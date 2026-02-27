@@ -362,6 +362,16 @@ def build_map(routes, weather):
     <div style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
     <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails · <span style="color:#4A90D9;">━ ━ ━</span> Alt routes · Toggle layers ↗</div></div>"""
     m.get_root().html.add_child(folium.Element(title))
+
+    # Make layer control scrollable so all layers are visible
+    layer_css = """<style>
+    .leaflet-control-layers-overlays {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    </style>"""
+    m.get_root().html.add_child(folium.Element(layer_css))
+
     return m
 
 if __name__ == "__main__":
