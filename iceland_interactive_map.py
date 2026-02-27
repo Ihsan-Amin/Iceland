@@ -572,369 +572,154 @@ def build_map(routes, weather):
     m.get_root().html.add_child(folium.Element(responsive_css))
 
     # ═══════════════════════ AGENDA VIEW ═══════════════════════
-    # Serialize data for client-side rendering
-    stops_json = []
+    # Pre-render all cards server-side (no client-side JS templating)
+    TYPE_ICONS = {"overnight":"🏕️","hike":"🥾","food":"🍽️","shop":"🧶","logistics":"✈️","attraction":"📷"}
+
+    # Build alt route lookup by main stop name
+    alt_lookup = {}
+    for ar in ALT_ROUTES:
+        if ar["day"] == 4 and "Skaftafellsheiði" in ar["name"]: alt_lookup["Kristínartindar Summit"] = ar
+        if ar["day"] == 5 and "Þórufoss" in ar["name"]: alt_lookup["Þingvellir"] = ar
+        if ar["day"] == 1 and "Dyrhólaey" in ar["name"]: alt_lookup["Dyrhólaey"] = ar
+
+    def _card(name, day, st, notes, link, wx, lat, lon, hr, parking, is_got):
+        c = DAY_COLORS[day]
+        icon = TYPE_ICONS.get(st, "📷")
+        tstr = f"{hr:02d}:00"
+        gmap = f"https://www.google.com/maps?q={lat},{lon}"
+        ga = "true" if is_got else "false"
+
+        h = f'<div class="sc" data-day="{day}" data-type="{st}" data-hour="{hr}" data-got="{ga}" style="border-left-color:{c}">'
+        h += f'<div style="display:flex;align-items:baseline;gap:10px">'
+        h += f'<div class="st">{tstr}</div>'
+        h += f'<div><span class="sn">{icon} {name}</span><br><span class="stp">{st}</span></div></div>'
+
+        if wx:
+            h += f'<div class="sw" style="border-left:3px solid {c}">'
+            h += f'<div style="grid-column:1/-1;font-weight:600;margin-bottom:2px">{wx["emoji"]} {wx["desc"]} at ~{wx["hour"]}:00</div>'
+            h += f'<span>🌡️ {wx["tc"]:.0f}°C / {wx["tf"]:.0f}°F</span><span>🥶 Feels {wx["fc"]:.0f}°C / {wx["ff"]:.0f}°F</span>'
+            h += f'<span>💨 Wind {wx["w"]:.0f} km/h</span><span>💨 Gusts {wx["g"]:.0f} km/h</span>'
+            h += f'<span>🌧️ {wx["p"]:.1f} mm</span></div>'
+
+        sn = notes.replace("\n", "<br>")
+        h += f'<div class="snt">{sn}</div>'
+        h += '<div class="sl">'
+        if link: h += f'<a href="{link}" target="_blank" style="color:{c}">📖 Guide →</a>'
+        h += f'<a href="{gmap}" target="_blank" style="color:{c}">📍 Map</a>'
+        if parking:
+            pg = f"https://www.google.com/maps?q={parking[0]},{parking[1]}"
+            h += f'<a href="{pg}" target="_blank" style="color:#2E7D32">🅿️ Parking</a>'
+        h += '</div></div>'
+        return h
+
+    def _alt_card(ar):
+        wx = get_wx(weather, ar["weather_loc"], ar["day"], ar["est_hour"])
+        gmap = f"https://www.google.com/maps?q={ar['waypoints'][0][0]},{ar['waypoints'][0][1]}"
+        h = '<div class="sc ac">'
+        h += '<div class="ab">🔀 ALTERNATIVE</div>'
+        h += f'<div class="sn">🔀 {ar["name"]}</div>'
+        h += f'<div class="stp">{ar["distance"]} · {ar["time"]}</div>'
+        if wx:
+            h += '<div class="sw" style="border-left:3px solid #4A90D9">'
+            h += f'<div style="grid-column:1/-1;font-weight:600;margin-bottom:2px">{wx["emoji"]} {wx["desc"]}</div>'
+            h += f'<span>🌡️ {wx["tc"]:.0f}°C / {wx["tf"]:.0f}°F</span>'
+            h += f'<span>💨 Wind {wx["w"]:.0f} km/h</span></div>'
+        h += f'<div style="background:#fff3cd;border-radius:6px;padding:6px 8px;margin-top:6px;font-size:11px;font-weight:600">{ar["trigger"]}</div>'
+        sn = ar["notes"].replace("\n", "<br>")
+        h += f'<div class="snt">{sn}</div>'
+        h += '<div class="sl">'
+        if ar.get("link"): h += f'<a href="{ar["link"]}" target="_blank" style="color:#4A90D9">📖 Guide →</a>'
+        h += f'<a href="{gmap}" target="_blank" style="color:#4A90D9">📍 Map</a>'
+        h += '</div></div>'
+        return h
+
+    # Build timeline cards
+    tl = ""
+    cur_day = 0
     for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
+        if day != cur_day:
+            cur_day = day
+            c = DAY_COLORS[day]
+            tl += f'<div class="dh" data-day="{day}"><div class="dd" style="background:{c}"></div>{DAY_LABELS[day]}</div>'
         wx = get_wx(weather, wl, day, hr)
         p = PARKING.get(name)
-        stops_json.append({
-            "name": name, "lat": lat, "lon": lon, "day": day,
-            "type": st, "notes": notes, "link": link,
-            "hour": hr, "weather": wx,
-            "parking": {"lat": p[0], "lon": p[1], "notes": p[2]} if p else None,
-            "got": "🐉" in notes,
-            "gmap": f"https://www.google.com/maps?q={lat},{lon}",
-        })
-    alts_json = []
-    for ar in ALT_ROUTES:
-        alts_json.append({
-            "name": ar["name"], "day": ar["day"],
-            "distance": ar["distance"], "time": ar["time"],
-            "trigger": ar["trigger"], "notes": ar["notes"],
-            "link": ar.get("link",""),
-            "lat": ar["waypoints"][0][0], "lon": ar["waypoints"][0][1],
-            "weather": get_wx(weather, ar["weather_loc"], ar["day"], ar["est_hour"]),
-            "gmap": f"https://www.google.com/maps?q={ar['waypoints'][0][0]},{ar['waypoints'][0][1]}",
-        })
+        ig = "\U0001F409" in notes
+        alt = alt_lookup.get(name)
+        if alt:
+            tl += '<div class="ar">'
+            tl += _card(name, day, st, notes, link, wx, lat, lon, hr, p, ig)
+            tl += _alt_card(alt)
+            tl += '</div>'
+        else:
+            tl += _card(name, day, st, notes, link, wx, lat, lon, hr, p, ig)
 
-    # Build JS objects with integer keys (json.dumps converts int keys to strings which breaks lookups)
-    dc_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_COLORS.items()) + "}"
-    dl_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_LABELS.items()) + "}"
-    dd_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_DATES.items()) + "}"
+    dd_js = "{" + ",".join(f'{k}:"{v}"' for k,v in DAY_DATES.items()) + "}"
 
-    agenda_html = f"""
-    <script>
-    const STOPS_DATA = {json.dumps(stops_json)};
-    const ALTS_DATA = {json.dumps(alts_json)};
-    const DAY_COLORS = {dc_js};
-    const DAY_LABELS = {dl_js};
-    const DAY_DATES = {dd_js};
-    const TYPE_ICONS = {{"overnight":"🏕️","hike":"🥾","food":"🍽️","shop":"🧶","logistics":"✈️","attraction":"📷"}};
-    </script>
-
-    <div id="view-toggle" style="position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-radius:24px;padding:3px;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
-      <button id="btn-map" onclick="switchView('map')" style="padding:8px 20px;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;background:#2E5B8A;color:white;">🗺️ Map</button>
-      <button id="btn-agenda" onclick="switchView('agenda')" style="padding:8px 20px;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;background:transparent;color:#666;">📋 Itinerary</button>
+    agenda_el = f"""
+    <div id="vtog">
+      <button id="bm" onclick="sv('map')">🗺️ Map</button>
+      <button id="ba" onclick="sv('agenda')">📋 Itinerary</button>
     </div>
-
-    <div id="agenda-view" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1500;background:#f8f9fb;overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
-      <!-- Header -->
-      <div style="padding:60px 20px 12px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:white;text-align:center;">
-        <div style="font-size:22px;font-weight:700;">🇮🇸 Iceland South Coast</div>
-        <div style="font-size:13px;opacity:0.8;margin-top:4px;">March 6–10, 2026 · 5 Days · ~1,200 km</div>
+    <div id="av">
+      <div class="ah"><div style="font-size:22px;font-weight:700">🇮🇸 Iceland South Coast</div>
+        <div style="font-size:13px;opacity:0.8;margin-top:4px">March 6–10, 2026 · 5 Days · ~1,200 km</div></div>
+      <div id="af">
+        <button class="fp active" data-f="all" onclick="tf(this)">All</button>
+        <button class="fp active" data-f="d1" onclick="tf(this)" style="border-color:#E63946;color:#E63946">Day 1</button>
+        <button class="fp active" data-f="d2" onclick="tf(this)" style="border-color:#457B9D;color:#457B9D">Day 2</button>
+        <button class="fp active" data-f="d3" onclick="tf(this)" style="border-color:#2A9D8F;color:#2A9D8F">Day 3</button>
+        <button class="fp active" data-f="d4" onclick="tf(this)" style="border-color:#D4A017;color:#D4A017">Day 4</button>
+        <button class="fp active" data-f="d5" onclick="tf(this)" style="border-color:#7B2D8E;color:#7B2D8E">Day 5</button>
+        <button class="fp" data-f="hike" onclick="tf(this)">🥾 Hikes</button>
+        <button class="fp" data-f="food" onclick="tf(this)">🍽️ Food</button>
+        <button class="fp" data-f="got" onclick="tf(this)">🐉 GoT</button>
       </div>
-
-      <!-- Filters -->
-      <div id="agenda-filters" style="padding:12px 16px;background:white;border-bottom:1px solid #e8eaed;display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
-        <button class="filter-pill active" data-filter="all" onclick="toggleFilter(this)">All</button>
-        <button class="filter-pill active" data-filter="day-1" onclick="toggleFilter(this)" style="border-color:#E63946;color:#E63946;">Day 1</button>
-        <button class="filter-pill active" data-filter="day-2" onclick="toggleFilter(this)" style="border-color:#457B9D;color:#457B9D;">Day 2</button>
-        <button class="filter-pill active" data-filter="day-3" onclick="toggleFilter(this)" style="border-color:#2A9D8F;color:#2A9D8F;">Day 3</button>
-        <button class="filter-pill active" data-filter="day-4" onclick="toggleFilter(this)" style="border-color:#D4A017;color:#D4A017;">Day 4</button>
-        <button class="filter-pill active" data-filter="day-5" onclick="toggleFilter(this)" style="border-color:#7B2D8E;color:#7B2D8E;">Day 5</button>
-        <button class="filter-pill" data-filter="hike" onclick="toggleFilter(this)">🥾 Hikes</button>
-        <button class="filter-pill" data-filter="food" onclick="toggleFilter(this)">🍽️ Food</button>
-        <button class="filter-pill" data-filter="got" onclick="toggleFilter(this)">🐉 GoT</button>
-        <button class="filter-pill" data-filter="alt" onclick="toggleFilter(this)">🔀 Alts</button>
-      </div>
-
-      <!-- Timeline -->
-      <div id="agenda-timeline" style="padding:16px;max-width:700px;margin:0 auto;"></div>
-
-      <div style="padding:20px;text-align:center;font-size:11px;color:#999;">
-        Weather: Open-Meteo · Routes: Valhalla/OSM · All times Iceland (UTC+0)
-      </div>
+      <div id="atl">{tl}</div>
+      <div style="padding:20px;text-align:center;font-size:11px;color:#999">Weather: Open-Meteo · Routes: Valhalla/OSM · All times Iceland (UTC+0)</div>
     </div>
-
     <style>
-    .filter-pill {{
-      padding: 6px 14px; border: 1.5px solid #ddd; border-radius: 16px;
-      font-size: 12px; font-weight: 500; cursor: pointer;
-      background: white; color: #888; transition: all 0.2s;
-    }}
-    .filter-pill.active {{
-      background: #f0f4ff; border-color: currentColor; font-weight: 600;
-    }}
-    .filter-pill[data-filter="all"].active {{ background: #e8eaed; border-color: #666; color: #333; }}
-
-    .day-header {{
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 0 8px; margin-top: 8px; font-size: 15px; font-weight: 700;
-    }}
-    .day-dot {{ width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }}
-
-    .stop-card {{
-      background: white; border-radius: 12px; padding: 14px 16px;
-      margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      border-left: 4px solid #ddd; transition: all 0.2s;
-      position: relative;
-    }}
-    .stop-card:hover {{ box-shadow: 0 3px 12px rgba(0,0,0,0.1); transform: translateY(-1px); }}
-    .stop-card.current-stop {{ box-shadow: 0 0 0 2px #2E5B8A, 0 3px 12px rgba(46,91,138,0.2); }}
-
-    .stop-time {{
-      font-size: 13px; font-weight: 700; color: #333; font-variant-numeric: tabular-nums;
-      min-width: 48px;
-    }}
-    .stop-name {{ font-size: 14px; font-weight: 600; color: #111; }}
-    .stop-type {{ font-size: 11px; color: #888; text-transform: capitalize; }}
-    .stop-notes {{ font-size: 12px; color: #555; margin-top: 6px; white-space: pre-wrap; line-height: 1.5; }}
-    .stop-wx {{
-      background: #f5f7fa; border-radius: 8px; padding: 8px 10px;
-      margin-top: 8px; font-size: 11px; display: grid;
-      grid-template-columns: 1fr 1fr; gap: 2px 10px;
-    }}
-    .stop-links {{
-      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;
-      padding-top: 8px; border-top: 1px solid #f0f0f0;
-    }}
-    .stop-links a {{
-      font-size: 12px; font-weight: 600; text-decoration: none;
-      padding: 4px 0; display: inline-block;
-    }}
-
-    .alt-row {{
-      display: flex; gap: 10px; margin-bottom: 10px;
-    }}
-    .alt-row .stop-card {{ flex: 1; margin-bottom: 0; }}
-    .alt-card {{
-      background: #f0f6ff; border-color: #4A90D9;
-    }}
-    .alt-badge {{
-      display: inline-block; font-size: 10px; font-weight: 600;
-      padding: 2px 8px; border-radius: 10px; background: #ffc107; color: #333;
-      margin-bottom: 6px;
-    }}
-
-    #view-toggle button:focus {{ outline: none; }}
-
-    @media (max-width: 600px) {{
-      #view-toggle {{ top: 8px; }}
-      #view-toggle button {{ padding: 6px 14px; font-size: 12px; }}
-      .alt-row {{ flex-direction: column; }}
-      .stop-card {{ padding: 12px 14px; }}
-      #agenda-filters {{ padding: 10px 12px; }}
-    }}
+    #vtog{{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-radius:24px;padding:3px;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}}
+    #vtog button{{padding:8px 20px;border:none;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s}}
+    #vtog button:focus{{outline:none}}
+    #bm{{background:#2E5B8A;color:white}}
+    #ba{{background:transparent;color:#666}}
+    #av{{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1500;background:#f8f9fb;overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}}
+    .ah{{padding:60px 20px 12px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:white;text-align:center}}
+    #af{{padding:12px 16px;background:white;border-bottom:1px solid #e8eaed;display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}}
+    .fp{{padding:6px 14px;border:1.5px solid #ddd;border-radius:16px;font-size:12px;font-weight:500;cursor:pointer;background:white;color:#888;transition:all 0.2s}}
+    .fp.active{{background:#f0f4ff;border-color:currentColor;font-weight:600}}
+    .fp[data-f="all"].active{{background:#e8eaed;border-color:#666;color:#333}}
+    #atl{{padding:16px;max-width:700px;margin:0 auto}}
+    .dh{{display:flex;align-items:center;gap:12px;padding:16px 0 8px;margin-top:8px;font-size:15px;font-weight:700}}
+    .dd{{width:14px;height:14px;border-radius:50%;flex-shrink:0}}
+    .sc{{background:white;border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.06);border-left:4px solid #ddd;transition:all 0.2s}}
+    .sc:hover{{box-shadow:0 3px 12px rgba(0,0,0,0.1);transform:translateY(-1px)}}
+    .sc.now{{box-shadow:0 0 0 2px #2E5B8A,0 3px 12px rgba(46,91,138,0.2)}}
+    .st{{font-size:13px;font-weight:700;color:#333;font-variant-numeric:tabular-nums;min-width:48px}}
+    .sn{{font-size:14px;font-weight:600;color:#111}}
+    .stp{{font-size:11px;color:#888;text-transform:capitalize}}
+    .snt{{font-size:12px;color:#555;margin-top:6px;line-height:1.5}}
+    .sw{{background:#f5f7fa;border-radius:8px;padding:8px 10px;margin-top:8px;font-size:11px;display:grid;grid-template-columns:1fr 1fr;gap:2px 10px}}
+    .sl{{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid #f0f0f0}}
+    .sl a{{font-size:12px;font-weight:600;text-decoration:none;padding:4px 0}}
+    .ar{{display:flex;gap:10px;margin-bottom:10px}}
+    .ar .sc{{flex:1;margin-bottom:0}}
+    .ac{{background:#f0f6ff;border-color:#4A90D9}}
+    .ab{{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:#ffc107;color:#333;margin-bottom:6px}}
+    @media(max-width:600px){{ #vtog{{top:8px}} #vtog button{{padding:6px 14px;font-size:12px}}.ar{{flex-direction:column}}.sc{{padding:12px 14px}} #af{{padding:10px 12px}}}}
     </style>
-
     <script>
-    function switchView(view) {{
-      const mapEl = document.querySelector('.folium-map').parentElement;
-      const agendaEl = document.getElementById('agenda-view');
-      const titleEl = document.getElementById('map-title');
-      const btnMap = document.getElementById('btn-map');
-      const btnAgenda = document.getElementById('btn-agenda');
-
-      if (view === 'agenda') {{
-        mapEl.style.display = 'none';
-        if (titleEl) titleEl.style.display = 'none';
-        agendaEl.style.display = 'block';
-        btnMap.style.background = 'transparent'; btnMap.style.color = '#666';
-        btnAgenda.style.background = '#2E5B8A'; btnAgenda.style.color = 'white';
-        scrollToCurrentStop();
-      }} else {{
-        mapEl.style.display = 'block';
-        if (titleEl) titleEl.style.display = 'block';
-        agendaEl.style.display = 'none';
-        btnMap.style.background = '#2E5B8A'; btnMap.style.color = 'white';
-        btnAgenda.style.background = 'transparent'; btnAgenda.style.color = '#666';
-      }}
-    }}
-
-    // Active filters
-    let activeFilters = new Set(['all','day-1','day-2','day-3','day-4','day-5']);
-
-    function toggleFilter(btn) {{
-      const f = btn.dataset.filter;
-      if (f === 'all') {{
-        // Reset all day filters
-        activeFilters = new Set(['all','day-1','day-2','day-3','day-4','day-5']);
-        document.querySelectorAll('.filter-pill').forEach(b => {{
-          if (b.dataset.filter.startsWith('day-') || b.dataset.filter === 'all') b.classList.add('active');
-          else b.classList.remove('active');
-        }});
-      }} else if (f.startsWith('day-')) {{
-        btn.classList.toggle('active');
-        if (btn.classList.contains('active')) activeFilters.add(f); else activeFilters.delete(f);
-        // Uncheck "all" if not all days active
-        const allDays = ['day-1','day-2','day-3','day-4','day-5'].every(d => activeFilters.has(d));
-        const allBtn = document.querySelector('[data-filter="all"]');
-        if (allDays) {{ allBtn.classList.add('active'); activeFilters.add('all'); }}
-        else {{ allBtn.classList.remove('active'); activeFilters.delete('all'); }}
-      }} else {{
-        btn.classList.toggle('active');
-        if (btn.classList.contains('active')) activeFilters.add(f); else activeFilters.delete(f);
-      }}
-      renderAgenda();
-    }}
-
-    function renderAgenda() {{
-      const tl = document.getElementById('agenda-timeline');
-      let html = '';
-      let currentDay = 0;
-
-      STOPS_DATA.forEach((s, idx) => {{
-        // Day filter
-        if (!activeFilters.has('day-' + s.day)) return;
-        // Type filters (only filter if the type filter is active)
-        if (activeFilters.has('hike') && s.type !== 'hike') {{
-          // If hike filter is on, also check for other show-all types
-          if (!activeFilters.has('food') && !activeFilters.has('got') && s.type !== 'hike') return;
-        }}
-        if (activeFilters.has('food') && !activeFilters.has('hike') && !activeFilters.has('got') && s.type !== 'food') return;
-        if (activeFilters.has('got') && !activeFilters.has('hike') && !activeFilters.has('food') && !s.got) return;
-
-        // Type-only filters — skip non-matching when only type filters are active
-        const typeFilters = ['hike','food','got'].filter(f => activeFilters.has(f));
-        if (typeFilters.length > 0) {{
-          let match = false;
-          if (activeFilters.has('hike') && s.type === 'hike') match = true;
-          if (activeFilters.has('food') && s.type === 'food') match = true;
-          if (activeFilters.has('got') && s.got) match = true;
-          if (!match) return;
-        }}
-
-        // Day header
-        if (s.day !== currentDay) {{
-          currentDay = s.day;
-          const c = DAY_COLORS[s.day];
-          html += '<div class="day-header"><div class="day-dot" style="background:' + c + '"></div>' + DAY_LABELS[s.day] + '</div>';
-        }}
-
-        // Check for alt route at this position
-        const altsHere = ALTS_DATA.filter(a => a.day === s.day && activeFilters.has('alt'));
-        // Show alt side-by-side if matching stop
-        const altMatch = altsHere.find(a => {{
-          if (s.name.includes('Kristínartindar') && a.name.includes('Skaftafellsheiði')) return true;
-          if (s.name.includes('Þingvellir') && a.name.includes('Þórufoss')) return true;
-          if (s.name.includes('Dyrhólaey') && a.name.includes('Dyrhólaey')) return true;
-          return false;
-        }});
-
-        if (altMatch) {{
-          html += '<div class="alt-row">';
-          html += buildCard(s, idx);
-          html += buildAltCard(altMatch);
-          html += '</div>';
-        }} else {{
-          html += buildCard(s, idx);
-        }}
-      }});
-
-      tl.innerHTML = html;
-    }}
-
-    function buildCard(s, idx) {{
-      const c = DAY_COLORS[s.day];
-      const icon = TYPE_ICONS[s.type] || '📷';
-      const timeStr = String(s.hour).padStart(2,'0') + ':00';
-      let h = '<div class="stop-card" data-day="' + s.day + '" data-hour="' + s.hour + '" data-idx="' + idx + '" style="border-left-color:' + c + '">';
-      h += '<div style="display:flex;align-items:baseline;gap:10px;">';
-      h += '<div class="stop-time">' + timeStr + '</div>';
-      h += '<div><span class="stop-name">' + icon + ' ' + s.name + '</span><br><span class="stop-type">' + s.type + '</span></div>';
-      h += '</div>';
-
-      // Weather
-      if (s.weather) {{
-        const w = s.weather;
-        h += '<div class="stop-wx" style="border-left:3px solid ' + c + '">';
-        h += '<div style="grid-column:1/-1;font-weight:600;margin-bottom:2px;">' + w.emoji + ' ' + w.desc + ' at ~' + w.hour + ':00</div>';
-        h += '<span>🌡️ ' + Math.round(w.tc) + '°C / ' + Math.round(w.tf) + '°F</span>';
-        h += '<span>🥶 Feels ' + Math.round(w.fc) + '°C / ' + Math.round(w.ff) + '°F</span>';
-        h += '<span>💨 Wind ' + Math.round(w.w) + ' km/h</span>';
-        h += '<span>💨 Gusts ' + Math.round(w.g) + ' km/h</span>';
-        h += '<span>🌧️ ' + w.p.toFixed(1) + ' mm</span>';
-        h += '</div>';
-      }}
-
-      // Notes
-      h += '<div class="stop-notes">' + s.notes + '</div>';
-
-      // Links
-      h += '<div class="stop-links">';
-      if (s.link) h += '<a href="' + s.link + '" target="_blank" style="color:' + c + '">📖 Guide →</a>';
-      h += '<a href="' + s.gmap + '" target="_blank" style="color:' + c + '">📍 Map</a>';
-      if (s.parking) {{
-        const pg = 'https://www.google.com/maps?q=' + s.parking.lat + ',' + s.parking.lon;
-        h += '<a href="' + pg + '" target="_blank" style="color:#2E7D32">🅿️ Parking</a>';
-      }}
-      h += '</div>';
-      h += '</div>';
-      return h;
-    }}
-
-    function buildAltCard(a) {{
-      let h = '<div class="stop-card alt-card">';
-      h += '<div class="alt-badge">🔀 ALTERNATIVE</div>';
-      h += '<div class="stop-name">🔀 ' + a.name + '</div>';
-      h += '<div class="stop-type">' + a.distance + ' · ' + a.time + '</div>';
-
-      if (a.weather) {{
-        const w = a.weather;
-        h += '<div class="stop-wx" style="border-left:3px solid #4A90D9">';
-        h += '<div style="grid-column:1/-1;font-weight:600;margin-bottom:2px;">' + w.emoji + ' ' + w.desc + '</div>';
-        h += '<span>🌡️ ' + Math.round(w.tc) + '°C / ' + Math.round(w.tf) + '°F</span>';
-        h += '<span>💨 Wind ' + Math.round(w.w) + ' km/h</span>';
-        h += '</div>';
-      }}
-
-      h += '<div style="background:#fff3cd;border-radius:6px;padding:6px 8px;margin-top:6px;font-size:11px;font-weight:600;">' + a.trigger + '</div>';
-      h += '<div class="stop-notes">' + a.notes + '</div>';
-
-      h += '<div class="stop-links">';
-      if (a.link) h += '<a href="' + a.link + '" target="_blank" style="color:#4A90D9">📖 Guide →</a>';
-      h += '<a href="' + a.gmap + '" target="_blank" style="color:#4A90D9">📍 Map</a>';
-      h += '</div>';
-      h += '</div>';
-      return h;
-    }}
-
-    function scrollToCurrentStop() {{
-      // Get current time in Iceland (UTC+0)
-      const now = new Date();
-      const utcHour = now.getUTCHours();
-      const utcMonth = now.getUTCMonth() + 1;
-      const utcDay = now.getUTCDate();
-      const utcYear = now.getUTCFullYear();
-
-      // Map trip dates to day numbers
-      const tripDays = {{}};
-      for (const [d, dateStr] of Object.entries(DAY_DATES)) {{
-        const parts = dateStr.split('-');
-        tripDays[dateStr] = parseInt(d);
-      }}
-
-      const todayStr = utcYear + '-' + String(utcMonth).padStart(2,'0') + '-' + String(utcDay).padStart(2,'0');
-      const tripDay = tripDays[todayStr];
-
-      // Find the next upcoming stop
-      let targetCard = null;
-      const cards = document.querySelectorAll('.stop-card[data-hour]');
-      cards.forEach(card => {{
-        const cardDay = parseInt(card.dataset.day);
-        const cardHour = parseInt(card.dataset.hour);
-        if (!targetCard) {{
-          if (tripDay && cardDay === tripDay && cardHour >= utcHour) targetCard = card;
-          else if (tripDay && cardDay > tripDay) targetCard = card;
-        }}
-      }});
-
-      // If not during trip, scroll to top
-      if (targetCard) {{
-        targetCard.classList.add('current-stop');
-        setTimeout(() => {{
-          targetCard.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
-        }}, 100);
-      }}
-    }}
-
-    // Initial render
-    document.addEventListener('DOMContentLoaded', renderAgenda);
-    // Fallback render
-    setTimeout(renderAgenda, 500);
+    var DD={dd_js};
+    function sv(v){{var m=document.querySelector('.folium-map');if(m)m=m.parentElement;var a=document.getElementById('av');var t=document.getElementById('map-title');var bm=document.getElementById('bm');var ba=document.getElementById('ba');if(v==='agenda'){{if(m)m.style.display='none';if(t)t.style.display='none';a.style.display='block';bm.style.background='transparent';bm.style.color='#666';ba.style.background='#2E5B8A';ba.style.color='white';asc();}}else{{if(m)m.style.display='block';if(t)t.style.display='block';a.style.display='none';bm.style.background='#2E5B8A';bm.style.color='white';ba.style.background='transparent';ba.style.color='#666';}}}}
+    var _f=new Set(['all','d1','d2','d3','d4','d5']);
+    function tf(b){{var f=b.getAttribute('data-f');if(f==='all'){{_f=new Set(['all','d1','d2','d3','d4','d5']);var ps=document.querySelectorAll('.fp');for(var i=0;i<ps.length;i++){{var p=ps[i];var pf=p.getAttribute('data-f');if(pf==='all'||pf.charAt(0)==='d')p.className='fp active';else p.className='fp';}}}}else{{if(b.className.indexOf('active')>=0){{b.className='fp';_f.delete(f);}}else{{b.className='fp active';_f.add(f);}}if(f.charAt(0)==='d'){{var ok=_f.has('d1')&&_f.has('d2')&&_f.has('d3')&&_f.has('d4')&&_f.has('d5');var ab=document.querySelector('[data-f="all"]');if(ok){{ab.className='fp active';_f.add('all');}}else{{ab.className='fp';_f.delete('all');}}}}}}af();}}
+    function af(){{var cs=document.querySelectorAll('#atl .sc');var hs=document.querySelectorAll('#atl .dh');var ars=document.querySelectorAll('#atl .ar');var tfs=[];if(_f.has('hike'))tfs.push('hike');if(_f.has('food'))tfs.push('food');if(_f.has('got'))tfs.push('got');for(var i=0;i<cs.length;i++){{var c=cs[i];if(c.parentElement.className.indexOf('ar')>=0)continue;var d=c.getAttribute('data-day');var tp=c.getAttribute('data-type');var gt=c.getAttribute('data-got');var dok=_f.has('d'+d);var tok=true;if(tfs.length>0){{tok=false;if(_f.has('hike')&&tp==='hike')tok=true;if(_f.has('food')&&tp==='food')tok=true;if(_f.has('got')&&gt==='true')tok=true;}}c.style.display=(dok&&tok)?'':'none';}}for(var i=0;i<ars.length;i++){{var r=ars[i];var mc=r.querySelector('.sc[data-day]');r.style.display=(mc&&mc.style.display==='none')?'none':'';}}for(var i=0;i<hs.length;i++){{var h=hs[i];h.style.display=_f.has('d'+h.getAttribute('data-day'))?'':'none';}}}}
+    function asc(){{var n=new Date();var uh=n.getUTCHours();var today=n.getUTCFullYear()+'-'+String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');var td=null;for(var k in DD){{if(DD[k]===today)td=parseInt(k);}}if(!td)return;var cs=document.querySelectorAll('.sc[data-hour]');for(var i=0;i<cs.length;i++){{var c=cs[i];var cd=parseInt(c.getAttribute('data-day'));var ch=parseInt(c.getAttribute('data-hour'));if((cd===td&&ch>=uh)||cd>td){{c.className+=' now';setTimeout(function(){{c.scrollIntoView({{behavior:'smooth',block:'center'}});}},200);return;}}}}}}
     </script>
     """
-    m.get_root().html.add_child(folium.Element(agenda_html))
+    m.get_root().html.add_child(folium.Element(agenda_el))
+
+
 
     return m
 
