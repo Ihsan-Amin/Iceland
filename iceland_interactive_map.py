@@ -743,6 +743,26 @@ def build_map(routes, weather):
         <div class="mod-bx">
           <div style="font-size:18px;font-weight:700;margin-bottom:12px;">Add Weather Delay / Stop</div>
           <div style="font-size:13px;color:#666;margin-bottom:16px;">This will shift all remaining scheduled items today downwards.</div>
+          
+          <div style="display:flex;gap:12px;margin-bottom:12px;">
+            <div style="flex:1">
+              <label style="font-size:12px;font-weight:600;color:#555;">Day:</label>
+              <select id="v-day" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:14px;margin-top:4px;">
+                <option value="1">Day 1</option>
+                <option value="2">Day 2</option>
+                <option value="3">Day 3</option>
+                <option value="4">Day 4</option>
+                <option value="5">Day 5</option>
+              </select>
+            </div>
+            <div style="flex:1">
+              <label style="font-size:12px;font-weight:600;color:#555;">Start Time:</label>
+              <select id="v-time" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:14px;margin-top:4px;">
+                {"".join(f'<option value="{h}">{h:02d}:00</option>' for h in range(6, 24))}
+              </select>
+            </div>
+          </div>
+
           <label style="font-size:12px;font-weight:600;color:#555;">Duration (minutes):</label><br>
           <div style="display:flex;gap:8px;margin-top:6px;margin-bottom:16px;">
             <button class="mbtn" onclick="setD(15)">15m</button>
@@ -815,7 +835,16 @@ def build_map(routes, weather):
     var DD={dd_js};
     window.dels = JSON.parse(localStorage.getItem('ic_dels')) || [];
     function togMenu(){{var m=document.getElementById('d-menu'); m.style.display=m.style.display==='none'?'flex':'none';}}
-    function opAdd(){{document.getElementById('d-menu').style.display='none'; document.getElementById('d-add-mod').style.display='flex';}}
+    function opAdd(){{
+      document.getElementById('d-menu').style.display='none'; 
+      document.getElementById('d-add-mod').style.display='flex';
+      var activeDay = 1;
+      var dhs = document.querySelectorAll('.dh');
+      for(var i=0; i<dhs.length; i++) {{ if(dhs[i].style.display !== 'none') {{ activeDay = parseInt(dhs[i].getAttribute('data-day')); break; }} }}
+      document.getElementById('v-day').value = activeDay;
+      var h = new Date().getUTCHours();
+      if(h >= 6 && h <= 23) document.getElementById('v-time').value = h;
+    }}
     function opRem(){{document.getElementById('d-menu').style.display='none'; buildRemList(); document.getElementById('d-rem-mod').style.display='flex';}}
     function clsMod(){{document.querySelectorAll('.mod-ov').forEach(m=>m.style.display='none');}}
     function setD(m){{document.getElementById('v-dur').value=m;}}
@@ -823,12 +852,10 @@ def build_map(routes, weather):
     function svDel(){{
       var mins = parseInt(document.getElementById('v-dur').value);
       var rsn = document.getElementById('v-rsn').value || 'Weather/Overtime';
+      var day = parseInt(document.getElementById('v-day').value);
+      var hr = parseInt(document.getElementById('v-time').value);
       if(isNaN(mins) || mins<=0) return;
-      // Get current active day from the timeline
-      var activeDay = 1;
-      var dhs = document.querySelectorAll('.dh');
-      for(var i=0; i<dhs.length; i++) {{ if(dhs[i].style.display !== 'none') {{ activeDay = parseInt(dhs[i].getAttribute('data-day')); break; }} }}
-      window.dels.push({{id: Date.now(), day: activeDay, mins: mins, rsn: rsn}});
+      window.dels.push({{id: Date.now(), day: day, hr: hr, mins: mins, rsn: rsn}});
       localStorage.setItem('ic_dels', JSON.stringify(window.dels));
       document.getElementById('v-dur').value=15; document.getElementById('v-rsn').value='';
       clsMod();
@@ -841,7 +868,7 @@ def build_map(routes, weather):
       else {{
         window.dels.forEach(d=> {{
           h+=`<div class="d-itm">
-            <div><strong style="color:#2E5B8A">Day ${{d.day}}</strong>: ${{d.mins}}m<br><span style="color:#666;font-size:11px">${{d.rsn}}</span></div>
+            <div><strong style="color:#2E5B8A">Day ${{d.day}} @ ${{d.hr}}:00</strong>: ${{d.mins}}m<br><span style="color:#666;font-size:11px">${{d.rsn}}</span></div>
             <button class="rm-btn" onclick="rmDel(${{d.id}})">Remove</button>
           </div>`;
         }});
@@ -862,25 +889,28 @@ def build_map(routes, weather):
 
       if(window.dels.length===0) return;
 
-      // Group delays by day
-      var dayDelays = {{}};
-      window.dels.forEach(d=> {{ dayDelays[d.day] = (dayDelays[d.day]||0) + d.mins; }});
-
       cards.forEach(c=> {{
         var dAttr = c.getAttribute('data-day');
         var hAttr = c.getAttribute('data-hour');
         if(!dAttr || !hAttr) return;
         
-        var day = parseInt(dAttr);
-        var mins = dayDelays[day];
+        var cardDay = parseInt(dAttr);
+        var cardHr = parseInt(hAttr);
+        
+        var mins = 0;
+        window.dels.forEach(d => {{
+           if(d.day === cardDay && cardHr >= d.hr) {{
+               mins += d.mins;
+           }}
+        }});
+        
         if(!mins) return;
         
-        var hr = parseInt(hAttr);
         var stEl = c.querySelector('.st');
         if(!stEl) return;
         if(!stEl.dataset.orig) stEl.dataset.orig = stEl.innerHTML;
         
-        var newTotalMins = (hr * 60) + mins;
+        var newTotalMins = (cardHr * 60) + mins;
         var newH = Math.floor(newTotalMins / 60);
         var newM = newTotalMins % 60;
         var tStr = String(newH).padStart(2,'0') + ':' + String(newM).padStart(2,'0');
