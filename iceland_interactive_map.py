@@ -597,13 +597,18 @@ def build_map(routes, weather):
             "gmap": f"https://www.google.com/maps?q={ar['waypoints'][0][0]},{ar['waypoints'][0][1]}",
         })
 
+    # Build JS objects with integer keys (json.dumps converts int keys to strings which breaks lookups)
+    dc_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_COLORS.items()) + "}"
+    dl_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_LABELS.items()) + "}"
+    dd_js = "{" + ",".join(f"{k}:{json.dumps(v)}" for k,v in DAY_DATES.items()) + "}"
+
     agenda_html = f"""
     <script>
     const STOPS_DATA = {json.dumps(stops_json)};
     const ALTS_DATA = {json.dumps(alts_json)};
-    const DAY_COLORS = {json.dumps(DAY_COLORS)};
-    const DAY_LABELS = {json.dumps(DAY_LABELS)};
-    const DAY_DATES = {json.dumps(DAY_DATES)};
+    const DAY_COLORS = {dc_js};
+    const DAY_LABELS = {dl_js};
+    const DAY_DATES = {dd_js};
     const TYPE_ICONS = {{"overnight":"🏕️","hike":"🥾","food":"🍽️","shop":"🧶","logistics":"✈️","attraction":"📷"}};
     </script>
 
