@@ -148,6 +148,7 @@ ALT_ROUTES = [
         "trigger":"⚠️ Use if sustained winds >15 m/s or poor visibility at altitude.",
         "notes":"Lower-elevation alternative to Kristínartindar summit. Glacier views without the exposed ridge scramble. Ask the ranger at Skaftafell visitor center for morning conditions.",
         "weather_loc":"Skaftafell","est_hour":10,
+        "link":"https://guidetoiceland.is/travel-iceland/drive/skaftafell",
         "waypoints":[
             (64.0169,-16.9669),(64.0195,-16.9700),(64.0275,-16.9753),
             (64.0355,-16.9650),(64.0380,-16.9600),(64.0400,-16.9550),
@@ -159,6 +160,7 @@ ALT_ROUTES = [
         "trigger":"🐉 Optional GoT bonus — only if ahead of schedule by 8:30am.",
         "notes":"Detour off Route 36 onto gravel Route 48. Quiet 18m waterfall. GoT S4E6: Drogon torches a goatherd's flock. ⚠️ Route 48 is gravel, potentially icy in March — check road.is.",
         "weather_loc":"Þingvellir","est_hour":8,
+        "link":"https://guidetoiceland.is/travel-iceland/drive/thorufoss",
         "waypoints":[
             (64.2559,-21.1299),(64.2650,-21.1100),(64.2750,-21.0900),
             (64.2833,-21.0667),
@@ -170,6 +172,7 @@ ALT_ROUTES = [
         "trigger":"⚠️ Use if gusts exceed 20 m/s — skip upper viewpoint.",
         "notes":"In high winds, stay at the lower parking area for views of the basalt sea arch. The upper viewpoint is extremely exposed and dangerous in strong gusts.",
         "weather_loc":"Vík","est_hour":16,
+        "link":"https://guidetoiceland.is/travel-iceland/drive/dyrholaey",
         "waypoints":[
             (63.4022,-19.1289),(63.3990,-19.1250),(63.3970,-19.1220),
         ],
@@ -369,8 +372,12 @@ def build_map(routes, weather):
         # Notes
         ar_html += f'<div style="font-size:12px;color:#333;white-space:pre-wrap;">{ar["notes"]}</div>'
 
-        # Google Maps link
-        ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a></div>'
+        # Links: Visitor Guide + Google Maps
+        links_parts = []
+        if ar.get('link'):
+            links_parts.append(f'<a href="{ar["link"]}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a>')
+        links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a>')
+        ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{"\n".join(links_parts)}</div>'
         ar_html += '</div>'
 
         PolyLine(locations=ar["waypoints"], color=ALT_COLOR, weight=3, opacity=0.8, dash_array="10 8",
