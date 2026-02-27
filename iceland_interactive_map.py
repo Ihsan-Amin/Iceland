@@ -1,512 +1,302 @@
-
 #!/usr/bin/env python3
-
 """
-Iceland South Coast Road Trip — Interactive Map (v2)
-March 6–10, 2026
+Iceland South Coast Road Trip — Interactive Map v2
+March 6-10, 2026
 
-Requires: pip install folium
-Usage: python3 iceland_interactive_map.py
-Output: iceland_interactive_map.html (open in any browser)
+Requires: pip install folium polyline requests
+Usage:    python3 iceland_interactive_map.py
+Output:   iceland_interactive_map.html
 
 Features:
-  - REAL road-following routes via Valhalla (OpenStreetMap) routing engine
-  - Color-coded routes per day with toggleable layers
-  - Clickable stop markers with popup info (name, day, notes, links)
-  - Layer control to show/hide individual days
-  - Overnight campsites highlighted
-  - Multiple base map options (street, terrain, satellite)
+  - Road-accurate route lines via Valhalla/OpenStreetMap
+  - Hiking trail overlays (dashed orange) with trail info popups
+  - Live weather forecast in every stop popup (Open-Meteo)
+  - Color-coded day layers with toggleable checkboxes
+  - Separate hiking trail toggle
+  - Multiple basemaps: Street, Terrain, Satellite
 """
 
 import folium
 from folium import FeatureGroup, Marker, PolyLine, Popup, Icon, LayerControl
-import json
-import urllib.request
-import urllib.parse
-import time
-import sys
+import polyline as pl_lib
+import requests, json, time, os
 
-# ═══════════════════════════════════════════════════════════════════
-# CONFIGURATION
-# ═══════════════════════════════════════════════════════════════════
-
-MAP_CENTER = [63.85, -18.5]
+MAP_CENTER = [63.95, -18.5]
 ZOOM_START = 8
-
-# Valhalla public routing endpoint (OpenStreetMap-based, no API key needed)
 VALHALLA_URL = "https://valhalla1.openstreetmap.de/route"
+ROUTE_CACHE = "route_cache.json"
+WEATHER_CACHE = "weather_cache.json"
 
-DAY_COLORS = {
-    1: "#E63946",  # Red
-    2: "#457B9D",  # Steel blue
-    3: "#2A9D8F",  # Teal
-    4: "#D4A017",  # Gold
-    5: "#7B2D8E",  # Purple
-}
-
+DAY_COLORS = {1:"#E63946",2:"#457B9D",3:"#2A9D8F",4:"#D4A017",5:"#7B2D8E"}
 DAY_LABELS = {
-    1: "Day 1 — Fri 3/6: KEF → Vík",
-    2: "Day 2 — Sat 3/7: Vík → Skaftafell",
-    3: "Day 3 — Sun 3/8: Skaftafell → Höfn → East",
-    4: "Day 4 — Mon 3/9: Höfn → Skaftafell → Selfoss",
-    5: "Day 5 — Tue 3/10: Selfoss → Golden Circle → KEF",
+    1:"Day 1 — Fri 3/6: KEF → Vík",2:"Day 2 — Sat 3/7: Vík → Skaftafell",
+    3:"Day 3 — Sun 3/8: Skaftafell → Höfn → East",4:"Day 4 — Mon 3/9: Höfn → Skaftafell → Selfoss",
+    5:"Day 5 — Tue 3/10: Selfoss → Golden Circle → KEF",
+}
+DAY_DATES = {1:"2026-03-06",2:"2026-03-07",3:"2026-03-08",4:"2026-03-09",5:"2026-03-10"}
+TRAIL_COLOR = "#FF6B35"
+
+WMO = {
+    0:("Clear sky","☀️"),1:("Mainly clear","🌤️"),2:("Partly cloudy","⛅"),3:("Overcast","☁️"),
+    45:("Fog","🌫️"),48:("Rime fog","🌫️"),51:("Light drizzle","🌦️"),53:("Drizzle","🌦️"),
+    55:("Dense drizzle","🌧️"),56:("Freezing drizzle","🌧️❄️"),57:("Heavy freezing drizzle","🌧️❄️"),
+    61:("Slight rain","🌦️"),63:("Rain","🌧️"),65:("Heavy rain","🌧️"),
+    66:("Freezing rain","🌧️❄️"),67:("Heavy freezing rain","🌧️❄️"),
+    71:("Light snow","🌨️"),73:("Snow","🌨️"),75:("Heavy snow","❄️"),77:("Snow grains","❄️"),
+    80:("Light showers","🌦️"),81:("Showers","🌧️"),82:("Heavy showers","⛈️"),
+    85:("Snow showers","🌨️"),86:("Heavy snow showers","❄️"),
+    95:("Thunderstorm","⛈️"),96:("T-storm + hail","⛈️"),99:("T-storm + heavy hail","⛈️"),
 }
 
-# ═══════════════════════════════════════════════════════════════════
-# STOPS DATA
-# Each stop: (name, lat, lon, day, type, notes, link)
-#   type: "overnight" | "hike" | "food" | "shop" | "attraction" | "logistics"
-# ═══════════════════════════════════════════════════════════════════
-
+# ═══════════════════════ STOPS ═══════════════════════
+# (name, lat, lon, day, type, notes, link, est_hour, weather_loc)
 STOPS = [
-    # ── Day 1: KEF → Vík ──
-    ("KEF Airport", 63.985, -22.6056, 1, "logistics",
-     "Pick up campervan, stock up at Bónus supermarket. Depart ~7:30–9am.",
-     None),
-    ("Hveragerði", 63.9966, -21.1876, 1, "attraction",
-     "Iceland's 'Hot Spring Town'. Walk through the Hveragerði Geothermal Park. ~45 min from KEF.",
-     None),
-    ("Reykjadalur Hot River", 64.0229, -21.2116, 1, "hike",
-     "🥾 BONUS HIKE: 6.4 km round trip, ~2 hrs. Hike up geothermal valley to natural warm river (36–40°C). Bring bathing suit + towel. Microspikes for icy patches.",
-     "https://guidetoiceland.is/connect-with-locals/regina/reykjadalur-hot-spring-valley-in-south-iceland"),
-    ("Seljalandsfoss", 63.6156, -19.9885, 1, "attraction",
-     "60m walk-behind waterfall. Expect spray + rain = full waterproofs. 45 min.",
-     "https://guidetoiceland.is/travel-iceland/drive/seljalandsfoss"),
-    ("Gljúfrabúi", 63.6207, -19.9862, 1, "attraction",
-     "Hidden waterfall inside a canyon slot, 500m from Seljalandsfoss. 30 min. Wear waterproofs.",
-     "https://guidetoiceland.is/travel-iceland/drive/gljufrabui"),
-    ("Skógafoss", 63.5321, -19.5113, 1, "attraction",
-     "🐉 GoT: Wildling camp (S8). Climb the 370-step staircase for glacier and coast views. 45 min.",
-     "https://guidetoiceland.is/travel-iceland/drive/skogafoss"),
-    ("Dyrhólaey", 63.4022, -19.1289, 1, "attraction",
-     "120m basalt sea arch, sweeping black sand panorama. 45 min. ⚠️ Skip upper viewpoint if gusts >20 m/s.",
-     "https://guidetoiceland.is/travel-iceland/drive/dyrholaey"),
-    ("Reynisfjara", 63.4044, -19.0695, 1, "attraction",
-     "🐉 GoT S7E5: coastline near Eastwatch-by-the-Sea. Basalt column cave, Reynisdrangar sea stacks. 45 min. ⚠️ SNEAKER WAVE WARNING: Never turn your back on the ocean.",
-     "https://guidetoiceland.is/travel-iceland/drive/reynisfjara"),
-    ("Súður-Vík (dinner)", 63.419, -19.008, 1, "food",
-     "🍽️ Dinner rec: Local hillside favorite. Lamb soup ~2,800 ISK, fish & chips ~3,200 ISK. Alt: Black Crust Pizzeria for charcoal-crust pizza ~3,500 ISK.",
-     None),
-    ("Vík 🏕️", 63.4186, -19.006, 1, "overnight",
-     "🏕️ OVERNIGHT: Vík Campsite (Víkurbraut 5). Year-round, heated common room, walking distance to village.",
-     None),
-
-    # ── Day 2: Vík → Skaftafell ──
-    ("Eldhraun Lava Field", 63.67, -18.32, 2, "attraction",
-     "World's largest lava flow carpeted in luminous green moss. 30 min roadside stop.",
-     "https://guidetoiceland.is/travel-iceland/drive/eldhraun"),
-    ("Kirkjugolf", 63.7875, -17.9959, 2, "attraction",
-     "'Church Floor' — hexagonal basalt columns, natural pavement. 5-min walk from parking.",
-     "https://guidetoiceland.is/travel-iceland/drive/kirkjugolfid"),
-    ("Systrafoss", 63.7835, -17.9745, 2, "attraction",
-     "Twin cascades above Kirkjubæjarklaustur. 30-min walk.",
-     "https://guidetoiceland.is/travel-iceland/drive/systrafoss"),
-    ("Fjaðrárgljúfur Canyon", 63.7712, -18.172, 2, "attraction",
-     "🐉 GoT filming location. 2km rim trail above 100m-deep gorge. 1.5 hrs. Microspikes recommended.",
-     "https://guidetoiceland.is/travel-iceland/drive/fjadrargljufur"),
-    ("Svartifoss + Sjónarnipa 🏕️", 64.0274, -16.9753, 2, "hike",
-     "🥾 HIKE #1: Svartifoss–Sjónarnipa Loop. 6.4 km, ~3 hrs. Basalt-column waterfall + panoramic glacier views from Sjónarnipa ridge. Microspikes strongly recommended.\n\n🏕️ OVERNIGHT: Skaftafell Campsite (inside Vatnajökull NP, year-round, heated facilities).",
-     "https://guidetoiceland.is/travel-iceland/drive/svartifoss"),
-
-    # ── Day 3: Skaftafell → Höfn → East ──
-    ("Svínafellsjökull", 64.008, -16.875, 3, "attraction",
-     "🐉 GoT: North of the Wall / Fist of the First Men (S2–S3). Walk to glacier snout for up-close ice views. 45 min.",
-     "https://guidetoiceland.is/travel-iceland/drive/svinafellsjokull"),
-    ("Fjallsárlón", 64.0167, -16.3667, 3, "attraction",
-     "Quieter sibling to Jökulsárlón. Glacier lagoon with icebergs. 45 min.",
-     "https://guidetoiceland.is/travel-iceland/drive/fjallsarlon"),
-    ("Jökulsárlón", 64.0784, -16.2297, 3, "attraction",
-     "Floating blue-white icebergs, possible harbor seals. Iceland's crown jewel lagoon. 1 hr.",
-     "https://guidetoiceland.is/travel-iceland/drive/jokulsarlon"),
-    ("Diamond Beach", 64.044, -16.178, 3, "attraction",
-     "Translucent ice blocks on jet-black sand. 5 min from Jökulsárlón. 30 min.",
-     "https://guidetoiceland.is/travel-iceland/drive/diamond-beach"),
-    ("Hofskirkja", 64.1978, -15.9418, 3, "attraction",
-     "Iceland's last surviving turf-roofed church. 15-min detour.",
-     "https://guidetoiceland.is/travel-iceland/drive/hofskirkja"),
-    ("Hafnarbuðin (lunch)", 64.254, -15.21, 3, "food",
-     "🍽️ Lunch rec: Harbour-side diner, budget langoustine. Langoustine baguette ~1,800 ISK (~$13) — cheapest langoustine in the lobster capital. Free coffee. Locals eat here.",
-     None),
-    ("Höfn", 64.2539, -15.2081, 3, "logistics",
-     "Fuel, groceries. The lobster capital of Iceland.",
-     None),
-    ("Stokksnes / Vestrahorn", 64.249, -14.965, 3, "attraction",
-     "Iconic mountain over black sand dunes + Viking village film set. 45 min. 💰 1,100 ISK/pp (~$8) at Viking Café.",
-     "https://guidetoiceland.is/travel-iceland/drive/stokksnes"),
-    ("Eystrahorn / Krossanesfjall", 64.319, -14.694, 3, "attraction",
-     "Turnaround point. Walk the black sand base of the dramatic mountain. 1 hr.",
-     "https://adventures.is/iceland/attractions/eystrahorn/"),
-    ("Höfn 🏕️", 64.2539, -15.2081, 3, "overnight",
-     "🏕️ OVERNIGHT: Höfn Campsite – Hamrar. Year-round, full facilities, walking distance to town.",
-     None),
-
-    # ── Day 4: Höfn → Skaftafell hike → Selfoss ──
-    ("Kristínartindar Summit", 64.035, -16.95, 4, "hike",
-     "🥾 HIKE #2: Kristínartindar Summit Trail. 10 km, ~4 hrs, moderate-strenuous. Climbs to 1,126m for 360° panorama over Vatnajökull. Full winter gear: microspikes, wind shell, warm layers.",
-     "https://adventures.is/iceland/attractions/kristinartindar/"),
-    ("Núpsstaurskógur", 63.9372, -17.505, 4, "attraction",
-     "Iceland's largest native birch forest at Lómagnúpur base. 30-min walk.",
-     "https://guidetoiceland.is/travel-iceland/drive/nupsstadaskogur"),
-    ("Lómagnúpur", 63.8971, -17.645, 4, "attraction",
-     "Sheer 767m wall. Roadside photo, 15 min. ⚠️ Notorious for sudden powerful gusts.",
-     "https://guidetoiceland.is/travel-iceland/drive/lomagnupur"),
-    ("Þingborg Wool Shop 🧶", 63.9333, -20.8167, 4, "shop",
-     "🧶 Local-run wool shop since 1991, in a 1927 schoolhouse. Authentic handknit lopapeysa sweaters, sheepskins, blankets. Knitted by local women from Icelandic sheep's wool — not tourist shops. Prices lower than Reykjavík. Ask for tax-free receipt (reclaim 15% VAT at KEF). 15–20 min.\n\n📍 Route 1, 8 km east of Selfoss.",
-     "https://www.south.is/en/service/thingborg-wool-processing"),
-    ("Selfoss 🏕️", 63.9332, -21.003, 4, "overnight",
-     "🏕️ OVERNIGHT: Selfoss Campsite. Year-round, full facilities. Proper town: Bónus supermarket, N1 fuel, restaurants, Sundhöllin pool.",
-     None),
-
-    # ── Day 5: Selfoss → Golden Circle → Reykjavík → KEF ──
-    ("Þingvellir", 64.2559, -21.1299, 5, "attraction",
-     "🐉 GoT S4: Almannagjá Gorge = mountain pass to the Bloody Gate (Vale of Arryn). Walk the rift valley + Öxarárfoss trail. UNESCO site. 1 hr. 💰 Parking 750 ISK.",
-     "https://guidetoiceland.is/travel-iceland/drive/thingvellir"),
-    ("Geysir", 64.3103, -20.3024, 5, "attraction",
-     "Strokkur erupts every 6–10 min. 45 min. 💰 Parking 1,000 ISK/vehicle. No entrance fee.",
-     "https://guidetoiceland.is/travel-iceland/drive/geysir"),
-    ("Gullfoss", 64.3271, -20.1199, 5, "attraction",
-     "Iceland's most powerful two-tier waterfall. 45 min. 💰 Free entry, free parking.",
-     "https://guidetoiceland.is/travel-iceland/drive/gullfoss"),
-    ("Hallgrímskirkja", 64.1417, -21.9267, 5, "attraction",
-     "🗽 Statue of Leif Erikson + iconic church tower. Church entry free. Tower: 1,500 ISK/adult (~$11). Hours: 10am–4:45pm. 20–25 min.",
-     "https://www.hallgrimskirkja.is/en-gb"),
-    ("Smékkleysa Records", 64.1435, -21.9280, 5, "attraction",
-     "🎵 Founded 1986 by The Sugarcubes (Björk). Legendary indie label / record shop / coffee bar. Browse vinyl from Sigur Rós, Björk, Múm, GusGus. Great espresso. 25–30 min.",
-     "https://www.instagram.com/smekkleysa/"),
-    ("Harpa Concert Hall", 64.1505, -21.9327, 5, "attraction",
-     "Stunning geometric glass facade, harbour views. Free to enter lobby. Guided tours 2,750 ISK if available. 20 min.",
-     "https://www.harpa.is/en"),
-    ("Sun Voyager", 64.1476, -21.9223, 5, "attraction",
-     "Iconic steel ship silhouette sculpture on the waterfront. Quick photo.",
-     "https://guidetoiceland.is/travel-iceland/drive/sun-voyager"),
-    ("Icelandic Street Food (lunch)", 64.1470, -21.9310, 5, "food",
-     "🍽️ Lunch rec: Lamb soup in bread bowl with unlimited refills + free waffles. ~2,500–3,000 ISK (~$18–21). Best budget lunch in Reykjavík.\n\n💡 Pro tip: Start with shellfish soup (not refillable), then switch to lamb/tomato for free refills. Free brownies and carrot cake at the counter.",
-     "https://www.icelandicstreetfood.com/"),
-    ("Reykjavík", 64.1466, -21.9426, 5, "logistics",
-     "Capital city. ~2.5 hr window for sightseeing (12:45pm–3:15pm).",
-     None),
-    ("KEF Departure ✈️", 63.985, -22.6056, 5, "logistics",
-     "Drop off campervan ~4pm. Flight departs 5pm.",
-     None),
+    ("KEF Airport",63.985,-22.6056,1,"logistics","Pick up campervan, stock up at Bónus. Depart ~7:30–9am.",None,8,"KEF / Reykjanes"),
+    ("Hveragerði",63.9966,-21.1876,1,"attraction","Iceland's 'Hot Spring Town'. Geothermal Park. ~45 min from KEF.",None,9,"Hveragerði"),
+    ("Reykjadalur Hot River",64.0229,-21.2116,1,"hike","🥾 BONUS HIKE: 7.4 km round trip, ~2–3 hrs. Natural warm river (36–40°C). Bring swimsuit + towel. Microspikes for icy patches.","https://guidetoiceland.is/connect-with-locals/regina/reykjadalur-hot-spring-valley-in-south-iceland",10,"Hveragerði"),
+    ("Seljalandsfoss",63.6156,-19.9885,1,"attraction","60m walk-behind waterfall. Full waterproofs. 45 min.","https://guidetoiceland.is/travel-iceland/drive/seljalandsfoss",13,"Seljalandsfoss"),
+    ("Gljúfrabúi",63.6207,-19.9862,1,"attraction","Hidden waterfall in canyon slot. 500m from Seljalandsfoss. 30 min.","https://guidetoiceland.is/travel-iceland/drive/gljufrabui",14,"Seljalandsfoss"),
+    ("Skógafoss",63.5321,-19.5113,1,"attraction","🐉 GoT: Wildling camp (S8). 370-step staircase. 45 min.","https://guidetoiceland.is/travel-iceland/drive/skogafoss",15,"Vík"),
+    ("Dyrhólaey",63.4022,-19.1289,1,"attraction","120m basalt sea arch. 45 min. ⚠️ Skip upper viewpoint if gusts >20 m/s.","https://guidetoiceland.is/travel-iceland/drive/dyrholaey",16,"Vík"),
+    ("Reynisfjara",63.4044,-19.0695,1,"attraction","🐉 GoT S7E5: Eastwatch-by-the-Sea. Basalt cave. ⚠️ SNEAKER WAVE WARNING.","https://guidetoiceland.is/travel-iceland/drive/reynisfjara",17,"Vík"),
+    ("Súður-Vík (dinner)",63.419,-19.008,1,"food","🍽️ Lamb soup ~2,800 ISK, fish & chips ~3,200 ISK. Alt: Black Crust Pizzeria ~3,500 ISK.",None,18,"Vík"),
+    ("Vík 🏕️",63.4186,-19.006,1,"overnight","🏕️ OVERNIGHT: Vík Campsite (Víkurbraut 5). Year-round, heated common room.",None,20,"Vík"),
+    ("Eldhraun Lava Field",63.67,-18.32,2,"attraction","World's largest lava flow in luminous green moss. 30 min.","https://guidetoiceland.is/travel-iceland/drive/eldhraun",9,"Vík"),
+    ("Fjaðrárgljúfur Canyon",63.7712,-18.172,2,"attraction","🐉 GoT filming location. 2km rim trail, 100m-deep gorge. 1.5 hrs. Microspikes.","https://guidetoiceland.is/travel-iceland/drive/fjadrargljufur",10,"Kirkjubæjarklaustur"),
+    ("Kirkjugolf",63.7875,-17.9959,2,"attraction","'Church Floor' — hexagonal basalt columns. 5-min walk.","https://guidetoiceland.is/travel-iceland/drive/kirkjugolfid",12,"Kirkjubæjarklaustur"),
+    ("Systrafoss",63.7835,-17.9745,2,"attraction","Twin cascades above Kirkjubæjarklaustur. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/systrafoss",12,"Kirkjubæjarklaustur"),
+    ("Svartifoss + Sjónarnipa Loop",64.0274,-16.9753,2,"hike","🥾 HIKE #1: 7.4 km, ~3 hrs. Basalt-column waterfall → Sjónarnipa glacier viewpoint → Sel turf house. Microspikes.\n\n🏕️ OVERNIGHT: Skaftafell Campsite (Vatnajökull NP, year-round).","https://guidetoiceland.is/travel-iceland/drive/svartifoss",14,"Skaftafell"),
+    ("Svínafellsjökull",64.008,-16.875,3,"attraction","🐉 GoT: North of the Wall (S2–S3). Walk to glacier snout. 45 min.","https://guidetoiceland.is/travel-iceland/drive/svinafellsjokull",9,"Skaftafell"),
+    ("Fjallsárlón",64.0167,-16.3667,3,"attraction","Quieter glacier lagoon with icebergs. 45 min.","https://guidetoiceland.is/travel-iceland/drive/fjallsarlon",10,"Jökulsárlón"),
+    ("Jökulsárlón",64.0784,-16.2297,3,"attraction","Floating icebergs, possible seals. Crown jewel lagoon. 1 hr.","https://guidetoiceland.is/travel-iceland/drive/jokulsarlon",11,"Jökulsárlón"),
+    ("Diamond Beach",64.044,-16.178,3,"attraction","Translucent ice on jet-black sand. 30 min.","https://guidetoiceland.is/travel-iceland/drive/diamond-beach",12,"Jökulsárlón"),
+    ("Hofskirkja",64.1978,-15.9418,3,"attraction","Last surviving turf-roofed church. 15-min detour.","https://guidetoiceland.is/travel-iceland/drive/hofskirkja",13,"Höfn"),
+    ("Hafnarbuðin (lunch)",64.254,-15.21,3,"food","🍽️ Langoustine baguette ~1,800 ISK (~$13). Cheapest langoustine in town. Free coffee.",None,13,"Höfn"),
+    ("Stokksnes / Vestrahorn",64.249,-14.965,3,"attraction","Iconic mountain + black sand + Viking set. 💰 1,100 ISK/pp.","https://guidetoiceland.is/travel-iceland/drive/stokksnes",15,"Stokksnes"),
+    ("Eystrahorn",64.319,-14.694,3,"attraction","Turnaround point. Walk the black sand base. 1 hr.","https://adventures.is/iceland/attractions/eystrahorn/",16,"Stokksnes"),
+    ("Höfn 🏕️",64.2539,-15.2081,3,"overnight","🏕️ OVERNIGHT: Höfn Campsite – Hamrar. Year-round.",None,19,"Höfn"),
+    ("Kristínartindar Summit",64.035,-16.95,4,"hike","🥾 HIKE #2: 17.9 km loop, ~6–8 hrs, summit 1,126m. 360° Vatnajökull panorama. Full winter gear. Backup: Skaftafellsheiði plateau.","https://adventures.is/iceland/attractions/kristinartindar/",10,"Skaftafell"),
+    ("Núpsstaurskógur",63.9372,-17.505,4,"attraction","Iceland's largest native birch forest. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/nupsstadaskogur",15,"Kirkjubæjarklaustur"),
+    ("Lómagnúpur",63.8971,-17.645,4,"attraction","Sheer 767m wall. ⚠️ Notorious sudden gusts.","https://guidetoiceland.is/travel-iceland/drive/lomagnupur",15,"Kirkjubæjarklaustur"),
+    ("Þingborg Wool Shop 🧶",63.9333,-20.8167,4,"shop","🧶 Since 1991. Handknit lopapeysa, Icelandic sheep's wool. Tax-free receipt (15% VAT at KEF). 📍 Route 1, 8 km east of Selfoss.","https://www.south.is/en/service/thingborg-wool-processing",18,"Selfoss"),
+    ("Selfoss 🏕️",63.9332,-21.003,4,"overnight","🏕️ OVERNIGHT: Selfoss Campsite. Year-round. Bónus, N1, pool.",None,19,"Selfoss"),
+    ("Þingvellir",64.2559,-21.1299,5,"attraction","🐉 GoT S4: Bloody Gate. Rift valley + Öxarárfoss. UNESCO. 💰 Parking 750 ISK.","https://guidetoiceland.is/travel-iceland/drive/thingvellir",9,"Þingvellir"),
+    ("Geysir",64.3103,-20.3024,5,"attraction","Strokkur erupts every 6–10 min. 💰 Parking 1,000 ISK.","https://guidetoiceland.is/travel-iceland/drive/geysir",11,"Geysir"),
+    ("Gullfoss",64.3271,-20.1199,5,"attraction","Iceland's most powerful waterfall. 💰 Free.","https://guidetoiceland.is/travel-iceland/drive/gullfoss",12,"Geysir"),
+    ("Hallgrímskirkja",64.1417,-21.9267,5,"attraction","🗽 Leif Erikson statue + tower 1,500 ISK. 20–25 min.","https://www.hallgrimskirkja.is/en-gb",13,"Reykjavík"),
+    ("Smékkleysa Records",64.1435,-21.928,5,"attraction","🎵 Björk's Sugarcubes label. Record shop + coffee. 25–30 min.","https://www.instagram.com/smekkleysa/",13,"Reykjavík"),
+    ("Harpa Concert Hall",64.1505,-21.9327,5,"attraction","Geometric glass facade. Free lobby. Tours 2,750 ISK.","https://www.harpa.is/en",14,"Reykjavík"),
+    ("Sun Voyager",64.1476,-21.9223,5,"attraction","Iconic steel ship sculpture. Quick photo.","https://guidetoiceland.is/travel-iceland/drive/sun-voyager",15,"Reykjavík"),
+    ("Icelandic Street Food",64.147,-21.931,5,"food","🍽️ Lamb soup bread bowl, unlimited refills + free waffles. ~2,500–3,000 ISK.\n💡 Start with shellfish soup, then switch to lamb/tomato for free refills.","https://www.icelandicstreetfood.com/",15,"Reykjavík"),
+    ("KEF Departure ✈️",63.985,-22.6056,5,"logistics","Drop off campervan ~4pm. Flight 5pm.",None,16,"KEF / Reykjanes"),
 ]
 
-# ═══════════════════════════════════════════════════════════════════
-# ROUTE WAYPOINTS PER DAY
-# These are the ordered stops the driving route must pass through.
-# Valhalla computes actual road geometry between them.
-# Format: list of (lat, lon) tuples per day.
-# ═══════════════════════════════════════════════════════════════════
+# ═══════════════════════ HIKING TRAILS ═══════════════════════
+TRAILS = [
+    {
+        "name":"Reykjadalur Hot River Trail",
+        "day":1,"distance":"7.4 km round trip","time":"2–3 hours",
+        "difficulty":"Moderate","elevation":"250m gain",
+        "url":"https://www.alltrails.com/trail/iceland/southern/reykjadalur-hot-spring-thermal-river",
+        "notes":"Out-and-back from car park. Steep climb 20 min, then rolling valley past Djúpagilsfoss waterfall, steam vents, mud pots. Ends at warm river bathing area with wooden boardwalk. Microspikes essential in March.",
+        "waypoints":[
+            (64.0193,-21.2116),(64.0205,-21.2135),(64.0218,-21.2160),(64.0235,-21.2185),
+            (64.0255,-21.2210),(64.0275,-21.2235),(64.0295,-21.2255),(64.0310,-21.2270),
+            (64.0325,-21.2285),(64.0336,-21.2292),
+        ],
+    },
+    {
+        "name":"Svartifoss–Sjónarnipa Loop (S6)",
+        "day":2,"distance":"7.4 km loop","time":"2.5–3 hours",
+        "difficulty":"Moderate","elevation":"270m gain",
+        "url":"https://www.alltrails.com/trail/iceland/southern/sjonarnipa-svartifoss-magnusafoss-hundafoss-via-austurbrekkur",
+        "notes":"Loop from Skaftafell Visitor Centre. Through camp → Hundafoss → Magnúsarfoss → Svartifoss (basalt columns) → Sjónarsker viewpoint (310m) → Sjónarnipa glacier overlook → Sel turf house → Austurbrekkur descent. Well-marked blue/red trails (S5/S6).",
+        "waypoints":[
+            (64.0169,-16.9669),(64.0180,-16.9680),(64.0195,-16.9700),(64.0215,-16.9720),
+            (64.0235,-16.9735),(64.0260,-16.9748),(64.0275,-16.9753),(64.0290,-16.9740),
+            (64.0310,-16.9720),(64.0335,-16.9690),(64.0355,-16.9650),(64.0340,-16.9620),
+            (64.0310,-16.9610),(64.0280,-16.9620),(64.0240,-16.9640),(64.0200,-16.9660),
+            (64.0169,-16.9669),
+        ],
+    },
+    {
+        "name":"Kristínartindar Summit (S4)",
+        "day":4,"distance":"17.9 km loop","time":"6–8 hours",
+        "difficulty":"Difficult","elevation":"1,215m gain → 1,126m summit",
+        "url":"https://www.alltrails.com/trail/iceland/southern/kristinartindar-via-svartifoss-skaftafellsheidi",
+        "notes":"Full-day from Visitor Centre. Austurbrekkur → Sjónarnipa → Skaftafellsheiði heath → Gemludalur valley → ridge scramble (loose scree, steep) → summit. Views: Vatnajökull, Öræfajökull, Morsárjökull, black sand plains to sea.\n\n⚠️ Backup: Turn around at Skaftafellsheiði plateau for amazing views without summit scramble.",
+        "waypoints":[
+            (64.0169,-16.9669),(64.0195,-16.9700),(64.0275,-16.9753),(64.0355,-16.9650),
+            (64.0380,-16.9600),(64.0400,-16.9550),(64.0420,-16.9500),(64.0440,-16.9450),
+            (64.0460,-16.9420),(64.0470,-16.9390),(64.0460,-16.9360),(64.0445,-16.9340),
+            (64.0430,-16.9320),(64.0415,-16.9310),(64.0430,-16.9320),(64.0445,-16.9340),
+            (64.0460,-16.9380),(64.0470,-16.9420),(64.0450,-16.9480),(64.0420,-16.9540),
+            (64.0380,-16.9590),(64.0340,-16.9620),(64.0280,-16.9640),(64.0200,-16.9660),
+            (64.0169,-16.9669),
+        ],
+    },
+]
 
-ROUTE_WAYPOINTS = {
-    1: [
-        (63.985, -22.6056),    # KEF
-        (63.9966, -21.1876),   # Hveragerði
-        (64.0229, -21.2116),   # Reykjadalur trailhead
-        (63.9966, -21.1876),   # Back to Hveragerði (rejoin Route 1)
-        (63.6156, -19.9885),   # Seljalandsfoss
-        (63.6207, -19.9862),   # Gljúfrabúi
-        (63.5321, -19.5113),   # Skógafoss
-        (63.4022, -19.1289),   # Dyrhólaey
-        (63.4044, -19.0695),   # Reynisfjara
-        (63.4186, -19.006),    # Vík
-    ],
-    2: [
-        (63.4186, -19.006),    # Vík
-        (63.67, -18.32),       # Eldhraun
-        (63.7712, -18.172),    # Fjaðrárgljúfur
-        (63.7875, -17.9959),   # Kirkjugolf
-        (63.7835, -17.9745),   # Systrafoss
-        (64.0274, -16.9753),   # Svartifoss / Skaftafell
-    ],
-    3: [
-        (64.0274, -16.9753),   # Skaftafell
-        (64.008, -16.875),     # Svínafellsjökull
-        (64.0167, -16.3667),   # Fjallsárlón
-        (64.0784, -16.2297),   # Jökulsárlón
-        (64.044, -16.178),     # Diamond Beach
-        (64.1978, -15.9418),   # Hofskirkja
-        (64.2539, -15.2081),   # Höfn
-        (64.249, -14.965),     # Stokksnes
-        (64.319, -14.694),     # Eystrahorn
-        (64.249, -14.965),     # Back to Stokksnes
-        (64.2539, -15.2081),   # Höfn overnight
-    ],
-    4: [
-        (64.2539, -15.2081),   # Höfn
-        (64.035, -16.95),      # Kristínartindar / Skaftafell area
-        (63.9372, -17.505),    # Núpsstaurskógur
-        (63.8971, -17.645),    # Lómagnúpur
-        (63.9333, -20.8167),   # Þingborg Wool Shop
-        (63.9332, -21.003),    # Selfoss
-    ],
-    5: [
-        (63.9332, -21.003),    # Selfoss
-        (64.2559, -21.1299),   # Þingvellir
-        (64.3103, -20.3024),   # Geysir
-        (64.3271, -20.1199),   # Gullfoss
-        (64.3103, -20.3024),   # Back through Geysir
-        (64.2559, -21.1299),   # Back through Þingvellir
-        (64.1466, -21.9426),   # Reykjavík
-        (63.985, -22.6056),    # KEF
-    ],
-}
-
-# ═══════════════════════════════════════════════════════════════════
-# VALHALLA ROUTING
-# ═══════════════════════════════════════════════════════════════════
-
-def decode_polyline6(encoded):
-    """Decode Valhalla's encoded polyline (precision 1e-6) to list of (lat, lon)."""
-    result = []
-    index = 0
-    lat = 0
-    lng = 0
-    while index < len(encoded):
-        shift = 0
-        res = 0
-        while True:
-            b = ord(encoded[index]) - 63
-            index += 1
-            res |= (b & 0x1F) << shift
-            shift += 5
-            if b < 0x20:
-                break
-        lat += (~(res >> 1) if (res & 1) else (res >> 1))
-
-        shift = 0
-        res = 0
-        while True:
-            b = ord(encoded[index]) - 63
-            index += 1
-            res |= (b & 0x1F) << shift
-            shift += 5
-            if b < 0x20:
-                break
-        lng += (~(res >> 1) if (res & 1) else (res >> 1))
-
-        result.append((lat / 1e6, lng / 1e6))
-    return result
-
-
-def get_route_geometry(waypoints, day_num):
-    """
-    Call Valhalla routing API to get road-following geometry.
-    Returns list of (lat, lon) tuples tracing actual roads.
-    """
-    MAX_LOCS = 20
-    all_coords = []
-
-    for chunk_start in range(0, len(waypoints), MAX_LOCS - 1):
-        chunk = waypoints[chunk_start:chunk_start + MAX_LOCS]
-        if len(chunk) < 2:
-            break
-
-        locations = [{"lat": lat, "lon": lon} for lat, lon in chunk]
-        params = {
-            "locations": locations,
-            "costing": "auto",
-            "directions_options": {"units": "km"},
-        }
-
-        url = VALHALLA_URL + "?json=" + urllib.parse.quote(json.dumps(params))
-
+# ═══════════════════════ WEATHER ═══════════════════════
+def fetch_weather():
+    if os.path.exists(WEATHER_CACHE):
+        with open(WEATHER_CACHE) as f: return json.load(f)
+    locs = {}
+    for s in STOPS:
+        wl = s[8]
+        if wl not in locs: locs[wl] = (s[1], s[2])
+    print("Fetching weather from Open-Meteo...")
+    out = {}
+    for name,(lat,lon) in locs.items():
+        url = (f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
+               f"&hourly=temperature_2m,apparent_temperature,precipitation,weathercode,windspeed_10m,windgusts_10m"
+               f"&start_date=2026-03-06&end_date=2026-03-10&timezone=Atlantic/Reykjavik")
         try:
-            req = urllib.request.Request(url)
-            req.add_header("User-Agent", "IcelandTripMap/1.0")
-            resp = urllib.request.urlopen(req, timeout=30)
-            data = json.load(resp)
+            r = requests.get(url, timeout=15).json()
+            if "hourly" in r: out[name] = r["hourly"]; print(f"  ✓ {name}")
+        except: pass
+        time.sleep(0.3)
+    with open(WEATHER_CACHE,"w") as f: json.dump(out, f)
+    return out
 
-            for leg in data["trip"]["legs"]:
-                decoded = decode_polyline6(leg["shape"])
-                if all_coords and decoded:
-                    decoded = decoded[1:]
-                all_coords.extend(decoded)
+def get_wx(wd, wloc, day, hour):
+    if wloc not in wd: return None
+    h = wd[wloc]; t = f"{DAY_DATES[day]}T{hour:02d}:00"
+    try: i = h["time"].index(t)
+    except ValueError: return None
+    tc = h["temperature_2m"][i]; fc = h["apparent_temperature"][i]
+    desc,emoji = WMO.get(h["weathercode"][i], ("Unknown","❓"))
+    return {"tc":tc,"tf":round(tc*9/5+32,1),"fc":fc,"ff":round(fc*9/5+32,1),
+            "p":h["precipitation"][i],"w":h["windspeed_10m"][i],"g":h["windgusts_10m"][i],
+            "desc":desc,"emoji":emoji,"hour":hour}
 
-            dist_km = data["trip"]["summary"]["length"]
-            time_hrs = data["trip"]["summary"]["time"] / 3600
-            print(f"  Day {day_num} chunk: {len(chunk)} waypoints → "
-                  f"{len(all_coords)} road points, {dist_km:.0f} km, {time_hrs:.1f} hrs")
+# ═══════════════════════ ROUTING ═══════════════════════
+def valhalla_route(locs):
+    payload = {"locations":[{"lat":la,"lon":lo} for la,lo in locs],"costing":"auto","directions_options":{"units":"km"}}
+    try:
+        r = requests.post(VALHALLA_URL, json=payload, timeout=30); r.raise_for_status(); d = r.json()
+        if "trip" not in d: return None
+        cc = []
+        for leg in d["trip"]["legs"]:
+            c = pl_lib.decode(leg["shape"], 6)
+            if cc and c and cc[-1]==c[0]: c=c[1:]
+            cc.extend(c)
+        return cc, d["trip"]["summary"]["length"]
+    except: return None
 
-        except Exception as e:
-            print(f"  ⚠️ Day {day_num} routing failed: {e}")
-            print(f"     Falling back to straight lines for this chunk.")
-            all_coords.extend(chunk)
+def fetch_routes():
+    if os.path.exists(ROUTE_CACHE):
+        with open(ROUTE_CACHE) as f:
+            c = json.load(f); routes = {int(k):v for k,v in c.items()}
+            if len(routes)==5: print("✓ Routes loaded from cache."); return routes
+    print("Fetching routes from Valhalla...")
+    routes = {}
+    for day in range(1,6):
+        pts = [(la,lo) for _,la,lo,d,*_ in STOPS if d==day]
+        ns = [n for n,_,_,d,*_ in STOPS if d==day]
+        print(f"  Day {day}: {ns[0]} → {ns[-1]} ({len(pts)} stops)")
+        res = valhalla_route(pts)
+        if res: routes[day]=res[0]; print(f"    ✓ {len(res[0])} pts, {res[1]:.0f} km")
+        else: routes[day]=pts; print(f"    ⚠ fallback")
+        time.sleep(1)
+    with open(ROUTE_CACHE,"w") as f: json.dump({str(k):v for k,v in routes.items()}, f)
+    return routes
 
-        time.sleep(1.0)
-
-    return all_coords
-
-
-# ═══════════════════════════════════════════════════════════════════
-# MAP BUILDING
-# ═══════════════════════════════════════════════════════════════════
-
-TYPE_ICONS = {
-    "overnight":  ("campground",    "green"),
-    "hike":       ("person-hiking", "orange"),
-    "food":       ("utensils",      "purple"),
-    "shop":       ("store",         "pink"),
-    "attraction": ("camera",        "blue"),
-    "logistics":  ("plane",         "gray"),
-}
-
-
-def build_popup_html(name, day, stop_type, notes, link):
-    """Build a styled HTML popup for a stop marker."""
-    color = DAY_COLORS[day]
-    type_label = stop_type.capitalize()
-
-    html = f"""
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-                width: 280px; line-height: 1.5;">
-        <div style="background: {color}; color: white; padding: 8px 12px;
-                    border-radius: 6px 6px 0 0; margin: -13px -20px 10px -20px;">
-            <strong style="font-size: 14px;">{name}</strong><br>
-            <span style="font-size: 11px; opacity: 0.9;">
-                {DAY_LABELS[day]} &nbsp;·&nbsp; {type_label}
-            </span>
-        </div>
-        <div style="font-size: 12px; color: #333; padding: 0 0 4px 0; white-space: pre-wrap;">{notes}</div>
-    """
+# ═══════════════════════ MAP ═══════════════════════
+def popup_html(name, day, stype, notes, link, wx):
+    c = DAY_COLORS[day]
+    h = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:300px;line-height:1.5;">
+    <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+      <strong style="font-size:14px;">{name}</strong><br>
+      <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {stype.capitalize()}</span>
+    </div>"""
+    if wx:
+        w=wx
+        h+=f"""<div style="background:#f0f4f8;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;border-left:3px solid {c};">
+      <div style="font-weight:600;margin-bottom:4px;">{w['emoji']} {w['desc']} at ~{w['hour']}:00</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;font-size:11px;color:#555;">
+        <span>🌡️ {w['tc']:.0f}°C / {w['tf']:.0f}°F</span><span>🥶 Feels {w['fc']:.0f}°C / {w['ff']:.0f}°F</span>
+        <span>💨 Wind {w['w']:.0f} km/h</span><span>💨 Gusts {w['g']:.0f} km/h</span>
+        <span>🌧️ Precip {w['p']:.1f} mm</span>
+      </div></div>"""
+    h+=f'<div style="font-size:12px;color:#333;white-space:pre-wrap;">{notes}</div>'
     if link:
-        html += f"""
-        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">
-            <a href="{link}" target="_blank"
-               style="color: {color}; text-decoration: none; font-size: 12px; font-weight: 600;">
-                📖 Visitor Guide →
-            </a>
-        </div>
-        """
-    html += "</div>"
-    return html
+        h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a></div>'
+    return h+"</div>"
 
+def trail_popup(t):
+    h=f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:280px;line-height:1.5;">
+    <div style="background:{TRAIL_COLOR};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+      <strong style="font-size:14px;">🥾 {t['name']}</strong><br>
+      <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[t['day']]}</span>
+    </div>
+    <div style="font-size:12px;margin-bottom:6px;"><b>{t['distance']}</b> · <b>{t['time']}</b> · {t['difficulty']}<br>📈 {t['elevation']}</div>
+    <div style="font-size:11px;color:#555;white-space:pre-wrap;margin-bottom:8px;">{t['notes']}</div>
+    <div style="border-top:1px solid #eee;padding-top:8px;">
+      <a href="{t['url']}" target="_blank" style="color:{TRAIL_COLOR};text-decoration:none;font-size:12px;font-weight:600;">🗺️ Trail Info & Map (AllTrails) →</a>
+    </div></div>"""
+    return h
 
-def create_map(route_geometries):
-    """Build the folium map with route lines and stop markers."""
-    m = folium.Map(
-        location=MAP_CENTER,
-        zoom_start=ZOOM_START,
-        tiles=None,
-        control_scale=True,
-    )
+def build_map(routes, weather):
+    m = folium.Map(location=MAP_CENTER, zoom_start=ZOOM_START, tiles=None, control_scale=True)
+    folium.TileLayer("OpenStreetMap", name="🗺️ Street Map").add_to(m)
+    folium.TileLayer(tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",attr="Esri",name="🏔️ Terrain").add_to(m)
+    folium.TileLayer(tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",attr="Esri",name="🛰️ Satellite").add_to(m)
 
-    # Tile layers
-    folium.TileLayer("OpenStreetMap", name="Street Map").add_to(m)
-    folium.TileLayer(
-        tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-        attr="Esri", name="Terrain",
-    ).add_to(m)
-    folium.TileLayer(
-        tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        attr="Esri", name="Satellite",
-    ).add_to(m)
+    dg = {d: FeatureGroup(name=DAY_LABELS[d], show=True) for d in range(1,6)}
+    tg = FeatureGroup(name="🥾 Hiking Trails", show=True)
 
-    # Feature groups per day
-    day_groups = {}
-    for day in range(1, 6):
-        fg = FeatureGroup(name=DAY_LABELS[day], show=True)
-        day_groups[day] = fg
+    # Road routes
+    for day, coords in routes.items():
+        PolyLine(locations=coords, color=DAY_COLORS[day], weight=4, opacity=0.85, smooth_factor=1, tooltip=DAY_LABELS[day]).add_to(dg[day])
 
-    # Route lines (real road geometry)
-    for day, coords in route_geometries.items():
-        color = DAY_COLORS[day]
-        PolyLine(
-            locations=coords,
-            color=color,
-            weight=4,
-            opacity=0.8,
-            smooth_factor=1.0,
-            tooltip=DAY_LABELS[day],
-        ).add_to(day_groups[day])
+    # Hiking trails
+    for t in TRAILS:
+        tp = trail_popup(t)
+        PolyLine(locations=t["waypoints"], color=TRAIL_COLOR, weight=3, opacity=0.9, dash_array="8 6",
+                 tooltip=f"<b>🥾 {t['name']}</b><br>{t['distance']} · {t['time']}",
+                 popup=Popup(tp, max_width=320)).add_to(tg)
+        Marker(location=t["waypoints"][0],
+               tooltip=f"🥾 {t['name']} — Trailhead",
+               icon=Icon(color="orange",icon="shoe-prints",prefix="fa"),
+               popup=Popup(tp, max_width=320)).add_to(tg)
 
     # Stop markers
-    for name, lat, lon, day, stop_type, notes, link in STOPS:
-        icon_name, _ = TYPE_ICONS.get(stop_type, ("circle-info", "blue"))
+    ICONS = {"overnight":("campground","green"),"hike":("person-hiking","orange"),
+             "food":("utensils","purple"),"shop":("store","pink"),"logistics":("plane","gray")}
+    DCOL = {1:"red",2:"blue",3:"darkgreen",4:"orange",5:"purple"}
 
-        popup_html = build_popup_html(name, day, stop_type, notes, link)
-        popup = Popup(popup_html, max_width=320)
+    for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
+        ic,icol = ICONS.get(st, ("camera", DCOL.get(day,"blue")))
+        wx = get_wx(weather, wl, day, hr)
+        ph = popup_html(name, day, st, notes, link, wx)
+        Marker(location=[lat,lon], popup=Popup(ph, max_width=340),
+               tooltip=f"<b>{name}</b><br><small>{DAY_LABELS[day]}</small>",
+               icon=Icon(color=icol, icon=ic, prefix="fa")).add_to(dg[day])
 
-        if stop_type == "overnight":
-            icon_obj = Icon(color="green", icon=icon_name, prefix="fa")
-        elif stop_type == "hike":
-            icon_obj = Icon(color="orange", icon=icon_name, prefix="fa")
-        elif stop_type == "food":
-            icon_obj = Icon(color="purple", icon=icon_name, prefix="fa")
-        elif stop_type == "shop":
-            icon_obj = Icon(color="pink", icon=icon_name, prefix="fa")
-        elif stop_type == "logistics":
-            icon_obj = Icon(color="gray", icon=icon_name, prefix="fa")
-        else:
-            day_icon_colors = {1: "red", 2: "blue", 3: "green", 4: "orange", 5: "purple"}
-            icon_obj = Icon(
-                color=day_icon_colors.get(day, "blue"),
-                icon=icon_name, prefix="fa",
-            )
-
-        Marker(
-            location=[lat, lon],
-            popup=popup,
-            tooltip=f"<b>{name}</b><br><small>{DAY_LABELS[day]}</small>",
-            icon=icon_obj,
-        ).add_to(day_groups[day])
-
-    for fg in day_groups.values():
-        fg.add_to(m)
-
+    for fg in dg.values(): fg.add_to(m)
+    tg.add_to(m)
     LayerControl(collapsed=False).add_to(m)
 
-    # Title overlay
-    title_html = """
-    <div style="position: fixed; top: 10px; left: 55px; z-index: 1000;
-                background: white; padding: 10px 18px; border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;">
-        <div style="font-size: 16px; font-weight: 700; color: #2E5B8A;">
-            🇮🇸 Iceland Road Trip
-        </div>
-        <div style="font-size: 12px; color: #666; margin-top: 2px;">
-            March 6–10, 2026 · 5 Days · ~1,200 km
-        </div>
-        <div style="font-size: 10px; color: #999; margin-top: 4px;">
-            🏕️ Overnight &nbsp; 🥾 Hike &nbsp; 🍽️ Food &nbsp; 🧶 Shop &nbsp; 📷 Attraction
-        </div>
-    </div>
-    """
-    m.get_root().html.add_child(folium.Element(title_html))
-
+    title = """<div style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+    <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
+    <div style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
+    <div style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics</div>
+    <div style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
+    <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails (toggle in layer control ↗)</div></div>"""
+    m.get_root().html.add_child(folium.Element(title))
     return m
 
-
-# ═══════════════════════════════════════════════════════════════════
-# MAIN
-# ═══════════════════════════════════════════════════════════════════
-
 if __name__ == "__main__":
-    print("═" * 60)
-    print(" Iceland Interactive Map — v2 (real road routing)")
-    print("═" * 60)
-
-    print("\n📡 Fetching road-following routes from Valhalla (OpenStreetMap)...")
-    print("   (This calls a free public API — takes ~10 seconds)\n")
-
-    route_geometries = {}
-    total_points = 0
-    for day in range(1, 6):
-        waypoints = ROUTE_WAYPOINTS[day]
-        print(f"Day {day}: {len(waypoints)} waypoints...")
-        coords = get_route_geometry(waypoints, day)
-        route_geometries[day] = coords
-        total_points += len(coords)
-
-    print(f"\n✓ Total road points: {total_points:,}")
-
-    print("\n🗺️  Building interactive map...")
-    m = create_map(route_geometries)
-
-    output_path = "iceland_interactive_map.html"
-    m.save(output_path)
-
-    print(f"\n✓ Saved: {output_path}")
-    print("  Open in any browser. Use the layer control (top-right) to toggle days.")
-    print("  Click any marker for popup details + visitor guide links.")
-    print("  Routes follow actual roads via OpenStreetMap/Valhalla routing.")
+    routes = fetch_routes()
+    weather = fetch_weather()
+    print("\nBuilding interactive map...")
+    m = build_map(routes, weather)
+    out = "iceland_interactive_map.html"
+    m.save(out)
+    kb = os.path.getsize(out)/1024
+    print(f"\n✓ Saved: {out} ({kb:.0f} KB)")
+    print("  • Layer control: toggle days + hiking trails on/off")
+    print("  • Click markers for weather + notes + visitor guide links")
+    print("  • Dashed orange lines = hiking trails with AllTrails links")
+    print("  • 3 basemaps: Street / Terrain / Satellite")
