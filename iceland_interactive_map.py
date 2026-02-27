@@ -76,7 +76,7 @@ STOPS = [
     ("Stokksnes / Vestrahorn",64.249,-14.965,3,"attraction","Iconic mountain + black sand + Viking set. 💰 1,100 ISK/pp.","https://guidetoiceland.is/travel-iceland/drive/stokksnes",15,"Stokksnes"),
     ("Eystrahorn",64.319,-14.694,3,"attraction","Turnaround point. Walk the black sand base. 1 hr.","https://adventures.is/iceland/attractions/eystrahorn/",16,"Stokksnes"),
     ("Höfn 🏕️",64.2539,-15.2081,3,"overnight","🏕️ OVERNIGHT: Höfn Campsite – Hamrar. Year-round.",None,19,"Höfn"),
-    ("Kristínartindar Summit",64.035,-16.95,4,"hike","🥾 HIKE #2: 17.9 km loop, ~6–8 hrs, summit 1,126m. 360° Vatnajökull panorama. Full winter gear. Backup: Skaftafellsheiði plateau.","https://adventures.is/iceland/attractions/kristinartindar/",10,"Skaftafell"),
+    ("Kristínartindar Summit",64.0169,-16.9669,4,"hike","🥾 HIKE #2: 17.9 km loop, ~6–8 hrs, summit 1,126m. 360° Vatnajökull panorama. Full winter gear. Backup: Skaftafellsheiði plateau.","https://adventures.is/iceland/attractions/kristinartindar/",10,"Skaftafell"),
     ("Núpsstaurskógur",63.9372,-17.505,4,"attraction","Iceland's largest native birch forest. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/nupsstadaskogur",15,"Kirkjubæjarklaustur"),
     ("Lómagnúpur",63.8971,-17.645,4,"attraction","Sheer 767m wall. ⚠️ Notorious sudden gusts.","https://guidetoiceland.is/travel-iceland/drive/lomagnupur",15,"Kirkjubæjarklaustur"),
     ("Þingborg Wool Shop 🧶",63.9333,-20.8167,4,"shop","🧶 Since 1991. Handknit lopapeysa, Icelandic sheep's wool. Tax-free receipt (15% VAT at KEF). 📍 Route 1, 8 km east of Selfoss.","https://www.south.is/en/service/thingborg-wool-processing",18,"Selfoss"),
