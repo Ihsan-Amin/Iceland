@@ -210,7 +210,7 @@ def fetch_routes():
     return routes
 
 # ═══════════════════════ MAP ═══════════════════════
-def popup_html(name, day, stype, notes, link, wx):
+def popup_html(name, day, stype, notes, link, wx, lat=None, lon=None):
     c = DAY_COLORS[day]
     h = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:300px;line-height:1.5;">
     <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
@@ -227,8 +227,14 @@ def popup_html(name, day, stype, notes, link, wx):
         <span>🌧️ Precip {w['p']:.1f} mm</span>
       </div></div>"""
     h+=f'<div style="font-size:12px;color:#333;white-space:pre-wrap;">{notes}</div>'
+    links_parts = []
     if link:
-        h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a></div>'
+        links_parts.append(f'<a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a>')
+    if lat is not None and lon is not None:
+        gmap = f"https://www.google.com/maps?q={lat},{lon}"
+        links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a>')
+    if links_parts:
+        h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{"".join(links_parts)}</div>'
     return h+"</div>"
 
 def trail_popup(t):
@@ -252,6 +258,7 @@ def build_map(routes, weather):
 
     dg = {d: FeatureGroup(name=DAY_LABELS[d], show=True) for d in range(1,6)}
     tg = FeatureGroup(name="🥾 Hiking Trails", show=True)
+    gotg = FeatureGroup(name="🐉 GoT Filming Locations", show=False)
 
     # Road routes
     for day, coords in routes.items():
@@ -276,21 +283,28 @@ def build_map(routes, weather):
     for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
         ic,icol = ICONS.get(st, ("camera", DCOL.get(day,"blue")))
         wx = get_wx(weather, wl, day, hr)
-        ph = popup_html(name, day, st, notes, link, wx)
+        ph = popup_html(name, day, st, notes, link, wx, lat, lon)
         Marker(location=[lat,lon], popup=Popup(ph, max_width=340),
                tooltip=f"<b>{name}</b><br><small>{DAY_LABELS[day]}</small>",
                icon=Icon(color=icol, icon=ic, prefix="fa")).add_to(dg[day])
+        # GoT filming location markers
+        if "🐉" in notes:
+            got_ph = popup_html(name, day, st, notes, link, wx, lat, lon)
+            Marker(location=[lat,lon], popup=Popup(got_ph, max_width=340),
+                   tooltip=f"<b>🐉 {name}</b><br><small>GoT Filming Location</small>",
+                   icon=Icon(color="black",icon="shield",prefix="fa")).add_to(gotg)
 
     for fg in dg.values(): fg.add_to(m)
     tg.add_to(m)
+    gotg.add_to(m)
     LayerControl(collapsed=False).add_to(m)
 
     title = """<div style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
     <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
     <div style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
-    <div style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics</div>
+    <div style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT</div>
     <div style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
-    <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails (toggle in layer control ↗)</div></div>"""
+    <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails · Toggle layers ↗</div></div>"""
     m.get_root().html.add_child(folium.Element(title))
     return m
 
