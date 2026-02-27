@@ -252,7 +252,7 @@ def fetch_routes():
 # ═══════════════════════ MAP ═══════════════════════
 def popup_html(name, day, stype, notes, link, wx, lat=None, lon=None):
     c = DAY_COLORS[day]
-    h = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:300px;line-height:1.5;">
+    h = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:300px;width:calc(100vw - 80px);line-height:1.5;">
     <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
       <strong style="font-size:14px;">{name}</strong><br>
       <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {stype.capitalize()}</span>
@@ -269,16 +269,16 @@ def popup_html(name, day, stype, notes, link, wx, lat=None, lon=None):
     h+=f'<div style="font-size:12px;color:#333;white-space:pre-wrap;">{notes}</div>'
     links_parts = []
     if link:
-        links_parts.append(f'<a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a>')
+        links_parts.append(f'<a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:13px;font-weight:600;padding:4px 0;">📖 Visitor Guide →</a>')
     if lat is not None and lon is not None:
         gmap = f"https://www.google.com/maps?q={lat},{lon}"
-        links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a>')
+        links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:13px;font-weight:600;padding:4px 0;">📍 Map</a>')
     if links_parts:
-        h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{"".join(links_parts)}</div>'
+        h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;flex-wrap:wrap;">{"".join(links_parts)}</div>'
     return h+"</div>"
 
 def trail_popup(t):
-    h=f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:280px;line-height:1.5;">
+    h=f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:280px;width:calc(100vw - 80px);line-height:1.5;">
     <div style="background:{TRAIL_COLOR};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
       <strong style="font-size:14px;">🥾 {t['name']}</strong><br>
       <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[t['day']]}</span>
@@ -347,7 +347,7 @@ def build_map(routes, weather):
         wx = get_wx(weather, ar['weather_loc'], day, ar['est_hour'])
         gmap = f"https://www.google.com/maps?q={lat},{lon}"
 
-        ar_html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:300px;line-height:1.5;">
+        ar_html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:300px;width:calc(100vw - 80px);line-height:1.5;">
         <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
           <strong style="font-size:14px;">🔀 {ar['name']}</strong><br>
           <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {ar['distance']} · {ar['time']}</span>
@@ -388,24 +388,83 @@ def build_map(routes, weather):
                icon=Icon(color="lightblue",icon="arrows-split-up-and-left",prefix="fa"),
                popup=Popup(ar_html, max_width=340)).add_to(altg)
     altg.add_to(m)
-    LayerControl(collapsed=False).add_to(m)
+    LayerControl(collapsed=True).add_to(m)
 
-    title = """<div style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+    title = """<div id="map-title" style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:calc(100vw - 120px);">
     <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
-    <div style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
-    <div style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT  🔀 Alt</div>
-    <div style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
+    <div class="title-sub" style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
+    <div class="title-legend" style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT  🔀 Alt</div>
+    <div class="title-credits" style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
     <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails · <span style="color:#4A90D9;">━ ━ ━</span> Alt routes · Toggle layers ↗</div></div>"""
     m.get_root().html.add_child(folium.Element(title))
 
-    # Make layer control scrollable so all layers are visible
-    layer_css = """<style>
+    # Responsive CSS for mobile + desktop
+    responsive_css = """<style>
+    /* Layer control */
     .leaflet-control-layers-overlays {
         max-height: 400px;
         overflow-y: auto;
     }
+    /* Popup close button — larger touch target */
+    .leaflet-popup-close-button {
+        font-size: 22px !important;
+        width: 30px !important;
+        height: 30px !important;
+        padding: 4px !important;
+    }
+    /* Mobile: screens under 600px */
+    @media (max-width: 600px) {
+        /* Compact title bar */
+        #map-title {
+            left: 10px !important;
+            top: 6px !important;
+            padding: 6px 12px !important;
+            max-width: calc(100vw - 70px) !important;
+        }
+        #map-title > div:first-child {
+            font-size: 13px !important;
+        }
+        .title-sub {
+            font-size: 10px !important;
+        }
+        .title-legend, .title-credits {
+            display: none !important;
+        }
+        /* Layer control compact */
+        .leaflet-control-layers {
+            max-width: 200px;
+        }
+        .leaflet-control-layers-overlays {
+            max-height: 250px;
+            font-size: 11px;
+        }
+        .leaflet-control-layers label {
+            margin-bottom: 2px;
+        }
+        /* Popup sizing */
+        .leaflet-popup-content-wrapper {
+            max-width: calc(100vw - 40px) !important;
+        }
+        .leaflet-popup-content {
+            margin: 10px 12px !important;
+            max-width: calc(100vw - 70px) !important;
+        }
+        /* Larger markers for touch */
+        .leaflet-marker-icon {
+            transform-origin: center bottom;
+        }
+    }
+    /* Middle screens: tablets */
+    @media (min-width: 601px) and (max-width: 1024px) {
+        #map-title {
+            max-width: 400px !important;
+        }
+        .title-credits {
+            display: none !important;
+        }
+    }
     </style>"""
-    m.get_root().html.add_child(folium.Element(layer_css))
+    m.get_root().html.add_child(folium.Element(responsive_css))
 
     return m
 
