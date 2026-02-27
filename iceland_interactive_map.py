@@ -147,6 +147,7 @@ ALT_ROUTES = [
         "day":4,"distance":"~5 km","time":"2.5 hrs",
         "trigger":"⚠️ Use if sustained winds >15 m/s or poor visibility at altitude.",
         "notes":"Lower-elevation alternative to Kristínartindar summit. Glacier views without the exposed ridge scramble. Ask the ranger at Skaftafell visitor center for morning conditions.",
+        "weather_loc":"Skaftafell","est_hour":10,
         "waypoints":[
             (64.0169,-16.9669),(64.0195,-16.9700),(64.0275,-16.9753),
             (64.0355,-16.9650),(64.0380,-16.9600),(64.0400,-16.9550),
@@ -157,6 +158,7 @@ ALT_ROUTES = [
         "day":5,"distance":"~30 min detour","time":"15 min stop",
         "trigger":"🐉 Optional GoT bonus — only if ahead of schedule by 8:30am.",
         "notes":"Detour off Route 36 onto gravel Route 48. Quiet 18m waterfall. GoT S4E6: Drogon torches a goatherd's flock. ⚠️ Route 48 is gravel, potentially icy in March — check road.is.",
+        "weather_loc":"Þingvellir","est_hour":8,
         "waypoints":[
             (64.2559,-21.1299),(64.2650,-21.1100),(64.2750,-21.0900),
             (64.2833,-21.0667),
@@ -167,6 +169,7 @@ ALT_ROUTES = [
         "day":1,"distance":"Same stop","time":"30 min",
         "trigger":"⚠️ Use if gusts exceed 20 m/s — skip upper viewpoint.",
         "notes":"In high winds, stay at the lower parking area for views of the basalt sea arch. The upper viewpoint is extremely exposed and dangerous in strong gusts.",
+        "weather_loc":"Vík","est_hour":16,
         "waypoints":[
             (63.4022,-19.1289),(63.3990,-19.1250),(63.3970,-19.1220),
         ],
@@ -335,23 +338,48 @@ def build_map(routes, weather):
 
     # Alternative routes
     for ar in ALT_ROUTES:
-        ar_html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:280px;line-height:1.5;">
-        <div style="background:{ALT_COLOR};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+        day = ar['day']
+        c = ALT_COLOR
+        lat, lon = ar['waypoints'][0]
+        wx = get_wx(weather, ar['weather_loc'], day, ar['est_hour'])
+        gmap = f"https://www.google.com/maps?q={lat},{lon}"
+
+        ar_html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;width:300px;line-height:1.5;">
+        <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
           <strong style="font-size:14px;">🔀 {ar['name']}</strong><br>
-          <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[ar['day']]} · {ar['distance']} · {ar['time']}</span>
-        </div>
-        <div style="background:#fff3cd;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;border-left:3px solid #ffc107;">
-          <div style="font-weight:600;">{ar['trigger']}</div>
-        </div>
-        <div style="font-size:12px;color:#333;white-space:pre-wrap;">{ar['notes']}</div>
+          <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {ar['distance']} · {ar['time']}</span>
         </div>"""
+
+        # Weather block
+        if wx:
+            w = wx
+            ar_html += f"""<div style="background:#f0f4f8;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;border-left:3px solid {c};">
+          <div style="font-weight:600;margin-bottom:4px;">{w['emoji']} {w['desc']} at ~{w['hour']}:00</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;font-size:11px;color:#555;">
+            <span>🌡️ {w['tc']:.0f}°C / {w['tf']:.0f}°F</span><span>🥶 Feels {w['fc']:.0f}°C / {w['ff']:.0f}°F</span>
+            <span>💨 Wind {w['w']:.0f} km/h</span><span>💨 Gusts {w['g']:.0f} km/h</span>
+            <span>🌧️ Precip {w['p']:.1f} mm</span>
+          </div></div>"""
+
+        # Trigger condition
+        ar_html += f"""<div style="background:#fff3cd;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;border-left:3px solid #ffc107;">
+          <div style="font-weight:600;">{ar['trigger']}</div>
+        </div>"""
+
+        # Notes
+        ar_html += f'<div style="font-size:12px;color:#333;white-space:pre-wrap;">{ar["notes"]}</div>'
+
+        # Google Maps link
+        ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a></div>'
+        ar_html += '</div>'
+
         PolyLine(locations=ar["waypoints"], color=ALT_COLOR, weight=3, opacity=0.8, dash_array="10 8",
                  tooltip=f"<b>🔀 {ar['name']}</b><br>{ar['trigger']}",
-                 popup=Popup(ar_html, max_width=320)).add_to(altg)
+                 popup=Popup(ar_html, max_width=340)).add_to(altg)
         Marker(location=ar["waypoints"][0],
                tooltip=f"🔀 {ar['name']} — Start",
                icon=Icon(color="lightblue",icon="arrows-split-up-and-left",prefix="fa"),
-               popup=Popup(ar_html, max_width=320)).add_to(altg)
+               popup=Popup(ar_html, max_width=340)).add_to(altg)
     altg.add_to(m)
     LayerControl(collapsed=False).add_to(m)
 
