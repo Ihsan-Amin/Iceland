@@ -625,8 +625,10 @@ def build_map(routes, weather):
         tstr = f"{hr:02d}:00"
         gmap = f"https://www.google.com/maps?q={lat},{lon}"
         ga = "true" if is_got else "false"
+        
+        is_skip = "true" if any(k in name for k in ["Reykjadalur", "Dyrhólaey", "Þórufoss", "Kerið"]) else "false"
 
-        h = f'<div class="sc" data-day="{day}" data-type="{st}" data-hour="{hr}" data-got="{ga}" style="border-left-color:{c}">'
+        h = f'<div class="sc" data-day="{day}" data-type="{st}" data-hour="{hr}" data-got="{ga}" data-skip="{is_skip}" style="border-left-color:{c}">'
         h += f'<div style="display:flex;align-items:baseline;gap:10px">'
         h += f'<div class="st">{tstr}</div>'
         h += f'<div><span class="sn">{icon} {name}</span><br><span class="stp">{st}</span></div></div>'
@@ -652,8 +654,11 @@ def build_map(routes, weather):
     def _alt_card(ar):
         wx = get_wx(weather, ar["weather_loc"], ar["day"], ar["est_hour"])
         gmap = f"https://www.google.com/maps?q={ar['waypoints'][0][0]},{ar['waypoints'][0][1]}"
-        h = '<div class="sc ac">'
-        h += '<div class="ab">🔀 ALTERNATIVE</div>'
+        
+        is_skip = "true" if any(k in ar["name"] for k in ["Reykjadalur", "Dyrhólaey", "Þórufoss", "Kerið"]) else "false"
+        
+        h = f'<div class="sc ac" data-day="{ar["day"]}" data-hour="{ar["est_hour"]}" data-skip="{is_skip}">'
+        h += '<div class="ab">🔀 ALTERNATIVE / DETOUR</div>'
         h += f'<div class="sn">🔀 {ar["name"]}</div>'
         h += f'<div class="stp">{ar["distance"]} · {ar["time"]}</div>'
         if wx:
@@ -661,7 +666,6 @@ def build_map(routes, weather):
             h += f'<div style="grid-column:1/-1;font-weight:600;margin-bottom:2px">{wx["emoji"]} {wx["desc"]}</div>'
             h += f'<span>🌡️ {wx["tc"]:.0f}°C / {wx["tf"]:.0f}°F</span>'
             h += f'<span>💨 Wind {wx["w"]:.0f} km/h</span></div>'
-        h += f'<div style="background:#fff3cd;border-radius:6px;padding:6px 8px;margin-top:6px;font-size:11px;font-weight:600">{ar["trigger"]}</div>'
         sn = _trunc_notes(ar["notes"], "#4A90D9")
         h += f'<div class="snt">{sn}</div>'
         h += '<div class="sl">'
@@ -726,6 +730,47 @@ def build_map(routes, weather):
       </div>
       <div id="atl">{tl}</div>
       <div style="padding:20px;text-align:center;font-size:11px;color:#999">Weather: Open-Meteo · Routes: Valhalla/OSM · All times Iceland (UTC+0)</div>
+      
+      <!-- Overtime / Delay Tracking UI -->
+      <div id="d-fab" onclick="togMenu()" style="position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:28px;background:#E63946;color:white;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 4px 16px rgba(230,57,70,0.4);cursor:pointer;z-index:100;transition:transform 0.2s;">+</div>
+      <div id="d-menu" style="display:none;position:fixed;bottom:90px;right:24px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);padding:8px;z-index:99;flex-direction:column;gap:4px;">
+        <button onclick="opAdd()" style="padding:12px 16px;border:none;background:transparent;text-align:left;font-size:14px;font-weight:600;cursor:pointer;border-radius:8px;color:#333;">⏱ Add Delay / Stop</button>
+        <button onclick="opRem()" style="padding:12px 16px;border:none;background:transparent;text-align:left;font-size:14px;font-weight:600;cursor:pointer;border-radius:8px;color:#666;">Undo / Remove Delay</button>
+      </div>
+
+      <!-- Add Delay Modal -->
+      <div id="d-add-mod" class="mod-ov" style="display:none;">
+        <div class="mod-bx">
+          <div style="font-size:18px;font-weight:700;margin-bottom:12px;">Add Weather Delay / Stop</div>
+          <div style="font-size:13px;color:#666;margin-bottom:16px;">This will shift all remaining scheduled items today downwards.</div>
+          <label style="font-size:12px;font-weight:600;color:#555;">Duration (minutes):</label><br>
+          <div style="display:flex;gap:8px;margin-top:6px;margin-bottom:16px;">
+            <button class="mbtn" onclick="setD(15)">15m</button>
+            <button class="mbtn" onclick="setD(30)">30m</button>
+            <button class="mbtn" onclick="setD(45)">45m</button>
+            <button class="mbtn" onclick="setD(60)">1h</button>
+            <input type="number" id="v-dur" style="width:70px;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:14px;" value="15">
+          </div>
+          <label style="font-size:12px;font-weight:600;color:#555;">Reason (Optional):</label>
+          <input type="text" id="v-rsn" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid #ddd;border-radius:6px;font-size:14px;margin-top:6px;margin-bottom:20px;" placeholder="e.g., Road closure, extra photos...">
+          <div style="display:flex;justify-content:flex-end;gap:12px;">
+            <button onclick="clsMod()" style="padding:10px 16px;border:none;background:transparent;color:#666;font-weight:600;cursor:pointer;">Cancel</button>
+            <button onclick="svDel()" style="padding:10px 20px;border:none;background:#2E5B8A;color:white;border-radius:8px;font-weight:600;cursor:pointer;">Apply Delay</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Remove Delay Modal -->
+      <div id="d-rem-mod" class="mod-ov" style="display:none;">
+        <div class="mod-bx">
+          <div style="font-size:18px;font-weight:700;margin-bottom:12px;">Remove a Delay</div>
+          <div id="v-del-list" style="max-height:200px;overflow-y:auto;margin-bottom:16px;font-size:13px;"></div>
+          <div style="display:flex;justify-content:flex-end;">
+            <button onclick="clsMod()" style="padding:10px 16px;border:none;background:#2E5B8A;color:white;border-radius:8px;font-weight:600;cursor:pointer;">Close</button>
+          </div>
+        </div>
+      </div>
+
     </div>
     <style>
     #vtog{{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-radius:24px;padding:3px;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}}
@@ -756,10 +801,103 @@ def build_map(routes, weather):
     .ar .sc{{flex:1;margin-bottom:0}}
     .ac{{background:#f0f6ff;border-color:#4A90D9}}
     .ab{{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;background:#ffc107;color:#333;margin-bottom:6px}}
+    .mod-ov{{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:3000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}}
+    .mod-bx{{background:white;border-radius:16px;padding:24px;width:90%;max-width:360px;box-shadow:0 10px 30px rgba(0,0,0,0.2)}}
+    .mbtn{{padding:8px 12px;background:#f0f4f8;border:1px solid #dde3ea;border-radius:6px;font-weight:600;color:#2E5B8A;cursor:pointer;flex:1}}
+    .mbtn:hover{{background:#e2e8f0;border-color:#cbd5e1}}
+    .d-itm{{display:flex;justify-content:space-between;align-items:center;background:#f9f9f9;padding:12px;border-radius:8px;margin-bottom:8px;border:1px solid #eee}}
+    .rm-btn{{background:#ffebee;color:#c62828;border:none;padding:6px 12px;border-radius:6px;font-weight:600;cursor:pointer}}
+    .time-adj{{color:#e63946;font-weight:700;font-size:11px;display:block;margin-top:2px}}
+    .skip-rec{{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;font-size:12px;font-weight:600;color:#856404;display:flex;align-items:center;gap:8px}}
     @media(max-width:600px){{ #vtog{{top:8px}} #vtog button{{padding:6px 14px;font-size:12px}}.ar{{flex-direction:column}}.sc{{padding:12px 14px}} #af{{padding:10px 12px}}}}
     </style>
     <script>
     var DD={dd_js};
+    window.dels = []; // Array of {{id, day, mins, rsn}}
+    function togMenu(){{var m=document.getElementById('d-menu'); m.style.display=m.style.display==='none'?'flex':'none';}}
+    function opAdd(){{document.getElementById('d-menu').style.display='none'; document.getElementById('d-add-mod').style.display='flex';}}
+    function opRem(){{document.getElementById('d-menu').style.display='none'; buildRemList(); document.getElementById('d-rem-mod').style.display='flex';}}
+    function clsMod(){{document.querySelectorAll('.mod-ov').forEach(m=>m.style.display='none');}}
+    function setD(m){{document.getElementById('v-dur').value=m;}}
+    
+    function svDel(){{
+      var mins = parseInt(document.getElementById('v-dur').value);
+      var rsn = document.getElementById('v-rsn').value || 'Weather/Overtime';
+      if(isNaN(mins) || mins<=0) return;
+      // Get current active day from the timeline
+      var activeDay = 1;
+      var dhs = document.querySelectorAll('.dh');
+      for(var i=0; i<dhs.length; i++) {{ if(dhs[i].style.display !== 'none') {{ activeDay = parseInt(dhs[i].getAttribute('data-day')); break; }} }}
+      window.dels.push({{id: Date.now(), day: activeDay, mins: mins, rsn: rsn}});
+      document.getElementById('v-dur').value=15; document.getElementById('v-rsn').value='';
+      clsMod();
+      applyDelays();
+    }}
+    
+    function buildRemList(){{
+      var h='';
+      if(window.dels.length===0) h='<div style="color:#888;text-align:center;padding:20px;">No delays added yet.</div>';
+      else {{
+        window.dels.forEach(d=> {{
+          h+=`<div class="d-itm">
+            <div><strong style="color:#2E5B8A">Day ${{d.day}}</strong>: ${{d.mins}}m<br><span style="color:#666;font-size:11px">${{d.rsn}}</span></div>
+            <button class="rm-btn" onclick="rmDel(${{d.id}})">Remove</button>
+          </div>`;
+        }});
+      }}
+      document.getElementById('v-del-list').innerHTML=h;
+    }}
+    
+    function rmDel(id){{ window.dels = window.dels.filter(d=>d.id!==id); buildRemList(); applyDelays(); }}
+
+    function applyDelays() {{
+      // Reset all times and skip recommendations first
+      document.querySelectorAll('.time-adj, .skip-rec').forEach(e=>e.remove());
+      var cards = document.querySelectorAll('.sc');
+      cards.forEach(c=> {{
+        var stEl = c.querySelector('.st');
+        if(stEl && stEl.dataset.orig) stEl.innerHTML = stEl.dataset.orig;
+      }});
+
+      if(window.dels.length===0) return;
+
+      // Group delays by day
+      var dayDelays = {{}};
+      window.dels.forEach(d=> {{ dayDelays[d.day] = (dayDelays[d.day]||0) + d.mins; }});
+
+      cards.forEach(c=> {{
+        var dAttr = c.getAttribute('data-day');
+        var hAttr = c.getAttribute('data-hour');
+        if(!dAttr || !hAttr) return;
+        
+        var day = parseInt(dAttr);
+        var mins = dayDelays[day];
+        if(!mins) return;
+        
+        var hr = parseInt(hAttr);
+        var stEl = c.querySelector('.st');
+        if(!stEl) return;
+        if(!stEl.dataset.orig) stEl.dataset.orig = stEl.innerHTML;
+        
+        var newTotalMins = (hr * 60) + mins;
+        var newH = Math.floor(newTotalMins / 60);
+        var newM = newTotalMins % 60;
+        var tStr = String(newH).padStart(2,'0') + ':' + String(newM).padStart(2,'0');
+        
+        stEl.innerHTML = `${{tStr}} <span class="time-adj">+${{mins}}m</span>`;
+        
+        // If shifted time is past 18:00 (approx sunset), and it's a skip recommended stop
+        if(newH >= 17) {{
+           if(c.getAttribute('data-skip') === 'true' && !c.querySelector('.skip-rec')) {{
+               var rec = document.createElement('div');
+               rec.className = 'skip-rec';
+               rec.innerHTML = '⚠️ Running late! Consider skipping this detour.';
+               c.insertBefore(rec, c.firstChild);
+           }}
+        }}
+      }});
+    }}
+
     function sv(v){{var m=document.querySelector('.folium-map');var a=document.getElementById('av');var t=document.getElementById('map-title');var bm=document.getElementById('bm');var ba=document.getElementById('ba');if(v==='agenda'){{if(m)m.style.display='none';if(t)t.style.display='none';a.style.display='block';bm.style.background='transparent';bm.style.color='#666';ba.style.background='#2E5B8A';ba.style.color='white';asc();}}else{{if(m)m.style.display='block';if(t)t.style.display='block';a.style.display='none';bm.style.background='#2E5B8A';bm.style.color='white';ba.style.background='transparent';ba.style.color='#666';}}}}
     var _f=new Set(['all','d1','d2','d3','d4','d5','hike','food','got']);
     function tf(b){{var f=b.getAttribute('data-f');if(f==='all'){{_f=new Set(['all','d1','d2','d3','d4','d5','hike','food','got']);var ps=document.querySelectorAll('.fp');for(var i=0;i<ps.length;i++){{ps[i].className='fp active';}}}}else{{if(b.className.indexOf('active')>=0){{b.className='fp';_f.delete(f);}}else{{b.className='fp active';_f.add(f);}}if(f.charAt(0)==='d'){{var ok=_f.has('d1')&&_f.has('d2')&&_f.has('d3')&&_f.has('d4')&&_f.has('d5');var ab=document.querySelector('[data-f="all"]');if(ok){{ab.className='fp active';_f.add('all');}}else{{ab.className='fp';_f.delete('all');}}}}}}af();}}
