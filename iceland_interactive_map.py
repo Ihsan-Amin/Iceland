@@ -26,6 +26,7 @@ ZOOM_START = 8
 VALHALLA_URL = "https://valhalla1.openstreetmap.de/route"
 ROUTE_CACHE = "route_cache.json"
 WEATHER_CACHE = "weather_cache.json"
+CACHE_MAX_AGE_HOURS = 1
 
 DAY_COLORS = {1:"#E63946",2:"#457B9D",3:"#2A9D8F",4:"#D4A017",5:"#7B2D8E"}
 DAY_LABELS = {
@@ -140,7 +141,12 @@ TRAILS = [
 # ═══════════════════════ WEATHER ═══════════════════════
 def fetch_weather():
     if os.path.exists(WEATHER_CACHE):
-        with open(WEATHER_CACHE) as f: return json.load(f)
+        age_seconds = time.time() - os.path.getmtime(WEATHER_CACHE)
+        if age_seconds < CACHE_MAX_AGE_HOURS * 3600:
+            print(f"✓ Weather loaded from cache (expires in {int((CACHE_MAX_AGE_HOURS * 3600 - age_seconds) / 60)} min).")
+            with open(WEATHER_CACHE) as f: return json.load(f)
+        else:
+            print("⟳ Weather cache expired — fetching fresh data...")
     locs = {}
     for s in STOPS:
         wl = s[8]
