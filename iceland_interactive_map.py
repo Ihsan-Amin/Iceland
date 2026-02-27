@@ -813,7 +813,7 @@ def build_map(routes, weather):
     </style>
     <script>
     var DD={dd_js};
-    window.dels = []; // Array of {{id, day, mins, rsn}}
+    window.dels = JSON.parse(localStorage.getItem('ic_dels')) || [];
     function togMenu(){{var m=document.getElementById('d-menu'); m.style.display=m.style.display==='none'?'flex':'none';}}
     function opAdd(){{document.getElementById('d-menu').style.display='none'; document.getElementById('d-add-mod').style.display='flex';}}
     function opRem(){{document.getElementById('d-menu').style.display='none'; buildRemList(); document.getElementById('d-rem-mod').style.display='flex';}}
@@ -829,6 +829,7 @@ def build_map(routes, weather):
       var dhs = document.querySelectorAll('.dh');
       for(var i=0; i<dhs.length; i++) {{ if(dhs[i].style.display !== 'none') {{ activeDay = parseInt(dhs[i].getAttribute('data-day')); break; }} }}
       window.dels.push({{id: Date.now(), day: activeDay, mins: mins, rsn: rsn}});
+      localStorage.setItem('ic_dels', JSON.stringify(window.dels));
       document.getElementById('v-dur').value=15; document.getElementById('v-rsn').value='';
       clsMod();
       applyDelays();
@@ -848,7 +849,7 @@ def build_map(routes, weather):
       document.getElementById('v-del-list').innerHTML=h;
     }}
     
-    function rmDel(id){{ window.dels = window.dels.filter(d=>d.id!==id); buildRemList(); applyDelays(); }}
+    function rmDel(id){{ window.dels = window.dels.filter(d=>d.id!==id); localStorage.setItem('ic_dels', JSON.stringify(window.dels)); buildRemList(); applyDelays(); }}
 
     function applyDelays() {{
       // Reset all times and skip recommendations first
@@ -912,6 +913,7 @@ def build_map(routes, weather):
         }});
       }});
     }}
+    applyDelays();
     </script>
     """
     m.get_root().html.add_child(folium.Element(agenda_el))
