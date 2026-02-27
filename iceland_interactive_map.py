@@ -93,6 +93,50 @@ STOPS = [
     ("KEF Departure ✈️",63.985,-22.6056,5,"logistics","Drop off campervan ~4pm. Flight 5pm.",None,16,"KEF / Reykjanes"),
 ]
 
+# ═══════════════════════ PARKING ═══════════════════════
+# (parking_lat, parking_lon, notes)  — where you actually park the campervan
+PARKING = {
+    "KEF Airport":          (63.9857,-22.6230, "KEF rental car return / pickup area"),
+    "Hveragerði":           (63.9966,-21.1876, "Town centre parking, free"),
+    "Reykjadalur Hot River":(64.0193,-21.2116, "Reykjadalur trailhead car park, free"),
+    "Seljalandsfoss":       (63.6154,-19.9907, "Seljalandsfoss main car park"),
+    "Gljúfrabúi":           (63.6154,-19.9907, "Same lot as Seljalandsfoss — 500m walk"),
+    "Skógafoss":            (63.5297,-19.5113, "Skógafoss car park at base of falls"),
+    "Dyrhólaey":            (63.4035,-19.1330, "Dyrhólaey lower car park (upper may close in wind)"),
+    "Reynisfjara":          (63.4037,-19.0664, "Reynisfjara beach car park by café"),
+    "Súður-Vík (dinner)":   (63.4190,-19.0080, "Street parking in Vík village"),
+    "Vík 🏕️":              (63.4186,-19.0060, "Vík Campsite, Víkurbraut 5"),
+    "Eldhraun Lava Field":  (63.6700,-18.3200, "Roadside pullout on Route 1"),
+    "Fjaðrárgljúfur Canyon":(63.7712,-18.1720, "Fjaðrárgljúfur car park off Route 1"),
+    "Kirkjugolf":           (63.7890,-17.9959, "Small car park by church, Kirkjubæjarklaustur"),
+    "Systrafoss":           (63.7850,-17.9745, "Kirkjubæjarklaustur village parking"),
+    "Svartifoss + Sjónarnipa Loop":(64.0169,-16.9669, "Skaftafell Visitor Centre car park"),
+    "Svínafellsjökull":     (64.0080,-16.8810, "Svínafellsjökull car park off Route 1"),
+    "Fjallsárlón":          (64.0167,-16.3750, "Fjallsárlón car park"),
+    "Jökulsárlón":          (64.0480,-16.1790, "Jökulsárlón main car park (east side)"),
+    "Diamond Beach":        (64.0440,-16.1780, "Diamond Beach car park (south side of bridge)"),
+    "Hofskirkja":           (64.1978,-15.9418, "Roadside pullout at church"),
+    "Hafnarbuðin (lunch)":  (64.2540,-15.2100, "Höfn harbour parking"),
+    "Stokksnes / Vestrahorn":(64.2530,-14.9700, "Viking Café car park (pay 1,100 ISK)"),
+    "Eystrahorn":           (64.3190,-14.6940, "Roadside pullout / gravel track end"),
+    "Höfn 🏕️":             (64.2539,-15.2081, "Höfn Campsite – Hamrar"),
+    "Kristínartindar Summit":(64.0169,-16.9669, "Skaftafell Visitor Centre car park"),
+    "Núpsstaurskógur":      (63.9372,-17.5050, "Roadside pullout on Route 1"),
+    "Lómagnúpur":           (63.8971,-17.6450, "Roadside viewpoint pullout"),
+    "Þingborg Wool Shop 🧶":(63.9333,-20.8167, "Parking at shop on Route 1"),
+    "Selfoss 🏕️":          (63.9332,-21.0030, "Selfoss Campsite"),
+    "Þingvellir":           (64.2559,-21.1187, "Þingvellir P1 car park, 💰 750 ISK"),
+    "Þórufoss (optional)":  (64.2833,-21.0667, "Small pullout by waterfall"),
+    "Geysir":               (64.3103,-20.3024, "Geysir car park, 💰 1,000 ISK"),
+    "Gullfoss":             (64.3260,-20.1270, "Gullfoss upper car park, free"),
+    "Hallgrímskirkja":      (64.1400,-21.9280, "Skólavörðustígur street parking / P1 zone"),
+    "Smékkleysa Records":   (64.1400,-21.9280, "Same Reykjavík parking — walk"),
+    "Harpa Concert Hall":   (64.1400,-21.9280, "Same Reykjavík parking — walk"),
+    "Sun Voyager":          (64.1400,-21.9280, "Same Reykjavík parking — walk"),
+    "Icelandic Street Food":(64.1400,-21.9280, "Same Reykjavík parking — walk"),
+    "KEF Departure ✈️":     (63.9857,-22.6230, "KEF rental car return"),
+}
+
 # ═══════════════════════ HIKING TRAILS ═══════════════════════
 TRAILS = [
     {
@@ -239,12 +283,44 @@ def fetch_routes():
     print("Fetching routes from Valhalla...")
     routes = {}
     for day in range(1,6):
-        pts = [(la,lo) for _,la,lo,d,*_ in STOPS if d==day]
-        ns = [n for n,_,_,d,*_ in STOPS if d==day]
+        # Use parking coordinates for routing (where you actually drive to)
+        pts = []
+        ns = []
+        for name,la,lo,d,*_ in STOPS:
+            if d != day: continue
+            p = PARKING.get(name)
+            coord = (p[0], p[1]) if p else (la, lo)
+            # Skip duplicate consecutive coords (shared parking lots)
+            if not pts or (round(coord[0],4), round(coord[1],4)) != (round(pts[-1][0],4), round(pts[-1][1],4)):
+                pts.append(coord)
+            ns.append(name)
         print(f"  Day {day}: {ns[0]} → {ns[-1]} ({len(pts)} stops)")
-        res = valhalla_route(pts)
-        if res: routes[day]=res[0]; print(f"    ✓ {len(res[0])} pts, {res[1]:.0f} km")
-        else: routes[day]=pts; print(f"    ⚠ fallback")
+        # Split long routes into overlapping chunks to avoid Valhalla timeouts
+        if len(pts) <= 6:
+            res = valhalla_route(pts)
+            if res: routes[day]=res[0]; print(f"    ✓ {len(res[0])} pts, {res[1]:.0f} km")
+            else: routes[day]=pts; print(f"    ⚠ fallback")
+        else:
+            all_coords = []
+            total_km = 0
+            chunk_size = 5
+            ok = True
+            for i in range(0, len(pts)-1, chunk_size-1):
+                chunk = pts[i:i+chunk_size]
+                if len(chunk) < 2: break
+                res = valhalla_route(chunk)
+                if res:
+                    cc = res[0]
+                    if all_coords and cc and all_coords[-1]==cc[0]: cc=cc[1:]
+                    all_coords.extend(cc)
+                    total_km += res[1]
+                else:
+                    ok = False; break
+                time.sleep(0.5)
+            if ok and all_coords:
+                routes[day]=all_coords; print(f"    ✓ {len(all_coords)} pts, {total_km:.0f} km (chunked)")
+            else:
+                routes[day]=pts; print(f"    ⚠ fallback")
         time.sleep(1)
     with open(ROUTE_CACHE,"w") as f: json.dump({str(k):v for k,v in routes.items()}, f)
     return routes
@@ -300,6 +376,7 @@ def build_map(routes, weather):
     tg = FeatureGroup(name="🥾 Hiking Trails", show=True)
     gotg = FeatureGroup(name="🐉 GoT Filming Locations", show=False)
     altg = FeatureGroup(name="🔀 Alternative Routes", show=False)
+    pkg = FeatureGroup(name="🅿️ Parking", show=False)
 
     # Road routes
     for day, coords in routes.items():
@@ -338,6 +415,34 @@ def build_map(routes, weather):
     for fg in dg.values(): fg.add_to(m)
     tg.add_to(m)
     gotg.add_to(m)
+
+    # Parking markers (deduplicated by coords)
+    seen_parking = set()
+    for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
+        p = PARKING.get(name)
+        if not p: continue
+        plat, plon, pnotes = p
+        coord_key = (round(plat,4), round(plon,4))
+        if coord_key in seen_parking: continue
+        seen_parking.add(coord_key)
+        # Find all stops sharing this parking
+        shared = [n for n,_,_,_,_,_,_,_,_ in STOPS if PARKING.get(n) and (round(PARKING[n][0],4), round(PARKING[n][1],4)) == coord_key]
+        gmap = f"https://www.google.com/maps?q={plat},{plon}"
+        dc = DAY_COLORS.get(day, "#666")
+        ph = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:280px;width:calc(100vw - 80px);line-height:1.5;">
+        <div style="background:#2E7D32;color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+          <strong style="font-size:14px;">🅿️ Parking</strong><br>
+          <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]}</span>
+        </div>
+        <div style="font-size:12px;color:#333;margin-bottom:6px;"><b>{'</b>, <b>'.join(shared)}</b></div>
+        <div style="font-size:12px;color:#555;">{pnotes}</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{gmap}" target="_blank" style="color:#2E7D32;text-decoration:none;font-size:13px;font-weight:600;padding:4px 0;">📍 Navigate to Parking</a></div>
+        </div>"""
+        Marker(location=[plat,plon],
+               tooltip=f"🅿️ Parking: {shared[0]}",
+               icon=Icon(color="green",icon="square-parking",prefix="fa"),
+               popup=Popup(ph, max_width=320)).add_to(pkg)
+    pkg.add_to(m)
 
     # Alternative routes
     for ar in ALT_ROUTES:
@@ -393,7 +498,7 @@ def build_map(routes, weather):
     title = """<div id="map-title" style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:calc(100vw - 120px);">
     <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
     <div class="title-sub" style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
-    <div class="title-legend" style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT  🔀 Alt</div>
+    <div class="title-legend" style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT  🔀 Alt  🅿️ P</div>
     <div class="title-credits" style="font-size:9px;color:#bbb;margin-top:3px;">Roads: Valhalla/OSM · Weather: Open-Meteo ·
     <span style="color:#FF6B35;">━ ━ ━</span> Hiking trails · <span style="color:#4A90D9;">━ ━ ━</span> Alt routes · Toggle layers ↗</div></div>"""
     m.get_root().html.add_child(folium.Element(title))
