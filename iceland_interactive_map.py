@@ -298,7 +298,7 @@ if __name__ == "__main__":
     weather = fetch_weather()
     print("\nBuilding interactive map...")
     m = build_map(routes, weather)
-    out = "iceland_interactive_map.html"
+    out = "index.html"
     m.save(out)
     kb = os.path.getsize(out)/1024
     print(f"\n✓ Saved: {out} ({kb:.0f} KB)")

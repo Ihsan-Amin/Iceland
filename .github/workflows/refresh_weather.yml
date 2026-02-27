@@ -1,0 +1,39 @@
+name: 🌤️ Refresh Weather & Deploy
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # Every hour on the hour (UTC)
+  workflow_dispatch:       # Also allow manual trigger from GitHub UI
+
+permissions:
+  contents: write          # Needed to push the updated index.html back
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install folium polyline requests
+
+      - name: Delete weather cache (force fresh fetch)
+        run: rm -f weather_cache.json
+
+      - name: Regenerate map with fresh weather
+        run: python3 iceland_interactive_map.py
+
+      - name: Commit and push updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html weather_cache.json
+          git diff --staged --quiet || git commit -m "🌤️ Auto-refresh weather [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          git push
