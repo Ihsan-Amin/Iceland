@@ -880,8 +880,8 @@ def build_map(routes, weather):
 
     function applyDelays() {{
       // Reset all times and skip recommendations first
-      document.querySelectorAll('.time-adj, .skip-rec').forEach(e=>e.remove());
-      var cards = document.querySelectorAll('.sc');
+      document.querySelectorAll('.time-adj, .skip-rec, .injected-delay').forEach(e=>e.remove());
+      var cards = document.querySelectorAll('.sc:not(.injected-delay)');
       cards.forEach(c=> {{
         var stEl = c.querySelector('.st');
         if(stEl && stEl.dataset.orig) stEl.innerHTML = stEl.dataset.orig;
@@ -889,23 +889,59 @@ def build_map(routes, weather):
 
       if(window.dels.length===0) return;
 
-      cards.forEach(c=> {{
+      // Inject visual delay blocks
+      window.dels.forEach(d => {{
+         var dc = document.createElement('div');
+         dc.className = 'sc injected-delay';
+         dc.setAttribute('data-day', d.day);
+         dc.setAttribute('data-hour', d.hr);
+         dc.setAttribute('data-delay-id', d.id);
+         dc.style.borderLeftColor = '#E63946';
+         dc.style.backgroundColor = '#fff0f1';
+         dc.style.marginBottom = '10px';
+         var hrStr = String(d.hr).padStart(2,'0') + ':00';
+         dc.innerHTML = `
+           <div style="display:flex;align-items:baseline;gap:10px">
+             <div class="st">${{hrStr}}</div>
+             <div><span class="sn" style="color:#C62828">🛑 Added Stop / Delay</span><br><span class="stp">${{d.mins}} minutes (${{d.rsn}})</span></div>
+           </div>`;
+           
+         var inserted = false;
+         for(var i=0; i<cards.length; i++) {{
+            var c = cards[i];
+            var cd = parseInt(c.getAttribute('data-day'));
+            var ch = parseInt(c.getAttribute('data-hour'));
+            if(cd === d.day && ch >= d.hr) {{
+               c.parentNode.insertBefore(dc, c);
+               inserted = true; break;
+            }} else if(cd > d.day) {{
+               c.parentNode.insertBefore(dc, c);
+               inserted = true; break;
+            }}
+         }}
+         if(!inserted) document.getElementById('atl').appendChild(dc);
+      }});
+
+      // Collect all cards including the newly injected ones for time shifting
+      var allCards = document.querySelectorAll('.sc');
+      allCards.forEach(c=> {{
         var dAttr = c.getAttribute('data-day');
         var hAttr = c.getAttribute('data-hour');
         if(!dAttr || !hAttr) return;
         
         var cardDay = parseInt(dAttr);
         var cardHr = parseInt(hAttr);
+        var delayId = c.getAttribute('data-delay-id');
         
         var mins = 0;
         window.dels.forEach(d => {{
-           if(d.day === cardDay && cardHr >= d.hr) {{
+           if(d.day === cardDay && cardHr >= d.hr && String(d.id) !== delayId) {{
                mins += d.mins;
            }}
         }});
         
         if(!mins) return;
-        
+
         var stEl = c.querySelector('.st');
         if(!stEl) return;
         if(!stEl.dataset.orig) stEl.dataset.orig = stEl.innerHTML;
@@ -917,8 +953,8 @@ def build_map(routes, weather):
         
         stEl.innerHTML = `${{tStr}} <span class="time-adj">+${{mins}}m</span>`;
         
-        // If shifted time is past 18:00 (approx sunset), and it's a skip recommended stop
-        if(newH >= 17) {{
+        // Only inject generic skip warning on ACTUAL cards, not the injected delay blocks
+        if(newH >= 17 && !delayId) {{
            if(c.getAttribute('data-skip') === 'true' && !c.querySelector('.skip-rec')) {{
                var rec = document.createElement('div');
                rec.className = 'skip-rec';
@@ -927,6 +963,8 @@ def build_map(routes, weather):
            }}
         }}
       }});
+      
+      af(); // Re-run filter logic to ensure injected cards respect Day tab toggles
     }}
 
     function sv(v){{var m=document.querySelector('.folium-map');var a=document.getElementById('av');var t=document.getElementById('map-title');var bm=document.getElementById('bm');var ba=document.getElementById('ba');if(v==='agenda'){{if(m)m.style.display='none';if(t)t.style.display='none';a.style.display='block';bm.style.background='transparent';bm.style.color='#666';ba.style.background='#2E5B8A';ba.style.color='white';asc();}}else{{if(m)m.style.display='block';if(t)t.style.display='block';a.style.display='none';bm.style.background='#2E5B8A';bm.style.color='white';ba.style.background='transparent';ba.style.color='#666';}}}}
