@@ -18,6 +18,7 @@ Features:
 
 import folium
 from folium import FeatureGroup, Marker, PolyLine, Popup, Icon, LayerControl
+from folium.plugins import LocateControl
 import polyline as pl_lib
 import requests, json, time, os
 
@@ -241,10 +242,11 @@ def fetch_weather():
     for name,(lat,lon) in locs.items():
         url = (f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
                f"&hourly=temperature_2m,apparent_temperature,precipitation,weathercode,windspeed_10m,windgusts_10m"
+               f"&daily=sunrise,sunset"
                f"&start_date=2026-03-06&end_date=2026-03-10&timezone=Atlantic/Reykjavik")
         try:
             r = requests.get(url, timeout=15).json()
-            if "hourly" in r: out[name] = r["hourly"]; print(f"  ✓ {name}")
+            if "hourly" in r: out[name] = {"hourly": r["hourly"], "daily": r.get("daily", {})}; print(f"  ✓ {name}")
         except: pass
         time.sleep(0.3)
     with open(WEATHER_CACHE,"w") as f: json.dump(out, f)
@@ -252,7 +254,8 @@ def fetch_weather():
 
 def get_wx(wd, wloc, day, hour):
     if wloc not in wd: return None
-    h = wd[wloc]; t = f"{DAY_DATES[day]}T{hour:02d}:00"
+    h = wd[wloc].get("hourly"); t = f"{DAY_DATES[day]}T{hour:02d}:00"
+    if not h: return None
     try: i = h["time"].index(t)
     except ValueError: return None
     tc = h["temperature_2m"][i]; fc = h["apparent_temperature"][i]
@@ -260,6 +263,17 @@ def get_wx(wd, wloc, day, hour):
     return {"tc":tc,"tf":round(tc*9/5+32,1),"fc":fc,"ff":round(fc*9/5+32,1),
             "p":h["precipitation"][i],"w":h["windspeed_10m"][i],"g":h["windgusts_10m"][i],
             "desc":desc,"emoji":emoji,"hour":hour}
+
+def get_sun_hours(wd, wloc, day):
+    if wloc not in wd: return None, None
+    d = wd[wloc].get("daily")
+    if not d: return None, None
+    try: 
+        i = d["time"].index(DAY_DATES[day])
+        sr = int(d["sunrise"][i].split("T")[1].split(":")[0])
+        ss = int(d["sunset"][i].split("T")[1].split(":")[0])
+        return sr, ss
+    except: return None, None
 
 # ═══════════════════════ ROUTING ═══════════════════════
 def valhalla_route(locs):
@@ -276,11 +290,13 @@ def valhalla_route(locs):
     except: return None
 
 def fetch_routes():
+    import hashlib
+    routes_cache_data = {}
     if os.path.exists(ROUTE_CACHE):
-        with open(ROUTE_CACHE) as f:
-            c = json.load(f); routes = {int(k):v for k,v in c.items()}
-            if len(routes)==5: print("✓ Routes loaded from cache."); return routes
-    print("Fetching routes from Valhalla...")
+        try:
+            with open(ROUTE_CACHE) as f: routes_cache_data = json.load(f)
+        except: pass
+    print("Fetching routes from Valhalla (with hash caching)...")
     routes = {}
     for day in range(1,6):
         # Use parking coordinates for routing (where you actually drive to)
@@ -295,10 +311,16 @@ def fetch_routes():
                 pts.append(coord)
             ns.append(name)
         print(f"  Day {day}: {ns[0]} → {ns[-1]} ({len(pts)} stops)")
+        day_hash = hashlib.md5(str(pts).encode('utf-8')).hexdigest()
+        if day_hash in routes_cache_data:
+            routes[day] = routes_cache_data[day_hash]
+            print(f"    ✓ Loaded from cache (hash: {day_hash[:8]})")
+            continue
+            
         # Split long routes into overlapping chunks to avoid Valhalla timeouts
         if len(pts) <= 6:
             res = valhalla_route(pts)
-            if res: routes[day]=res[0]; print(f"    ✓ {len(res[0])} pts, {res[1]:.0f} km")
+            if res: routes[day]=res[0]; routes_cache_data[day_hash]=res[0]; print(f"    ✓ {len(res[0])} pts, {res[1]:.0f} km")
             else: routes[day]=pts; print(f"    ⚠ fallback")
         else:
             all_coords = []
@@ -318,11 +340,11 @@ def fetch_routes():
                     ok = False; break
                 time.sleep(0.5)
             if ok and all_coords:
-                routes[day]=all_coords; print(f"    ✓ {len(all_coords)} pts, {total_km:.0f} km (chunked)")
+                routes[day]=all_coords; routes_cache_data[day_hash]=all_coords; print(f"    ✓ {len(all_coords)} pts, {total_km:.0f} km (chunked)")
             else:
                 routes[day]=pts; print(f"    ⚠ fallback")
         time.sleep(1)
-    with open(ROUTE_CACHE,"w") as f: json.dump({str(k):v for k,v in routes.items()}, f)
+    with open(ROUTE_CACHE,"w") as f: json.dump(routes_cache_data, f)
     return routes
 
 # ═══════════════════════ MAP ═══════════════════════
@@ -494,6 +516,7 @@ def build_map(routes, weather):
                popup=Popup(ar_html, max_width=340)).add_to(altg)
     altg.add_to(m)
     LayerControl(collapsed=True).add_to(m)
+    LocateControl(position="topleft", strings={"title": "See my location"}).add_to(m)
 
     title = """<div id="map-title" style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:calc(100vw - 120px);">
     <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
@@ -509,6 +532,12 @@ def build_map(routes, weather):
     .leaflet-control-layers-overlays {
         max-height: 400px;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Mobile-friendly popup scrolling */
+    .leaflet-popup-content {
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
     }
     /* Popup close button — larger touch target */
     .leaflet-popup-close-button {
@@ -582,6 +611,14 @@ def build_map(routes, weather):
         if ar["day"] == 5 and "Þórufoss" in ar["name"]: alt_lookup["Þingvellir"] = ar
         if ar["day"] == 1 and "Dyrhólaey" in ar["name"]: alt_lookup["Dyrhólaey"] = ar
 
+    def _trunc_notes(notes, c):
+        if len(notes) > 130:
+            short_n = notes[:125].rsplit(" ", 1)[0] + "..."
+            short_n = short_n.replace("\n", "<br>")
+            full_n = notes.replace("\n", "<br>")
+            return f"""<span style="display:inline">{short_n} </span><a href="#" onclick="this.previousElementSibling.style.display='none';this.nextElementSibling.style.display='inline';this.style.display='none';return false;" style="color:{c};font-weight:600;text-decoration:none;">Read More ↓</a><span style="display:none">{full_n} <a href="#" onclick="var p=this.parentElement;p.style.display='none';p.previousElementSibling.style.display='inline';p.previousElementSibling.previousElementSibling.style.display='inline';return false;" style="color:#666;text-decoration:none;">Hide ↑</a></span>"""
+        return notes.replace("\n", "<br>")
+
     def _card(name, day, st, notes, link, wx, lat, lon, hr, parking, is_got):
         c = DAY_COLORS[day]
         icon = TYPE_ICONS.get(st, "📷")
@@ -601,7 +638,7 @@ def build_map(routes, weather):
             h += f'<span>💨 Wind {wx["w"]:.0f} km/h</span><span>💨 Gusts {wx["g"]:.0f} km/h</span>'
             h += f'<span>🌧️ {wx["p"]:.1f} mm</span></div>'
 
-        sn = notes.replace("\n", "<br>")
+        sn = _trunc_notes(notes, c)
         h += f'<div class="snt">{sn}</div>'
         h += '<div class="sl">'
         if link: h += f'<a href="{link}" target="_blank" style="color:{c}">📖 Guide →</a>'
@@ -625,7 +662,7 @@ def build_map(routes, weather):
             h += f'<span>🌡️ {wx["tc"]:.0f}°C / {wx["tf"]:.0f}°F</span>'
             h += f'<span>💨 Wind {wx["w"]:.0f} km/h</span></div>'
         h += f'<div style="background:#fff3cd;border-radius:6px;padding:6px 8px;margin-top:6px;font-size:11px;font-weight:600">{ar["trigger"]}</div>'
-        sn = ar["notes"].replace("\n", "<br>")
+        sn = _trunc_notes(ar["notes"], "#4A90D9")
         h += f'<div class="snt">{sn}</div>'
         h += '<div class="sl">'
         if ar.get("link"): h += f'<a href="{ar["link"]}" target="_blank" style="color:#4A90D9">📖 Guide →</a>'
@@ -636,11 +673,24 @@ def build_map(routes, weather):
     # Build timeline cards
     tl = ""
     cur_day = 0
+    last_hr = 0
+    day_sr, day_ss = None, None
     for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
         if day != cur_day:
             cur_day = day
+            last_hr = 0
+            day_sr, day_ss = get_sun_hours(weather, wl, day)
             c = DAY_COLORS[day]
             tl += f'<div class="dh" data-day="{day}"><div class="dd" style="background:{c}"></div>{DAY_LABELS[day]}</div>'
+            
+        if day_sr and last_hr < day_sr <= hr:
+            tl += f'<div class="sc" style="padding:6px 16px;background:#fef8e7;border-left-color:#f9a826;text-align:center;font-size:12px;font-weight:600;color:#d97706;margin-bottom:10px;">☀️ Sunrise at ~{day_sr:02d}:00</div>'
+            day_sr = None
+        if day_ss and last_hr < day_ss <= hr:
+            tl += f'<div class="sc" style="padding:6px 16px;background:#f0f4f8;border-left-color:#3b82f6;text-align:center;font-size:12px;font-weight:600;color:#1e40af;margin-bottom:10px;">🌙 Sunset at ~{day_ss:02d}:00</div>'
+            day_ss = None
+        last_hr = hr
+        
         wx = get_wx(weather, wl, day, hr)
         p = PARKING.get(name)
         ig = "\U0001F409" in notes
@@ -715,6 +765,15 @@ def build_map(routes, weather):
     function tf(b){{var f=b.getAttribute('data-f');if(f==='all'){{_f=new Set(['all','d1','d2','d3','d4','d5','hike','food','got']);var ps=document.querySelectorAll('.fp');for(var i=0;i<ps.length;i++){{ps[i].className='fp active';}}}}else{{if(b.className.indexOf('active')>=0){{b.className='fp';_f.delete(f);}}else{{b.className='fp active';_f.add(f);}}if(f.charAt(0)==='d'){{var ok=_f.has('d1')&&_f.has('d2')&&_f.has('d3')&&_f.has('d4')&&_f.has('d5');var ab=document.querySelector('[data-f="all"]');if(ok){{ab.className='fp active';_f.add('all');}}else{{ab.className='fp';_f.delete('all');}}}}}}af();}}
     function af(){{var cs=document.querySelectorAll('#atl .sc');var hs=document.querySelectorAll('#atl .dh');var ars=document.querySelectorAll('#atl .ar');for(var i=0;i<cs.length;i++){{var c=cs[i];if(c.parentElement.className.indexOf('ar')>=0)continue;var d=c.getAttribute('data-day');var tp=c.getAttribute('data-type');var gt=c.getAttribute('data-got');var dok=_f.has('d'+d);var tok=true;if(tp==='hike'&&!_f.has('hike'))tok=false;if(tp==='food'&&!_f.has('food'))tok=false;if(gt==='true'&&!_f.has('got'))tok=false;c.style.display=(dok&&tok)?'':'none';}}for(var i=0;i<ars.length;i++){{var r=ars[i];var mc=r.querySelector('.sc[data-day]');r.style.display=(mc&&mc.style.display==='none')?'none':'';}}for(var i=0;i<hs.length;i++){{var h=hs[i];h.style.display=_f.has('d'+h.getAttribute('data-day'))?'':'none';}}}}
     function asc(){{var n=new Date();var uh=n.getUTCHours();var today=n.getUTCFullYear()+'-'+String(n.getUTCMonth()+1).padStart(2,'0')+'-'+String(n.getUTCDate()).padStart(2,'0');var td=null;for(var k in DD){{if(DD[k]===today)td=parseInt(k);}}if(!td)return;var cs=document.querySelectorAll('.sc[data-hour]');for(var i=0;i<cs.length;i++){{var c=cs[i];var cd=parseInt(c.getAttribute('data-day'));var ch=parseInt(c.getAttribute('data-hour'));if((cd===td&&ch>=uh)||cd>td){{c.className+=' now';setTimeout(function(){{c.scrollIntoView({{behavior:'smooth',block:'center'}});}},200);return;}}}}}}
+    if ('serviceWorker' in navigator) {{
+      window.addEventListener('load', function() {{
+        navigator.serviceWorker.register('sw.js').then(function(r) {{
+          console.log('SW registered: ', r.scope);
+        }}).catch(function(e) {{
+          console.log('SW fail: ', e);
+        }});
+      }});
+    }}
     </script>
     """
     m.get_root().html.add_child(folium.Element(agenda_el))
@@ -730,6 +789,15 @@ if __name__ == "__main__":
     m = build_map(routes, weather)
     out = "index.html"
     m.save(out)
+    
+    # Clean up trailing slashes for perfect HTML5 validation
+    import re
+    with open(out, 'r', encoding='utf-8') as f:
+        html = f.read()
+    html = re.sub(r'(<(meta|link|img|br|hr|input)[^>]*?)\s*/>', r'\1>', html)
+    with open(out, 'w', encoding='utf-8') as f:
+        f.write(html)
+        
     kb = os.path.getsize(out)/1024
     print(f"\n✓ Saved: {out} ({kb:.0f} KB)")
     print("  • Layer control: toggle days + hiking trails on/off")
