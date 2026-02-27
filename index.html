@@ -55,7 +55,7 @@
 </head>
 <body>
     
-    <div id="map-title" style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:calc(100vw - 120px);">
+    <div id="map-title" style="position:fixed;top:10px;left:55px;z-index:1000;background:white;padding:10px 18px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:calc(50vw - 160px);">
     <div style="font-size:16px;font-weight:700;color:#2E5B8A;">🇮🇸 Iceland Road Trip — Interactive Map</div>
     <div class="title-sub" style="font-size:12px;color:#666;margin-top:2px;">March 6–10, 2026 · 5 Days · ~1,200 km · Live weather forecast</div>
     <div class="title-legend" style="font-size:10px;color:#999;margin-top:4px;">🏕️ Camp  🥾 Hike  🍽️ Food  🧶 Shop  📷 Attraction  ✈️ Logistics  🐉 GoT  🔀 Alt  🅿️ P</div>
@@ -82,10 +82,10 @@
     }
     /* Mobile: screens under 600px */
     @media (max-width: 600px) {
-        /* Compact title bar */
+        /* Compact title bar — sit below the centered view toggle */
         #map-title {
             left: 10px !important;
-            top: 6px !important;
+            top: 52px !important;
             padding: 6px 12px !important;
             max-width: calc(100vw - 70px) !important;
         }
@@ -223,7 +223,7 @@
     #ba{background:transparent;color:#666}
     #av{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1500;background:#f8f9fb;overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
     .ah{padding:60px 20px 12px;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);color:white;text-align:center}
-    #af{padding:12px 16px;background:white;border-bottom:1px solid #e8eaed;display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+    #af{padding:12px 16px;background:white;border-bottom:1px solid #e8eaed;display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:48px;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
     .fp{padding:6px 14px;border:1.5px solid #ddd;border-radius:16px;font-size:12px;font-weight:500;cursor:pointer;background:white;color:#888;transition:all 0.2s}
     .fp.active{background:#f0f4ff;border-color:currentColor;font-weight:600}
     .fp[data-f="all"].active{background:#e8eaed;border-color:#666;color:#333}
@@ -252,11 +252,65 @@
     .rm-btn{background:#ffebee;color:#c62828;border:none;padding:6px 12px;border-radius:6px;font-weight:600;cursor:pointer}
     .time-adj{color:#e63946;font-weight:700;font-size:11px;display:block;margin-top:2px}
     .skip-rec{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;font-size:12px;font-weight:600;color:#856404;display:flex;align-items:center;gap:8px}
+    .sc.removed{opacity:0.35;filter:grayscale(70%);pointer-events:none}
+    .sc.removed .tog-rm{pointer-events:auto}
+    .tog-rm{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:2px solid #ccc;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;color:#999;transition:all 0.2s;padding:0;z-index:10}
+    .tog-rm:hover{border-color:#e63946;color:#e63946;background:#fff5f5}
+    .sc.removed .tog-rm{border-color:#4CAF50;color:#4CAF50;opacity:1;filter:none}
+    .sc.removed .tog-rm:hover{background:#f0fff0}
+    .flight-card{background:linear-gradient(135deg,#f8f9fb,#eef1f6);border-radius:12px;padding:14px 16px;margin-bottom:10px;border-left:4px solid #1a237e;font-size:12px}
+    .flight-card .fc-header{font-size:13px;font-weight:700;color:#1a237e;margin-bottom:8px}
+    .flight-card .fc-route{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+    .flight-card .fc-time{font-weight:700;font-size:14px}
+    .flight-card .fc-code{font-size:11px;color:#666}
+    .flight-card .fc-arrow{color:#999;font-size:12px}
+    .flight-card .fc-detail{font-size:11px;color:#555;margin-top:4px}
+    .flight-card .fc-confirm{display:inline-block;background:#e8eaf6;color:#1a237e;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-bottom:6px}
+    .time-saved{color:#4CAF50;font-weight:700;font-size:11px;display:block;margin-top:2px}
     @media(max-width:600px){ #vtog{top:8px} #vtog button{padding:6px 14px;font-size:12px}.ar{flex-direction:column}.sc{padding:12px 14px} #af{padding:10px 12px}}
     </style>
     <script>
     var DD={1:"2026-03-06",2:"2026-03-07",3:"2026-03-08",4:"2026-03-09",5:"2026-03-10"};
     window.dels = JSON.parse(localStorage.getItem('ic_dels')) || [];
+    window.removedStops = JSON.parse(localStorage.getItem('ic_removed')) || [];
+
+    function getStopId(c){
+      var d=c.getAttribute('data-day'), h=c.getAttribute('data-hour'), n=c.querySelector('.sn');
+      return d+'-'+h+'-'+(n?n.textContent.trim():'');
+    }
+    function isImmune(c){
+      var tp=c.getAttribute('data-type');
+      if(tp==='overnight') return true;
+      if(tp==='logistics'){var n=c.querySelector('.sn'); if(n&&n.textContent.indexOf('KEF')>=0) return true;}
+      return false;
+    }
+    function isDepArr(c){
+      var tp=c.getAttribute('data-type');
+      if(tp==='logistics'){var n=c.querySelector('.sn'); if(n&&n.textContent.indexOf('KEF')>=0) return true;}
+      return false;
+    }
+    function togStop(btn){
+      var c=btn.closest('.sc'), id=getStopId(c);
+      var idx=window.removedStops.indexOf(id);
+      if(idx>=0) window.removedStops.splice(idx,1); else window.removedStops.push(id);
+      localStorage.setItem('ic_removed',JSON.stringify(window.removedStops));
+      applyDelays();
+    }
+    function initTogButtons(){
+      var cards=document.querySelectorAll('#atl .sc[data-day]');
+      cards.forEach(function(c){
+        if(c.classList.contains('injected-delay')) return;
+        if(isImmune(c)) return;
+        if(c.closest('.ar')&&c.classList.contains('ac')) return;
+        c.style.position='relative';
+        var btn=document.createElement('button');
+        btn.className='tog-rm';
+        btn.innerHTML='−';
+        btn.title='Remove / restore this stop';
+        btn.setAttribute('onclick','togStop(this)');
+        c.appendChild(btn);
+      });
+    }
     function togMenu(){var m=document.getElementById('d-menu'); m.style.display=m.style.display==='none'?'flex':'none';}
     function opAdd(){
       document.getElementById('d-menu').style.display='none'; 
@@ -302,91 +356,141 @@
     function rmDel(id){ window.dels = window.dels.filter(d=>d.id!==id); localStorage.setItem('ic_dels', JSON.stringify(window.dels)); buildRemList(); applyDelays(); }
 
     function applyDelays() {
-      // Reset all times and skip recommendations first
-      document.querySelectorAll('.time-adj, .skip-rec, .injected-delay').forEach(e=>e.remove());
-      var cards = document.querySelectorAll('.sc:not(.injected-delay)');
+      // Reset all times, skip recs, injected delays, removed states, and time-saved indicators
+      document.querySelectorAll('.time-adj, .time-saved, .skip-rec, .injected-delay').forEach(e=>e.remove());
+      var cards = document.querySelectorAll('#atl .sc:not(.injected-delay)');
       cards.forEach(c=> {
         var stEl = c.querySelector('.st');
         if(stEl && stEl.dataset.orig) stEl.innerHTML = stEl.dataset.orig;
+        c.classList.remove('removed');
       });
 
-      if(window.dels.length===0) return;
-
-      // Inject visual delay blocks
-      window.dels.forEach(d => {
-         var dc = document.createElement('div');
-         dc.className = 'sc injected-delay';
-         dc.setAttribute('data-day', d.day);
-         dc.setAttribute('data-hour', d.hr);
-         dc.setAttribute('data-delay-id', d.id);
-         dc.style.borderLeftColor = '#E63946';
-         dc.style.backgroundColor = '#fff0f1';
-         dc.style.marginBottom = '10px';
-         var hrStr = String(d.hr).padStart(2,'0') + ':00';
-         dc.innerHTML = `
-           <div style="display:flex;align-items:baseline;gap:10px">
-             <div class="st">${hrStr}</div>
-             <div><span class="sn" style="color:#C62828">🛑 Added Stop / Delay</span><br><span class="stp">${d.mins} minutes (${d.rsn})</span></div>
-           </div>`;
-           
-         var inserted = false;
-         for(var i=0; i<cards.length; i++) {
-            var c = cards[i];
-            var cd = parseInt(c.getAttribute('data-day'));
-            var ch = parseInt(c.getAttribute('data-hour'));
-            if(cd === d.day && ch >= d.hr) {
-               c.parentNode.insertBefore(dc, c);
-               inserted = true; break;
-            } else if(cd > d.day) {
-               c.parentNode.insertBefore(dc, c);
-               inserted = true; break;
-            }
-         }
-         if(!inserted) document.getElementById('atl').appendChild(dc);
+      // Apply removed state to cards
+      cards.forEach(c=> {
+        if(!c.getAttribute('data-day')) return;
+        var id = getStopId(c);
+        if(window.removedStops.indexOf(id) >= 0) c.classList.add('removed');
       });
 
-      // Collect all cards including the newly injected ones for time shifting
-      var allCards = document.querySelectorAll('.sc');
+      // Inject visual delay blocks (only if delays exist)
+      if(window.dels.length > 0) {
+        window.dels.forEach(d => {
+           var dc = document.createElement('div');
+           dc.className = 'sc injected-delay';
+           dc.setAttribute('data-day', d.day);
+           dc.setAttribute('data-hour', d.hr);
+           dc.setAttribute('data-delay-id', d.id);
+           dc.style.borderLeftColor = '#E63946';
+           dc.style.backgroundColor = '#fff0f1';
+           dc.style.marginBottom = '10px';
+           var hrStr = String(d.hr).padStart(2,'0') + ':00';
+           dc.innerHTML = `
+             <div style="display:flex;align-items:baseline;gap:10px">
+               <div class="st">${hrStr}</div>
+               <div><span class="sn" style="color:#C62828">🛑 Added Stop / Delay</span><br><span class="stp">${d.mins} minutes (${d.rsn})</span></div>
+             </div>`;
+           var inserted = false;
+           for(var i=0; i<cards.length; i++) {
+              var c = cards[i];
+              var cd = parseInt(c.getAttribute('data-day'));
+              var ch = parseInt(c.getAttribute('data-hour'));
+              if(cd === d.day && ch >= d.hr) {
+                 c.parentNode.insertBefore(dc, c);
+                 inserted = true; break;
+              } else if(cd > d.day) {
+                 c.parentNode.insertBefore(dc, c);
+                 inserted = true; break;
+              }
+           }
+           if(!inserted) document.getElementById('atl').appendChild(dc);
+        });
+      }
+
+      // Build per-day ordered lists of cards for time calculations
+      var dayCards = {};
+      var allCards = document.querySelectorAll('#atl .sc');
       allCards.forEach(c=> {
         var dAttr = c.getAttribute('data-day');
-        var hAttr = c.getAttribute('data-hour');
-        if(!dAttr || !hAttr) return;
-        
-        var cardDay = parseInt(dAttr);
-        var cardHr = parseInt(hAttr);
-        var delayId = c.getAttribute('data-delay-id');
-        
-        var mins = 0;
-        window.dels.forEach(d => {
-           if(d.day === cardDay && cardHr >= d.hr && String(d.id) !== delayId) {
-               mins += d.mins;
-           }
-        });
-        
-        if(!mins) return;
-
-        var stEl = c.querySelector('.st');
-        if(!stEl) return;
-        if(!stEl.dataset.orig) stEl.dataset.orig = stEl.innerHTML;
-        
-        var newTotalMins = (cardHr * 60) + mins;
-        var newH = Math.floor(newTotalMins / 60);
-        var newM = newTotalMins % 60;
-        var tStr = String(newH).padStart(2,'0') + ':' + String(newM).padStart(2,'0');
-        
-        stEl.innerHTML = `${tStr} <span class="time-adj">+${mins}m</span>`;
-        
-        // Only inject generic skip warning on ACTUAL cards, not the injected delay blocks
-        if(newH >= 17 && !delayId) {
-           if(c.getAttribute('data-skip') === 'true' && !c.querySelector('.skip-rec')) {
-               var rec = document.createElement('div');
-               rec.className = 'skip-rec';
-               rec.innerHTML = '⚠️ Running late! Consider skipping this detour.';
-               c.insertBefore(rec, c.firstChild);
-           }
-        }
+        if(!dAttr) return;
+        var day = parseInt(dAttr);
+        if(!dayCards[day]) dayCards[day] = [];
+        dayCards[day].push(c);
       });
-      
+
+      // For each day, calculate net time offset (delays push later, removals push earlier)
+      for(var day in dayCards) {
+        var list = dayCards[day];
+        var removedMins = 0; // accumulated minutes saved from removed stops
+
+        for(var i=0; i<list.length; i++) {
+          var c = list[i];
+          var hAttr = c.getAttribute('data-hour');
+          if(!hAttr) continue;
+          var cardHr = parseInt(hAttr);
+          var delayId = c.getAttribute('data-delay-id');
+          var dayInt = parseInt(day);
+
+          // If this card is removed, calculate its slot duration and accumulate savings
+          if(c.classList.contains('removed') && !delayId) {
+            // Slot = time until next non-removed, non-injected card on same day
+            var nextHr = null;
+            for(var j=i+1; j<list.length; j++) {
+              var nh = list[j].getAttribute('data-hour');
+              if(nh && !list[j].getAttribute('data-delay-id')) {
+                nextHr = parseInt(nh);
+                break;
+              }
+            }
+            if(nextHr !== null && nextHr > cardHr) {
+              removedMins += (nextHr - cardHr) * 60;
+            } else {
+              removedMins += 60; // default 1hr slot if last stop or same hour
+            }
+            continue; // removed card keeps its original time display
+          }
+
+          // Skip departure/arrival — immune to ALL time changes
+          if(isDepArr(c)) continue;
+
+          // Calculate delay offset (push later)
+          var delayMins = 0;
+          window.dels.forEach(d => {
+             if(d.day === dayInt && cardHr >= d.hr && String(d.id) !== delayId) {
+                 delayMins += d.mins;
+             }
+          });
+
+          var netMins = delayMins - removedMins;
+          if(netMins === 0) continue;
+
+          var stEl = c.querySelector('.st');
+          if(!stEl) continue;
+          if(!stEl.dataset.orig) stEl.dataset.orig = stEl.innerHTML;
+
+          var newTotalMins = (cardHr * 60) + netMins;
+          if(newTotalMins < 0) newTotalMins = 0;
+          var newH = Math.floor(newTotalMins / 60);
+          var newM = newTotalMins % 60;
+          var tStr = String(newH).padStart(2,'0') + ':' + String(newM).padStart(2,'0');
+
+          if(netMins > 0) {
+            stEl.innerHTML = tStr + ' <span class="time-adj">+' + netMins + 'm</span>';
+          } else {
+            stEl.innerHTML = tStr + ' <span class="time-saved">' + netMins + 'm</span>';
+          }
+
+          // Skip recommendation if pushed past 17:00
+          if(newH >= 17 && !delayId) {
+             if(c.getAttribute('data-skip') === 'true' && !c.querySelector('.skip-rec')) {
+                 var rec = document.createElement('div');
+                 rec.className = 'skip-rec';
+                 rec.innerHTML = '⚠️ Running late! Consider skipping this detour.';
+                 c.insertBefore(rec, c.firstChild);
+             }
+          }
+        }
+      }
+
       af(); // Re-run filter logic to ensure injected cards respect Day tab toggles
     }
 
@@ -404,6 +508,45 @@
         });
       });
     }
+    function injectFlightCards(){
+      var atl=document.getElementById('atl');
+      if(!atl) return;
+      // Find Day 1 header and KEF Airport card — insert outbound flight before KEF Airport
+      var d1Cards=atl.querySelectorAll('.sc[data-day="1"]');
+      if(d1Cards.length>0){
+        var outbound=document.createElement('div');
+        outbound.className='flight-card';
+        outbound.setAttribute('data-day','1');
+        outbound.innerHTML='<div class="fc-confirm">Confirmation: CAJIC8</div>'+
+          '<div class="fc-header">✈️ Outbound Flight — Thu, Mar 5</div>'+
+          '<div class="fc-route">'+
+            '<div><div class="fc-time">07:40 PM</div><div class="fc-code">BWI</div></div>'+
+            '<div class="fc-arrow">→ 5h 50m →</div>'+
+            '<div><div class="fc-time">06:30 AM<sup>+1</sup></div><div class="fc-code">KEF</div></div>'+
+          '</div>'+
+          '<div class="fc-detail">Icelandair FI 642 · Boeing 737 MAX 8 · Next day arrival Fri 3/6</div>';
+        d1Cards[0].parentNode.insertBefore(outbound, d1Cards[0]);
+      }
+      // Find Day 5 KEF Departure card — insert return flight after it
+      var d5Cards=atl.querySelectorAll('.sc[data-day="5"]');
+      if(d5Cards.length>0){
+        var lastD5=d5Cards[d5Cards.length-1];
+        var ret=document.createElement('div');
+        ret.className='flight-card';
+        ret.setAttribute('data-day','5');
+        ret.innerHTML='<div class="fc-confirm">Confirmation: CAJIC8</div>'+
+          '<div class="fc-header">✈️ Return Flight — Tue, Mar 10</div>'+
+          '<div class="fc-route">'+
+            '<div><div class="fc-time">05:00 PM</div><div class="fc-code">KEF</div></div>'+
+            '<div class="fc-arrow">→ 6h 40m →</div>'+
+            '<div><div class="fc-time">07:40 PM</div><div class="fc-code">BWI</div></div>'+
+          '</div>'+
+          '<div class="fc-detail">Icelandair FI 643 · Boeing 737 MAX 8 · Same day arrival</div>';
+        lastD5.parentNode.insertBefore(ret, lastD5.nextSibling);
+      }
+    }
+    initTogButtons();
+    injectFlightCards();
     applyDelays();
     </script>
     
