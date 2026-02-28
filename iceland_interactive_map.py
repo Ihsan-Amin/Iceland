@@ -51,47 +51,86 @@ WMO = {
 }
 
 # ═══════════════════════ STOPS ═══════════════════════
-# (name, lat, lon, day, type, notes, link, est_hour, weather_loc)
+# (name, lat, lon, day, type, notes, link, est_hour, weather_loc, is_immune_to_skipping, duration_minutes)
 STOPS = [
-    ("KEF Airport",63.985,-22.6056,1,"logistics","Pick up campervan, stock up at Bónus. Depart ~7:30–9am.",None,8,"KEF / Reykjanes"),
-    ("Hveragerði",63.9966,-21.1876,1,"attraction","Iceland's 'Hot Spring Town'. Geothermal Park. ~45 min from KEF.",None,9,"Hveragerði"),
-    ("Reykjadalur Hot River",64.0229,-21.2116,1,"hike","🥾 BONUS HIKE: 7.4 km round trip, ~2–3 hrs. Natural warm river (36–40°C). Bring swimsuit + towel. Microspikes for icy patches.","https://guidetoiceland.is/connect-with-locals/regina/reykjadalur-hot-spring-valley-in-south-iceland",10,"Hveragerði"),
-    ("Seljalandsfoss",63.6156,-19.9885,1,"attraction","60m walk-behind waterfall. Full waterproofs. 45 min.","https://guidetoiceland.is/travel-iceland/drive/seljalandsfoss",13,"Seljalandsfoss"),
-    ("Gljúfrabúi",63.6207,-19.9862,1,"attraction","Hidden waterfall in canyon slot. 500m from Seljalandsfoss. 30 min.","https://guidetoiceland.is/travel-iceland/drive/gljufrabui",14,"Seljalandsfoss"),
-    ("Skógafoss",63.5321,-19.5113,1,"attraction","🐉 GoT: Wildling camp (S8). 370-step staircase. 45 min.","https://guidetoiceland.is/travel-iceland/drive/skogafoss",15,"Vík"),
-    ("Dyrhólaey",63.4022,-19.1289,1,"attraction","120m basalt sea arch. 45 min. ⚠️ Skip upper viewpoint if gusts >20 m/s.","https://guidetoiceland.is/travel-iceland/drive/dyrholaey",16,"Vík"),
-    ("Reynisfjara",63.4044,-19.0695,1,"attraction","🐉 GoT S7E5: Eastwatch-by-the-Sea. Basalt cave. ⚠️ SNEAKER WAVE WARNING.","https://guidetoiceland.is/travel-iceland/drive/reynisfjara",17,"Vík"),
-    ("Súður-Vík (dinner)",63.419,-19.008,1,"food","🍽️ Lamb soup ~2,800 ISK, fish & chips ~3,200 ISK. Alt: Black Crust Pizzeria ~3,500 ISK.",None,18,"Vík"),
-    ("Vík 🏕️",63.4186,-19.006,1,"overnight","🏕️ OVERNIGHT: Vík Campsite (Víkurbraut 5). Year-round, heated common room.",None,20,"Vík"),
-    ("Eldhraun Lava Field",63.67,-18.32,2,"attraction","World's largest lava flow in luminous green moss. 30 min.","https://guidetoiceland.is/travel-iceland/drive/eldhraun",9,"Vík"),
-    ("Fjaðrárgljúfur Canyon",63.7712,-18.172,2,"attraction","🐉 GoT filming location. 2km rim trail, 100m-deep gorge. 1.5 hrs. Microspikes.","https://guidetoiceland.is/travel-iceland/drive/fjadrargljufur",10,"Kirkjubæjarklaustur"),
-    ("Kirkjugolf",63.7875,-17.9959,2,"attraction","'Church Floor' — hexagonal basalt columns. 5-min walk.","https://guidetoiceland.is/travel-iceland/drive/kirkjugolfid",12,"Kirkjubæjarklaustur"),
-    ("Systrafoss",63.7835,-17.9745,2,"attraction","Twin cascades above Kirkjubæjarklaustur. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/systrafoss",12,"Kirkjubæjarklaustur"),
-    ("Svartifoss + Sjónarnipa Loop",64.0274,-16.9753,2,"hike","🥾 HIKE #1: 7.4 km, ~3 hrs. Basalt-column waterfall → Sjónarnipa glacier viewpoint → Sel turf house. Microspikes.\n\n🏕️ OVERNIGHT: Skaftafell Campsite (Vatnajökull NP, year-round).","https://guidetoiceland.is/travel-iceland/drive/svartifoss",14,"Skaftafell"),
-    ("Svínafellsjökull",64.008,-16.875,3,"attraction","🐉 GoT: North of the Wall (S2–S3). Walk to glacier snout. 45 min.","https://guidetoiceland.is/travel-iceland/drive/svinafellsjokull",9,"Skaftafell"),
-    ("Fjallsárlón",64.0167,-16.3667,3,"attraction","Quieter glacier lagoon with icebergs. 45 min.","https://guidetoiceland.is/travel-iceland/drive/fjallsarlon",10,"Jökulsárlón"),
-    ("Jökulsárlón",64.0784,-16.2297,3,"attraction","Floating icebergs, possible seals. Crown jewel lagoon. 1 hr.","https://guidetoiceland.is/travel-iceland/drive/jokulsarlon",11,"Jökulsárlón"),
-    ("Diamond Beach",64.044,-16.178,3,"attraction","Translucent ice on jet-black sand. 30 min.","https://guidetoiceland.is/travel-iceland/drive/diamond-beach",12,"Jökulsárlón"),
-    ("Hofskirkja",64.1978,-15.9418,3,"attraction","Last surviving turf-roofed church. 15-min detour.","https://guidetoiceland.is/travel-iceland/drive/hofskirkja",13,"Höfn"),
-    ("Hafnarbuðin (lunch)",64.254,-15.21,3,"food","🍽️ Langoustine baguette ~1,800 ISK (~$13). Cheapest langoustine in town. Free coffee.",None,13,"Höfn"),
-    ("Stokksnes / Vestrahorn",64.249,-14.965,3,"attraction","Iconic mountain + black sand + Viking set. 💰 1,100 ISK/pp.","https://guidetoiceland.is/travel-iceland/drive/stokksnes",15,"Stokksnes"),
-    ("Eystrahorn",64.319,-14.694,3,"attraction","Turnaround point. Walk the black sand base. 1 hr.","https://adventures.is/iceland/attractions/eystrahorn/",16,"Stokksnes"),
-    ("Höfn 🏕️",64.2539,-15.2081,3,"overnight","🏕️ OVERNIGHT: Höfn Campsite – Hamrar. Year-round.",None,19,"Höfn"),
-    ("Kristínartindar Summit",64.0169,-16.9669,4,"hike","🥾 HIKE #2: 17.9 km loop, ~6–8 hrs, summit 1,126m. 360° Vatnajökull panorama. Full winter gear. Backup: Skaftafellsheiði plateau.","https://adventures.is/iceland/attractions/kristinartindar/",10,"Skaftafell"),
-    ("Núpsstaurskógur",63.9372,-17.505,4,"attraction","Iceland's largest native birch forest. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/nupsstadaskogur",15,"Kirkjubæjarklaustur"),
-    ("Lómagnúpur",63.8971,-17.645,4,"attraction","Sheer 767m wall. ⚠️ Notorious sudden gusts.","https://guidetoiceland.is/travel-iceland/drive/lomagnupur",15,"Kirkjubæjarklaustur"),
-    ("Þingborg Wool Shop 🧶",63.9333,-20.8167,4,"shop","🧶 Since 1991. Handknit lopapeysa, Icelandic sheep's wool. Tax-free receipt (15% VAT at KEF). 📍 Route 1, 8 km east of Selfoss.","https://www.south.is/en/service/thingborg-wool-processing",18,"Selfoss"),
-    ("Selfoss 🏕️",63.9332,-21.003,4,"overnight","🏕️ OVERNIGHT: Selfoss Campsite. Year-round. Bónus, N1, pool.",None,19,"Selfoss"),
-    ("Þingvellir",64.2559,-21.1299,5,"attraction","🐉 GoT S4: Bloody Gate. Rift valley + Öxarárfoss. UNESCO. 💰 Parking 750 ISK.","https://guidetoiceland.is/travel-iceland/drive/thingvellir",8,"Þingvellir"),
-    ("Þórufoss (optional)",64.2833,-21.0667,5,"attraction","🐉 GoT S4E6: Drogon torches a goatherd's flock. Quiet 18m waterfall. ⚠️ Route 48 is gravel, may be icy — check road.is.","https://guidetoiceland.is/travel-iceland/drive/thorufoss",8,"Þingvellir"),
-    ("Geysir",64.3103,-20.3024,5,"attraction","Strokkur erupts every 6–10 min. 💰 Parking 1,000 ISK.","https://guidetoiceland.is/travel-iceland/drive/geysir",10,"Geysir"),
-    ("Gullfoss",64.3271,-20.1199,5,"attraction","Iceland's most powerful waterfall. 💰 Free.","https://guidetoiceland.is/travel-iceland/drive/gullfoss",11,"Geysir"),
-    ("Hallgrímskirkja",64.1417,-21.9267,5,"attraction","🗽 Leif Erikson statue + tower 1,500 ISK. 20–25 min.","https://www.hallgrimskirkja.is/en-gb",13,"Reykjavík"),
-    ("Smékkleysa Records",64.1435,-21.928,5,"attraction","🎵 Björk's Sugarcubes label. Record shop + coffee. 25–30 min.","https://www.instagram.com/smekkleysa/",13,"Reykjavík"),
-    ("Harpa Concert Hall",64.1505,-21.9327,5,"attraction","Geometric glass facade. Free lobby. Tours 2,750 ISK.","https://www.harpa.is/en",14,"Reykjavík"),
-    ("Sun Voyager",64.1476,-21.9223,5,"attraction","Iconic steel ship sculpture. Quick photo.","https://guidetoiceland.is/travel-iceland/drive/sun-voyager",15,"Reykjavík"),
-    ("Icelandic Street Food",64.147,-21.931,5,"food","🍽️ Lamb soup bread bowl, unlimited refills + free waffles. ~2,500–3,000 ISK.\n💡 Start with shellfish soup, then switch to lamb/tomato for free refills.","https://www.icelandicstreetfood.com/",15,"Reykjavík"),
-    ("KEF Departure ✈️",63.985,-22.6056,5,"logistics","Drop off campervan ~4pm. Flight 5pm.",None,16,"KEF / Reykjanes"),
+    # ---- Day 1: KEF to Vík ----
+    ("KEF Airport",63.985,-22.6056,1,"logistics",
+     "Arrive via BWI 06:30 am (Flight FI642, Confirm: CAJIC8). Pick up campervan, stock up at Bónus. Depart ~7:30–9am.", None, 8, "KEF / Reykjanes", True, 0),
+    ("Hveragerði",63.9966,-21.1876,1,"attraction",
+     "Iceland's 'Hot Spring Town'. Geothermal Park. ~45 min from KEF.", None, 9, "Hveragerði", False, 60),
+    ("Reykjadalur Hot River",64.0229,-21.2116,1,"hike",
+     "BONUS HIKE: 7.4 km round trip, ~2–3 hrs. Natural warm river (36–40°C). Bring swimsuit + towel. Microspikes for icy patches.",
+     "https://guidetoiceland.is/connect-with-locals/regina/reykjadalur-hot-spring-valley-in-south-iceland", 10, "Hveragerði", False, 180),
+    ("Seljalandsfoss",63.6156,-19.9885,1,"attraction",
+     "60m walk-behind waterfall. Full waterproofs. 45 min.",
+     "https://guidetoiceland.is/travel-iceland/drive/seljalandsfoss", 13, "Seljalandsfoss", False, 45),
+    ("Gljúfrabúi",63.6207,-19.9862,1,"attraction",
+     "Hidden waterfall in canyon slot. 500m from Seljalandsfoss. 30 min.",
+     "https://guidetoiceland.is/travel-iceland/drive/gljufrabui", 14, "Seljalandsfoss", False, 30),
+    ("Skógafoss",63.5321,-19.5113,1,"attraction",
+     "🐉 GoT: Wildling camp (S8). 370-step staircase. 45 min.",
+     "https://guidetoiceland.is/travel-iceland/drive/skogafoss", 15, "Vík", False, 45),
+    ("Dyrhólaey",63.4022,-19.1289,1,"attraction",
+     "120m basalt sea arch. 45 min. ⚠️ Skip upper viewpoint if gusts >20 m/s.",
+     "https://guidetoiceland.is/travel-iceland/drive/dyrholaey", 16, "Vík", False, 45),
+    ("Reynisfjara",63.4044,-19.0695,1,"attraction",
+     "🐉 GoT S7E5: Eastwatch-by-the-Sea. Basalt cave. ⚠️ SNEAKER WAVE WARNING.",
+     "https://guidetoiceland.is/travel-iceland/drive/reynisfjara", 17, "Vík", False, 60),
+    ("Súður-Vík (dinner)",63.419,-19.008,1,"food",
+     "🍽️ Lamb soup ~2,800 ISK, fish & chips ~3,200 ISK. Alt: Black Crust Pizzeria ~3,500 ISK.",None,18,"Vík", False, 60),
+    ("Vík 🏕️",63.4186,-19.006,1,"overnight",
+     "🏕️ OVERNIGHT: Vík Campsite (Víkurbraut 5). Year-round, heated common room.",None,20,"Vík", True, 0),
+
+    # ---- Day 2: Vík to Skaftafell ----
+    ("Eldhraun Lava Field",63.67,-18.32,2,"attraction","World's largest lava flow in luminous green moss. 30 min.","https://guidetoiceland.is/travel-iceland/drive/eldhraun",9,"Vík", False, 30),
+    ("Fjaðrárgljúfur Canyon",63.7712,-18.172,2,"attraction","🐉 GoT filming location. 2km rim trail, 100m-deep gorge. 1.5 hrs. Microspikes.","https://guidetoiceland.is/travel-iceland/drive/fjadrargljufur",10,"Kirkjubæjarklaustur", False, 90),
+    ("Kirkjugolf",63.7875,-17.9959,2,"attraction","'Church Floor' — hexagonal basalt columns. 5-min walk.","https://guidetoiceland.is/travel-iceland/drive/kirkjugolfid",12,"Kirkjubæjarklaustur", False, 15),
+    ("Systrafoss",63.7835,-17.9745,2,"attraction","Twin cascades above Kirkjubæjarklaustur. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/systrafoss",12,"Kirkjubæjarklaustur", False, 30),
+    ("Svartifoss + Sjónarnipa Loop",64.0274,-16.9753,2,"hike","🥾 HIKE #1: 7.4 km, ~3 hrs. Basalt-column waterfall → Sjónarnipa glacier viewpoint → Sel turf house. Microspikes.\n\n🏕️ OVERNIGHT: Skaftafell Campsite (Vatnajökull NP, year-round).","https://guidetoiceland.is/travel-iceland/drive/svartifoss",14,"Skaftafell", False, 180),
+
+    # ---- Day 3: Skaftafell to Höfn & East ----
+    ("Svínafellsjökull",64.008,-16.875,3,"attraction","🐉 GoT: North of the Wall (S2–S3). Walk to glacier snout. 45 min.","https://guidetoiceland.is/travel-iceland/drive/svinafellsjokull",9,"Skaftafell", False, 45),
+    ("Fjallsárlón",64.0167,-16.3667,3,"attraction","Quieter glacier lagoon with icebergs. 45 min.","https://guidetoiceland.is/travel-iceland/drive/fjallsarlon",10,"Jökulsárlón", False, 45),
+    ("Jökulsárlón",64.0784,-16.2297,3,"attraction","Floating icebergs, possible seals. Crown jewel lagoon. 1 hr.","https://guidetoiceland.is/travel-iceland/drive/jokulsarlon",11,"Jökulsárlón", False, 60),
+    ("Diamond Beach",64.044,-16.178,3,"attraction","Translucent ice on jet-black sand. 30 min.","https://guidetoiceland.is/travel-iceland/drive/diamond-beach",12,"Jökulsárlón", False, 30),
+    ("Hofskirkja",64.1978,-15.9418,3,"attraction","Last surviving turf-roofed church. 15-min detour.","https://guidetoiceland.is/travel-iceland/drive/hofskirkja",13,"Höfn", False, 15),
+    ("Hafnarbuðin (lunch)",64.254,-15.21,3,"food","🍽️ Langoustine baguette ~1,800 ISK (~$13). Cheapest langoustine in town. Free coffee.",None,13,"Höfn", False, 60),
+    ("Stokksnes / Vestrahorn",64.249,-14.965,3,"attraction","Iconic mountain + black sand + Viking set. 💰 1,100 ISK/pp.","https://guidetoiceland.is/travel-iceland/drive/stokksnes",15,"Stokksnes", False, 90),
+    ("Eystrahorn",64.319,-14.694,3,"attraction","Turnaround point. Walk the black sand base. 1 hr.","https://adventures.is/iceland/attractions/eystrahorn/",16,"Stokksnes", False, 60),
+    ("Höfn 🏕️",64.2539,-15.2081,3,"overnight","🏕️ OVERNIGHT: Höfn Campsite – Hamrar. Year-round.",None,19,"Höfn", True, 0),
+
+    # ---- Day 4: Höfn to Skaftafell & Selfoss ----
+    ("Kristínartindar Summit",64.0169,-16.9669,4,"hike","🥾 HIKE #2: 17.9 km loop, ~6–8 hrs, summit 1,126m. 360° Vatnajökull panorama. Full winter gear. Backup: Skaftafellsheiði plateau.","https://adventures.is/iceland/attractions/kristinartindar/",10,"Skaftafell", False, 480),
+    ("Núpsstaurskógur",63.9372,-17.505,4,"attraction","Iceland's largest native birch forest. 30-min walk.","https://guidetoiceland.is/travel-iceland/drive/nupsstadaskogur",15,"Kirkjubæjarklaustur", False, 30),
+    ("Lómagnúpur",63.8971,-17.645,4,"attraction","Sheer 767m wall. ⚠️ Notorious sudden gusts.","https://guidetoiceland.is/travel-iceland/drive/lomagnupur",15,"Kirkjubæjarklaustur", False, 15),
+    ("Þingborg Wool Shop 🧶",63.9333,-20.8167,4,"shop","🧶 Since 1991. Handknit lopapeysa, Icelandic sheep's wool. Tax-free receipt (15% VAT at KEF). 📍 Route 1, 8 km east of Selfoss.","https://www.south.is/en/service/thingborg-wool-processing",18,"Selfoss", False, 30),
+    ("Selfoss 🏕️",63.9332,-21.003,4,"overnight","🏕️ OVERNIGHT: Selfoss Campsite. Year-round. Bónus, N1, pool.",None,19,"Selfoss", True, 0),
+
+    # ---- Day 5: Golden Circle to KEF ----
+    ("Þingvellir",64.2559,-21.1299,5,"attraction",
+     "Tectonic rift valley. Almannagjá gorge, Öxarárfoss. 1.5–2 hrs.",
+     "https://guidetoiceland.is/travel-iceland/drive/thingvellir", 8, "Þingvellir", True, 120),
+    ("Þórufoss (optional)",64.2833,-21.0667,5,"attraction",
+     "🐉 GoT S4E6: Drogon torches a goatherd's flock. Quiet 18m waterfall. ⚠️ Route 48 is gravel, may be icy — check road.is.",
+     "https://guidetoiceland.is/travel-iceland/drive/thorufoss", 8, "Þingvellir", False, 30),
+    ("Geysir",64.3103,-20.3024,5,"attraction",
+     "Strokkur erupts every 5-10 mins. Active geothermal field. 1 hr.",
+     "https://guidetoiceland.is/travel-iceland/drive/geysir", 10, "Geysir", False, 60),
+    ("Gullfoss",64.3271,-20.1199,5,"attraction",
+     "Massive two-tier waterfall. 45 mins. 10 min drive from Geysir.",
+     "https://guidetoiceland.is/travel-iceland/drive/gullfoss", 11, "Geysir", False, 45),
+    ("Hallgrímskirkja",64.1417,-21.9267,5,"attraction",
+     "Reykjavík's iconic church tower.", None, 13, "Reykjavík", False, 30),
+    ("Smékkleysa Records",64.1435,-21.928,5,"attraction",
+     "🎵 Björk's Sugarcubes label. Record shop + coffee. 25–30 min.","https://www.instagram.com/smekkleysa/",13,"Reykjavík", False, 30),
+    ("Harpa Concert Hall",64.1505,-21.9327,5,"attraction",
+     "Geometric glass facade. Free lobby. Tours 2,750 ISK.","https://www.harpa.is/en",14,"Reykjavík", False, 30),
+    ("Sun Voyager",64.1476,-21.9223,5,"attraction",
+     "Iconic steel ship sculpture. Quick photo.","https://guidetoiceland.is/travel-iceland/drive/sun-voyager",15,"Reykjavík", False, 15),
+    ("Icelandic Street Food",64.147,-21.931,5,"food",
+     "Quick lamb soup in bread bowls or plokkfiskur before the airport.", None, 14, "Reykjavík", False, 60),
+    ("KEF Departure ✈️",63.985,-22.6056,5,"logistics",
+     "Return campervan exactly as scheduled. Depart 05:00 pm (Flight FI643 to BWI). Check-in ~2 hours prior.", None, 17, "KEF / Reykjanes", True, 0),
 ]
 
 # ═══════════════════════ PARKING ═══════════════════════
@@ -135,7 +174,7 @@ PARKING = {
     "Harpa Concert Hall":   (64.1400,-21.9280, "Same Reykjavík parking — walk"),
     "Sun Voyager":          (64.1400,-21.9280, "Same Reykjavík parking — walk"),
     "Icelandic Street Food":(64.1400,-21.9280, "Same Reykjavík parking — walk"),
-    "KEF Departure ✈️":     (63.9857,-22.6230, "KEF rental car return"),
+    "KEF Departure ✈️":     (63.9857,-22.6230, "KEF Airport Departure Terminal"),
 }
 
 # ═══════════════════════ HIKING TRAILS ═══════════════════════
@@ -419,8 +458,7 @@ def build_map(routes, weather):
     ICONS = {"overnight":("campground","green"),"hike":("person-hiking","orange"),
              "food":("utensils","purple"),"shop":("store","pink"),"logistics":("plane","gray")}
     DCOL = {1:"red",2:"blue",3:"darkgreen",4:"orange",5:"purple"}
-
-    for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
+    for name,lat,lon,day,st,notes,link,hr,wl,is_immune,dur in STOPS:
         ic,icol = ICONS.get(st, ("camera", DCOL.get(day,"blue")))
         wx = get_wx(weather, wl, day, hr)
         ph = popup_html(name, day, st, notes, link, wx, lat, lon)
@@ -440,7 +478,7 @@ def build_map(routes, weather):
 
     # Parking markers (deduplicated by coords)
     seen_parking = set()
-    for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
+    for name,lat,lon,day,st,notes,link,hr,wl,is_immune,dur in STOPS:
         p = PARKING.get(name)
         if not p: continue
         plat, plon, pnotes = p
@@ -448,7 +486,7 @@ def build_map(routes, weather):
         if coord_key in seen_parking: continue
         seen_parking.add(coord_key)
         # Find all stops sharing this parking
-        shared = [n for n,_,_,_,_,_,_,_,_ in STOPS if PARKING.get(n) and (round(PARKING[n][0],4), round(PARKING[n][1],4)) == coord_key]
+        shared = [n for n,*_ in STOPS if PARKING.get(n) and (round(PARKING[n][0],4), round(PARKING[n][1],4)) == coord_key]
         gmap = f"https://www.google.com/maps?q={plat},{plon}"
         dc = DAY_COLORS.get(day, "#666")
         ph = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:280px;width:calc(100vw - 80px);line-height:1.5;">
@@ -621,6 +659,15 @@ def build_map(routes, weather):
         return notes.replace("\n", "<br>")
 
     def _card(name, day, st, notes, link, wx, lat, lon, hr, parking, is_got):
+        # We find duration & immune dynamically from STOPS array based on name
+        dur = 60
+        immune = "false"
+        for s in STOPS:
+            if s[0] == name:
+                immune = "true" if s[9] else "false"
+                dur = s[10]
+                break
+                
         c = DAY_COLORS[day]
         icon = TYPE_ICONS.get(st, "📷")
         tstr = f"{hr:02d}:00"
@@ -628,11 +675,15 @@ def build_map(routes, weather):
         ga = "true" if is_got else "false"
         
         is_skip = "true" if any(k in name for k in ["Reykjadalur", "Dyrhólaey", "Þórufoss", "Kerið"]) else "false"
-
-        h = f'<div class="sc" data-day="{day}" data-type="{st}" data-hour="{hr}" data-got="{ga}" data-skip="{is_skip}" style="border-left-color:{c}">'
-        h += f'<div style="display:flex;align-items:baseline;gap:10px">'
-        h += f'<div class="st">{tstr}</div>'
+        sid = f"d{day}h{hr}"
+        
+        h = f'<div class="sc" id="{sid}" data-id="{sid}" data-day="{day}" data-type="{st}" data-hour="{hr}" data-got="{ga}" data-skip="{is_skip}" data-immune="{immune}" data-dur="{dur}" style="border-left-color:{c}">'
+        h += f'<div style="display:flex;align-items:baseline;gap:10px;justify-content:space-between;width:100%">'
+        h += f'<div style="display:flex;align-items:baseline;gap:10px"><div class="st">{tstr}</div>'
         h += f'<div><span class="sn">{icon} {name}</span><br><span class="stp">{st}</span></div></div>'
+        if immune == "false":
+            h += f'<button class="stog" onclick="togSkip(\'{sid}\', event)" style="background:transparent;border:1px solid #ddd;color:#666;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;height:24px;">➖ Remove</button>'
+        h += '</div>'
 
         if wx:
             h += f'<div class="sw" style="border-left:3px solid {c}">'
@@ -657,9 +708,22 @@ def build_map(routes, weather):
         gmap = f"https://www.google.com/maps?q={ar['waypoints'][0][0]},{ar['waypoints'][0][1]}"
         
         is_skip = "true" if any(k in ar["name"] for k in ["Reykjadalur", "Dyrhólaey", "Þórufoss", "Kerið"]) else "false"
+        sid = f"a{ar['day']}h{ar['est_hour']}"
         
-        h = f'<div class="sc ac" data-day="{ar["day"]}" data-hour="{ar["est_hour"]}" data-skip="{is_skip}">'
-        h += '<div class="ab">🔀 ALTERNATIVE / DETOUR</div>'
+        # Parse duration string roughly to minutes (e.g. "1 hr 15 mins" -> 75, "1.5 hrs" -> 90, "30 min" -> 30)
+        dur = 60
+        ts = str(ar.get("time","")).lower()
+        if "min" in ts and "hr" not in ts:
+            dur = int(''.join(filter(str.isdigit, ts)) or 30)
+        elif "hr" in ts:
+            import re
+            m = re.match(r'(?:(\d+)\s*hr)?\s*(?:(\d+)\s*min)?', ts)
+            if m: dur = int(m.group(1) or 0)*60 + int(m.group(2) or 0)
+        if dur == 0: dur = 60
+
+        h = f'<div class="sc ac" id="{sid}" data-id="{sid}" data-day="{ar["day"]}" data-hour="{ar["est_hour"]}" data-skip="{is_skip}" data-immune="false" data-dur="{dur}">'
+        h += f'<div style="display:flex;justify-content:space-between;align-items:start;"><div class="ab">🔀 ALTERNATIVE / DETOUR</div>'
+        h += f'<button class="stog" onclick="togSkip(\'{sid}\', event)" style="background:transparent;border:1px solid #4A90D9;color:#4A90D9;border-radius:6px;padding:4px 8px;font-size:11px;cursor:pointer;">➖ Remove</button></div>'
         h += f'<div class="sn">🔀 {ar["name"]}</div>'
         h += f'<div class="stp">{ar["distance"]} · {ar["time"]}</div>'
         if wx:
@@ -686,27 +750,30 @@ def build_map(routes, weather):
             last_hr = 0
             day_sr, day_ss = get_sun_hours(weather, wl, day)
             c = DAY_COLORS[day]
-            tl += f'<div class="dh" data-day="{day}"><div class="dd" style="background:{c}"></div>{DAY_LABELS[day]}</div>'
-            
-        if day_sr and last_hr < day_sr <= hr:
-            tl += f'<div class="sc" style="padding:6px 16px;background:#fef8e7;border-left-color:#f9a826;text-align:center;font-size:12px;font-weight:600;color:#d97706;margin-bottom:10px;">☀️ Sunrise at ~{day_sr:02d}:00</div>'
-            day_sr = None
-        if day_ss and last_hr < day_ss <= hr:
-            tl += f'<div class="sc" style="padding:6px 16px;background:#f0f4f8;border-left-color:#3b82f6;text-align:center;font-size:12px;font-weight:600;color:#1e40af;margin-bottom:10px;">🌙 Sunset at ~{day_ss:02d}:00</div>'
-            day_ss = None
-        last_hr = hr
+    # Day Cards
+    for i in range(1, 6):
+        tl += f'<div class="dh" data-day="{i}"><div class="dd" style="background:{DAY_COLORS[i]}"></div>Day {i}</div>'
         
-        wx = get_wx(weather, wl, day, hr)
-        p = PARKING.get(name)
-        ig = "\U0001F409" in notes
-        alt = alt_lookup.get(name)
-        if alt:
-            tl += '<div class="ar">'
-            tl += _card(name, day, st, notes, link, wx, lat, lon, hr, p, ig)
-            tl += _alt_card(alt)
-            tl += '</div>'
-        else:
-            tl += _card(name, day, st, notes, link, wx, lat, lon, hr, p, ig)
+        # Inject alt routes for the day before normal stops
+        for d in ALT_ROUTES:
+            if d["day"] == i and d["est_hour"] < 12:
+                tl += _alt_card(d)
+
+        for name,lat,lon,day,st,notes,link,hr,wl,is_immune,dur in STOPS:
+            if day == i:
+                wx = get_wx(weather, wl, day, hr)
+                park = PARKING.get(name, "")
+                is_got = "\U0001F409" in notes # Check if dragon emoji is in notes for GoT
+                
+                # Check for alt routes at same hour
+                has_alt = False
+                if name in alt_lookup:
+                    ac = alt_lookup[name]
+                    tl += f'<div class="ar">{_card(name, day, st, notes, link, wx, lat, lon, hr, park, is_got)}{_alt_card(ac)}</div>'
+                    has_alt = True
+                
+                if not has_alt:
+                    tl += _card(name, day, st, notes, link, wx, lat, lon, hr, park, is_got)
 
     dd_js = "{" + ",".join(f'{k}:"{v}"' for k,v in DAY_DATES.items()) + "}"
 
@@ -829,13 +896,28 @@ def build_map(routes, weather):
     .d-itm{{display:flex;justify-content:space-between;align-items:center;background:#f9f9f9;padding:12px;border-radius:8px;margin-bottom:8px;border:1px solid #eee}}
     .rm-btn{{background:#ffebee;color:#c62828;border:none;padding:6px 12px;border-radius:6px;font-weight:600;cursor:pointer}}
     .time-adj{{color:#e63946;font-weight:700;font-size:11px;display:block;margin-top:2px}}
+    .time-adj.time-sub{{color:#4caf50;}}
     .skip-rec{{background:#fff3cd;border-left:4px solid #ffc107;padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;font-size:12px;font-weight:600;color:#856404;display:flex;align-items:center;gap:8px}}
+    .sc.skipped {{ opacity: 0.5; filter: grayscale(1); }}
+    .sc.skipped .sn, .sc.skipped .stp, .sc.skipped .snt {{ text-decoration: line-through; }}
+    .sc.skipped .stog {{ color: #111 !important; border-color: #111 !important; }}
     @media(max-width:600px){{ #vtog{{top:8px}} #vtog button{{padding:6px 14px;font-size:12px}}.ar{{flex-direction:column}}.sc{{padding:12px 14px}} #af{{padding:10px 12px}}}}
     </style>
     <script>
     var DD={dd_js};
     window.dels = JSON.parse(localStorage.getItem('ic_dels')) || [];
+    window.skips = JSON.parse(localStorage.getItem('ic_skips')) || [];
     function togMenu(){{var m=document.getElementById('d-menu'); m.style.display=m.style.display==='none'?'flex':'none';}}
+    
+    function togSkip(sid, e) {{
+       if(e) e.preventDefault();
+       var idx = window.skips.indexOf(sid);
+       if(idx === -1) window.skips.push(sid);
+       else window.skips.splice(idx, 1);
+       localStorage.setItem('ic_skips', JSON.stringify(window.skips));
+       applyDelays();
+    }}
+    
     function opAdd(){{
       document.getElementById('d-menu').style.display='none'; 
       document.getElementById('d-add-mod').style.display='flex';
@@ -884,11 +966,23 @@ def build_map(routes, weather):
       document.querySelectorAll('.time-adj, .skip-rec, .injected-delay').forEach(e=>e.remove());
       var cards = document.querySelectorAll('.sc:not(.injected-delay)');
       cards.forEach(c=> {{
+        c.classList.remove('skipped');
+        var sid = c.getAttribute('data-id');
+        if(sid && window.skips.includes(sid)) {{
+           c.classList.add('skipped');
+           var btn = c.querySelector('.stog');
+           if(btn) btn.innerHTML = '➕ Restore';
+        }} else {{
+           var btn = c.querySelector('.stog');
+           if(btn) btn.innerHTML = '➖ Remove';
+        }}
+        
         var stEl = c.querySelector('.st');
         if(stEl && stEl.dataset.orig) stEl.innerHTML = stEl.dataset.orig;
       }});
 
-      if(window.dels.length===0) return;
+      // Always process skips, even if delays are 0
+      if(window.dels.length===0 && window.skips.length===0) return;
 
       // Inject visual delay blocks
       window.dels.forEach(d => {{
@@ -925,6 +1019,24 @@ def build_map(routes, weather):
 
       // Collect all cards including the newly injected ones for time shifting
       var allCards = document.querySelectorAll('.sc');
+      
+      // We must calculate cumulative shifts per day
+      var dayShifts = {{1: [], 2: [], 3: [], 4: [], 5: []}};
+      
+      // Calculate active delay events
+      window.dels.forEach(d => dayShifts[d.day].push({{type: 'add', hr: d.hr, mins: d.mins, id: d.id}}));
+      
+      // Calculate skipped events
+      cards.forEach(c => {{
+         var sid = c.getAttribute('data-id');
+         if(sid && window.skips.includes(sid)) {{
+             var cDay = parseInt(c.getAttribute('data-day'));
+             var cHrk = parseInt(c.getAttribute('data-hour'));
+             var cDur = parseInt(c.getAttribute('data-dur') || 60);
+             if(dayShifts[cDay]) dayShifts[cDay].push({{type: 'sub', hr: cHrk, mins: cDur, id: sid}});
+         }}
+      }});
+
       allCards.forEach(c=> {{
         var dAttr = c.getAttribute('data-day');
         var hAttr = c.getAttribute('data-hour');
@@ -933,15 +1045,19 @@ def build_map(routes, weather):
         var cardDay = parseInt(dAttr);
         var cardHr = parseInt(hAttr);
         var delayId = c.getAttribute('data-delay-id');
+        var isImmune = c.getAttribute('data-immune') === 'true';
         
         var mins = 0;
-        window.dels.forEach(d => {{
-           if(d.day === cardDay && cardHr >= d.hr && String(d.id) !== delayId) {{
-               mins += d.mins;
-           }}
+        var shifts = dayShifts[cardDay] || [];
+        shifts.forEach(sh => {{
+            // Additive delays affect events scheduled at or after them
+            if(sh.type === 'add' && cardHr >= sh.hr && String(sh.id) !== delayId) mins += sh.mins;
+            // Subtractive removes affect events scheduled strictly AFTER them
+            if(sh.type === 'sub' && cardHr > sh.hr) mins -= sh.mins;
         }});
         
-        if(!mins) return;
+        if(isImmune) return; // Immune cards (flights/camps) never shift time
+        if(mins === 0) return;
 
         var stEl = c.querySelector('.st');
         if(!stEl) return;
@@ -950,9 +1066,15 @@ def build_map(routes, weather):
         var newTotalMins = (cardHr * 60) + mins;
         var newH = Math.floor(newTotalMins / 60);
         var newM = newTotalMins % 60;
+        // Keep realistic clock boundaries
+        if(newH < 0) {{ newH = 0; newM = 0; }}
+        if(newH > 23) {{ newH = 23; newM = 59; }}
+        
         var tStr = String(newH).padStart(2,'0') + ':' + String(newM).padStart(2,'0');
         
-        stEl.innerHTML = `${{tStr}} <span class="time-adj">+${{mins}}m</span>`;
+        var sign = mins > 0 ? '+' : '';
+        var tCls = mins < 0 ? 'time-adj time-sub' : 'time-adj';
+        stEl.innerHTML = `${{tStr}} <span class="${{tCls}}">${{sign}}${{mins}}m</span>`;
         
         // Only inject generic skip warning on ACTUAL cards, not the injected delay blocks
         if(newH >= 17 && !delayId) {{

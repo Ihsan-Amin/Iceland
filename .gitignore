@@ -1,0 +1,12 @@
+__pycache__/
+node_modules/
+.claude/
+*.png
+*.js
+extracted_skips.txt
+pdf_text.txt
+package.json
+package-lock.json
+test.html
+test.py
+test_page.py
