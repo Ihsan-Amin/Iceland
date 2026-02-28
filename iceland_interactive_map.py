@@ -741,15 +741,6 @@ def build_map(routes, weather):
 
     # Build timeline cards
     tl = ""
-    cur_day = 0
-    last_hr = 0
-    day_sr, day_ss = None, None
-    for name,lat,lon,day,st,notes,link,hr,wl in STOPS:
-        if day != cur_day:
-            cur_day = day
-            last_hr = 0
-            day_sr, day_ss = get_sun_hours(weather, wl, day)
-            c = DAY_COLORS[day]
     # Day Cards
     for i in range(1, 6):
         tl += f'<div class="dh" data-day="{i}"><div class="dd" style="background:{DAY_COLORS[i]}"></div>Day {i}</div>'
