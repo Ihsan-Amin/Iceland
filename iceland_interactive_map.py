@@ -504,7 +504,8 @@ def build_map(routes, weather):
         if ar.get('link'):
             links_parts.append(f'<a href="{ar["link"]}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📖 Visitor Guide →</a>')
         links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a>')
-        ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{"\n".join(links_parts)}</div>'
+        links_joined = "\n".join(links_parts)
+        ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{links_joined}</div>'
         ar_html += '</div>'
 
         PolyLine(locations=ar["waypoints"], color=ALT_COLOR, weight=3, opacity=0.8, dash_array="10 8",
