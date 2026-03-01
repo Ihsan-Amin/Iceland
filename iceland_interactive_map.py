@@ -892,7 +892,7 @@ def build_map(routes, weather):
     .sc.skipped {{ opacity: 0.5; filter: grayscale(1); }}
     .sc.skipped .sn, .sc.skipped .stp, .sc.skipped .snt {{ text-decoration: line-through; }}
     .sc.skipped .stog {{ color: #111 !important; border-color: #111 !important; }}
-    @media(max-width:600px){{ #vtog{{top:8px}} #vtog button{{padding:6px 14px;font-size:12px}}.ar{{flex-direction:column}}.sc{{padding:12px 14px}} #af{{padding:10px 12px}}}}
+    @media(max-width:600px){{ #vtog{{top:auto;bottom:24px;}} #vtog button{{padding:6px 14px;font-size:12px;}}.ar{{flex-direction:column}}.sc{{padding:12px 14px}} #af{{padding:10px 12px}}}}
     </style>
     <script>
     var DD={dd_js};
