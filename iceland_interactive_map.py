@@ -265,14 +265,26 @@ ALT_ROUTES = [
 
 # ═══════════════════════ WEATHER ═══════════════════════
 def fetch_weather():
+    locs = {}
+    for s in STOPS:
+        wl = s[8]
+        if wl not in locs: locs[wl] = (s[1], s[2])
+        
     if os.path.exists(WEATHER_CACHE):
         age_seconds = time.time() - os.path.getmtime(WEATHER_CACHE)
         if age_seconds < CACHE_MAX_AGE_HOURS * 3600:
-            print(f"✓ Weather loaded from cache (expires in {int((CACHE_MAX_AGE_HOURS * 3600 - age_seconds) / 60)} min).")
-            with open(WEATHER_CACHE) as f: return json.load(f)
+            try:
+                with open(WEATHER_CACHE) as f: cached_data = json.load(f)
+                # Check if all required locations are currently in the cache
+                if all(loc in cached_data for loc in locs):
+                    print(f"✓ Weather loaded from cache (expires in {int((CACHE_MAX_AGE_HOURS * 3600 - age_seconds) / 60)} min).")
+                    return cached_data
+                else:
+                    print("⟳ Weather cache missing some locations — fetching fresh data...")
+            except: pass
         else:
             print("⟳ Weather cache expired — fetching fresh data...")
-    locs = {}
+
     for s in STOPS:
         wl = s[8]
         if wl not in locs: locs[wl] = (s[1], s[2])
