@@ -402,10 +402,11 @@ def fetch_routes():
 def popup_html(name, day, stype, notes, link, wx, lat=None, lon=None):
     c = DAY_COLORS[day]
     h = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:300px;width:calc(100vw - 80px);line-height:1.5;">
-    <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+    <div style="background:{c};color:white;padding:8px 12px;">
       <strong style="font-size:14px;">{name}</strong><br>
       <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {stype.capitalize()}</span>
-    </div>"""
+    </div>
+    <div style="padding:10px 14px 12px 14px;">"""
     if wx:
         w=wx
         h+=f"""<div style="background:#f0f4f8;border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;border-left:3px solid {c};">
@@ -424,19 +425,20 @@ def popup_html(name, day, stype, notes, link, wx, lat=None, lon=None):
         links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:13px;font-weight:600;padding:4px 0;">📍 Map</a>')
     if links_parts:
         h+=f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;flex-wrap:wrap;">{"".join(links_parts)}</div>'
-    return h+"</div>"
+    return h+"</div></div>"
 
 def trail_popup(t):
     h=f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:280px;width:calc(100vw - 80px);line-height:1.5;">
-    <div style="background:{TRAIL_COLOR};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+    <div style="background:{TRAIL_COLOR};color:white;padding:8px 12px;">
       <strong style="font-size:14px;">🥾 {t['name']}</strong><br>
       <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[t['day']]}</span>
     </div>
+    <div style="padding:10px 14px 12px 14px;">
     <div style="font-size:12px;margin-bottom:6px;"><b>{t['distance']}</b> · <b>{t['time']}</b> · {t['difficulty']}<br>📈 {t['elevation']}</div>
     <div style="font-size:11px;color:#555;white-space:pre-wrap;margin-bottom:8px;">{t['notes']}</div>
     <div style="border-top:1px solid #eee;padding-top:8px;">
       <a href="{t['url']}" target="_blank" style="color:{TRAIL_COLOR};text-decoration:none;font-size:12px;font-weight:600;">🗺️ Trail Info & Map (AllTrails) →</a>
-    </div></div>"""
+    </div></div></div>"""
     return h
 
 def build_map(routes, weather):
@@ -502,14 +504,15 @@ def build_map(routes, weather):
         gmap = f"https://www.google.com/maps?q={plat},{plon}"
         dc = DAY_COLORS.get(day, "#666")
         ph = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:280px;width:calc(100vw - 80px);line-height:1.5;">
-        <div style="background:#2E7D32;color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+        <div style="background:#2E7D32;color:white;padding:8px 12px;">
           <strong style="font-size:14px;">🅿️ Parking</strong><br>
           <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]}</span>
         </div>
+        <div style="padding:10px 14px 12px 14px;">
         <div style="font-size:12px;color:#333;margin-bottom:6px;"><b>{'</b>, <b>'.join(shared)}</b></div>
         <div style="font-size:12px;color:#555;">{pnotes}</div>
         <div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;"><a href="{gmap}" target="_blank" style="color:#2E7D32;text-decoration:none;font-size:13px;font-weight:600;padding:4px 0;">📍 Navigate to Parking</a></div>
-        </div>"""
+        </div></div>"""
         Marker(location=[plat,plon],
                tooltip=f"🅿️ Parking: {shared[0]}",
                icon=Icon(color="green",icon="square-parking",prefix="fa"),
@@ -525,10 +528,11 @@ def build_map(routes, weather):
         gmap = f"https://www.google.com/maps?q={lat},{lon}"
 
         ar_html = f"""<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:300px;width:calc(100vw - 80px);line-height:1.5;">
-        <div style="background:{c};color:white;padding:8px 12px;border-radius:6px 6px 0 0;margin:-13px -20px 10px -20px;">
+        <div style="background:{c};color:white;padding:8px 12px;">
           <strong style="font-size:14px;">🔀 {ar['name']}</strong><br>
           <span style="font-size:11px;opacity:0.9;">{DAY_LABELS[day]} · {ar['distance']} · {ar['time']}</span>
-        </div>"""
+        </div>
+        <div style="padding:10px 14px 12px 14px;">"""
 
         # Weather block
         if wx:
@@ -556,7 +560,7 @@ def build_map(routes, weather):
         links_parts.append(f'<a href="{gmap}" target="_blank" style="color:{c};text-decoration:none;font-size:12px;font-weight:600;">📍 Map</a>')
         links_joined = "\n".join(links_parts)
         ar_html += f'<div style="margin-top:8px;padding-top:8px;border-top:1px solid #eee;display:flex;gap:16px;">{links_joined}</div>'
-        ar_html += '</div>'
+        ar_html += '</div></div>'
 
         PolyLine(locations=ar["waypoints"], color=ALT_COLOR, weight=3, opacity=0.8, dash_array="10 8",
                  tooltip=f"<b>🔀 {ar['name']}</b><br>{ar['trigger']}",
@@ -585,17 +589,24 @@ def build_map(routes, weather):
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
-    /* Mobile-friendly popup scrolling */
+    /* Popup: remove default padding so colored header goes edge-to-edge */
+    .leaflet-popup-content-wrapper {
+        padding: 0 !important;
+        overflow: hidden;
+    }
     .leaflet-popup-content {
+        margin: 0 !important;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y;
     }
-    /* Popup close button — larger touch target */
+    /* Popup close button — larger touch target, white for colored headers */
     .leaflet-popup-close-button {
         font-size: 22px !important;
         width: 30px !important;
         height: 30px !important;
         padding: 4px !important;
+        color: white !important;
+        z-index: 1;
     }
     /* Mobile: screens under 600px */
     @media (max-width: 600px) {
@@ -631,7 +642,6 @@ def build_map(routes, weather):
             max-width: calc(100vw - 40px) !important;
         }
         .leaflet-popup-content {
-            margin: 10px 12px !important;
             max-width: calc(100vw - 70px) !important;
         }
         /* Larger markers for touch */
