@@ -68,7 +68,7 @@ DAY_LABELS = {
     11:"Day 11 — Sun Aug 16: THE ALHAMBRA",
     12:"Day 12 — Mon Aug 17: Train to Madrid",
     13:"Day 13 — Tue Aug 18: Madrid full day",
-    14:"Day 14 — Wed Aug 19: Segovia + Toledo tour · farewell",
+    14:"Day 14 — Wed Aug 19: Toledo + Segovia tour · farewell",
     15:"Day 15 — Thu Aug 20: Fly home",
 }
 
@@ -86,7 +86,7 @@ DAY_MAP = {
  11:"https://www.google.com/maps/dir/?api=1&origin=Melia%20Granada&destination=Casa%20Juanillo%2C%20Sacromonte%2C%20Granada&waypoints=Alhambra%2C%20Granada%7CCapilla%20Real%20de%20Granada%7CCentro%20Federico%20Garcia%20Lorca%2C%20Granada&travelmode=walking",
  12:"https://www.google.com/maps/dir/?api=1&origin=Madrid%20Atocha%20Station&destination=Mercado%20de%20San%20Miguel%2C%20Madrid&waypoints=Calle%20de%20Felipe%20III%206%2C%20Madrid%7CLa%20Casa%20del%20Abuelo%2C%20Madrid%7CLa%20Latina%2C%20Madrid&travelmode=walking",
  13:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Felipe%20III%206%2C%20Madrid&destination=Templo%20de%20Debod%2C%20Madrid&waypoints=Museo%20Reina%20Sofia%2C%20Madrid%7CCuesta%20de%20Moyano%2C%20Madrid%7CMuralla%20Arabe%2C%20Madrid%7CChocolateria%20San%20Gines%2C%20Madrid%7CCasa%20Hernanz%2C%20Madrid%7CMuseo%20del%20Prado%2C%20Madrid&travelmode=walking",
- 14:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&destination=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&waypoints=Acueducto%20de%20Segovia%7CAlcazar%20de%20Segovia%7CCatedral%20de%20Toledo&travelmode=driving",
+ 14:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&destination=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&waypoints=Catedral%20de%20Toledo%7CAcueducto%20de%20Segovia%7CAlcazar%20de%20Segovia&travelmode=driving",
  15:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Felipe%20III%206%2C%20Madrid&destination=Adolfo%20Suarez%20Madrid-Barajas%20Airport&travelmode=driving",
 }
 
@@ -461,37 +461,40 @@ S = [
 ("⭐ Templo de Debod (sunset) 🌄",40.4240,-3.7176,13,"attraction","Madrid",
  "⭐ 8:45 PM an actual 2nd-c. BC Egyptian temple — Madrid's best sunset spot, free, ~25 min on foot from the Airbnb and worth every step at dusk.",
  None,20,45,False),
-# ---- Day 14: Segovia + Toledo guided coach tour ----
-("🚌 Tour meet-up — Calle Julio Camba",40.4300,-3.6670,14,"bus","Madrid",
- "🚌 BOOKED full-day guided tour: Segovia + Toledo. Meet-up 08:30 at Calle Julio Camba 13 — ⚠️ be there ~08:15. Metro line 2 straight from Sol to Ventas (~10 min) then a 4-min walk, so leave the flat by 07:45; a taxi is ~12 min. Back here 20:30. Water, hat, walking shoes — it's a long day on your feet.",
+# ---- Day 14: Toledo + Segovia guided coach tour (operator schedule) ----
+("🚌 Tour meet-up — Ventas / Calle Julio Camba",40.4300,-3.6670,14,"bus","Madrid",
+ "🚌 BOOKED full-day guided tour (Ibetours): Toledo then Segovia. Departure 08:30 from Ventas — the guide waits where Calle Julio Camba meets Calle de Alcalá. ⚠️ Be there ~08:15. Metro line 2 runs straight from Sol to Ventas (~10 min) then a 4-min walk, so leave the flat by 07:45; taxi ~12 min. Back in Madrid 19:45. Water, hat, real walking shoes.",
  None,8,15,True),
-("Segovia Aqueduct",40.9481,-4.1177,14,"attraction","Segovia",
- "🏛 ~10:00 arrive Segovia. The Roman aqueduct — 1st-c. AD, 167 arches, 28 m tall, assembled without a drop of mortar — is the tour's first stop and where the guided walk into the old town begins.",
- "https://www.turismodesegovia.com/en/",10,45,False),
-("⭐ Alcázar of Segovia",40.9526,-4.1327,14,"attraction","Segovia",
- "⭐ Guided visit, 1 hr, TICKETS INCLUDED in the tour. The castle on the rock spur where the Eresma and Clamores meet — the silhouette that fed Disney's Cinderella Castle. Climb the Torre de Juan II if the tour allows.",
- "https://www.alcazardesegovia.com/en/",11,60,False),
-("🌄 Mirador de la Pradera de San Marcos (optional)",40.9558,-4.1355,14,"viewpoint","Segovia",
- "🌄 OPTIONAL, on your own — THE lower view you're after. A grassy riverside glade by the Iglesia de San Marcos: from here the Alcázar rears over the treeline like a ship's prow, unobstructed. The Berserk / Disney angle, and it only works from below. ⚠️ EITHER/OR with a sit-down lunch — it's ~18 min down, ~25 min back up the hill, so the round trip eats the whole ~85 min of free time. Do this and grab a bocadillo, or skip it and eat properly. Confirm the coach time with your guide before setting off.",
- None,12,85,False),
-("Lunch in Segovia (free time)",40.9489,-4.1189,14,"food","Segovia",
- "🍽 The other way to spend the free time: Segovia's one dish is cochinillo asado, suckling pig roasted until it's carved with the edge of a plate. Mesón de Cándido by the aqueduct is the famous one (~€30, book ahead); Mesón José María is the locals' pick. If you took the mirador instead, make it a bocadillo and a slice of ponche segoviano on the walk back. Coach leaves ~13:30.",
- None,12,80,False),
-("⭐ Toledo Cathedral (guided)",39.8570,-4.0273,14,"attraction","Toledo",
- "⭐ ~16:30 after the ~2.5-hr transfer south. Guided visit, 1 hr — ⚠️ PAY ON SITE, not included (~€12), so carry cash/card. Spain's High Gothic primate cathedral: the Transparente, the sacristy's El Grecos and a Goya.",
- "https://www.catedralprimada.es",16,60,False),
-("🕌 Cristo de la Luz / Santa María la Blanca (free time)",39.8607,-4.0247,14,"moorish","Toledo",
- "🕌 FREE TIME. Toledo is the day's long stop — arrive ~16:00, coach leaves ~19:15, so after the cathedral you have roughly 2 hrs. Enough for the mosque of 999 AD (Cristo de la Luz, ~€3) by the Puerta del Sol gate AND the Mudéjar synagogues Santa María la Blanca + El Tránsito, though they sit at opposite ends of the hill — about 15 min apart on foot. At two or three monuments the €12 toledomonumental wristband starts to pay for itself.",
- "https://toledomonumental.com",17,40,False),
+("🌄 Toledo panoramic tour (from the coach)",39.8500,-4.0230,14,"viewpoint","Toledo",
+ "🌄 09:30 arrive Toledo — the coach first does the panoramic loop on the far bank, the classic postcard of the whole city stacked above the Tagus (this is the Mirador del Valle road). Have your camera ready; on a tour coach this is usually a short photo stop rather than a long one.",
+ None,9,60,False),
+("⭐ Toledo walking tour + Cathedral",39.8570,-4.0273,14,"attraction","Toledo",
+ "⭐ 10:30–11:30 guided walk through the old town and into the cathedral. ⚠️ Cathedral entry is PAY ON SITE (~€12), not included — carry a card. Spain\'s High Gothic primate cathedral: the Transparente, the sacristy\'s El Grecos and a Goya.",
+ "https://www.catedralprimada.es",10,60,False),
 ("⭐ Santo Tomé (El Greco) — free time",39.8574,-4.0283,14,"attraction","Toledo",
- "⭐ FREE TIME (~€4) and the highest value per minute in Toledo: El Greco's Burial of the Count of Orgaz. One canvas, ten minutes, unmissable — 5 min from the cathedral, so do this one first. With ~2 hrs of free time you can add Bar Ludeña (carcamusas, €12–15) for an early bite, and still make the ~19:15 coach.",
- "https://santotome.org",18,25,False),
+ "⭐ 11:30–12:30 FREE TIME, one hour only — spend it here first. Santo Tomé (~€4): El Greco\'s Burial of the Count of Orgaz, one canvas, ten minutes, and a 5-min walk from the cathedral. The single best use of a short window.",
+ "https://santotome.org",11,30,False),
+("🕌 Cristo de la Luz / Santa María la Blanca (free time)",39.8563,-4.0296,14,"moorish","Toledo",
+ "🕌 Same 11:30–12:30 window, if Santo Tomé left you time. The Mudéjar synagogues Santa María la Blanca + El Tránsito are ~5 min further west; the mosque of 999 AD (Cristo de la Luz) is up at the north gate, ~15 min the other way. ⚠️ With one hour you realistically add ONE of these — pick the synagogues, they\'re closer. Skip the €12 wristband on a stop this short; pay singly. Coach leaves 12:30 sharp.",
+ "https://toledomonumental.com",12,25,False),
+("Lunch in Segovia",40.9489,-4.1189,14,"food","Segovia",
+ "🍽 14:30 arrive Segovia after the 2-hr transfer, and lunch runs to 16:00. Segovia\'s one dish is cochinillo asado, suckling pig roasted until it\'s carved with the edge of a plate — Mesón de Cándido by the aqueduct is the famous one (~€30, book ahead), Mesón José María the locals\' pick. Eat quickly if you want the mirador (next stop).",
+ None,14,90,False),
+("Segovia Aqueduct + walking tour",40.9481,-4.1177,14,"attraction","Segovia",
+ "🏛 16:00 guided walking tour, starting at the Roman aqueduct — 1st-c. AD, 167 arches, 28 m tall, assembled without a drop of mortar — then up through the old town toward the Alcázar.",
+ "https://www.turismodesegovia.com/en/",16,60,False),
+("⭐ Alcázar of Segovia",40.9526,-4.1327,14,"attraction","Segovia",
+ "⭐ 17:00 admission, INCLUDED in the tour. The castle on the rock spur where the Eresma and Clamores meet — the silhouette behind Disney\'s Cinderella Castle. Climb the Torre de Juan II if there\'s time. Coach leaves Segovia 18:30.",
+ "https://www.alcazardesegovia.com/en/",17,75,False),
+("🌄 Mirador de la Pradera de San Marcos (optional)",40.9558,-4.1355,14,"viewpoint","Segovia",
+ "🌄 OPTIONAL, on your own — THE lower view: a riverside glade by the Iglesia de San Marcos where the Alcázar rears over the treeline like a ship\'s prow. The Berserk / Disney angle, and it only works from below. ⚠️ GENUINELY TIGHT in this schedule — it\'s ~15 min down from the Alcázar and ~20 back up, against a 18:30 departure. Best play: cut lunch short (eat by 15:15), walk ahead to the Alcázar side and drop to the mirador while the 16:00 walking tour is still working up through town, then rejoin for the 17:00 admission. Clear it with the guide first.",
+ None,18,30,False),
 ("🚌 Back in Madrid — tour drop-off",40.4300,-3.6670,14,"bus","Madrid",
- "🚌 20:30 drop-off back at Calle Julio Camba 13. Metro line 2 Ventas → Sol (~10 min) or a taxi puts you at Plaza Mayor by ~21:00 — just in time for the farewell dinner around the corner.",
- None,20,0,False),
+ "🚌 19:45 drop-off back at Ventas / Calle Julio Camba. Metro line 2 Ventas → Sol (~10 min) puts you at Plaza Mayor by ~20:15 — a civilised hour for the farewell dinner around the corner.",
+ None,19,0,False),
 ("Botín — farewell dinner",40.4147,-3.7085,14,"food","Madrid",
- "🍽 ~9:15 PM farewell dinner (BOOK AHEAD — 6-week waitlist): Botín, the world's oldest restaurant, cochinillo ~€45–50 pp, 2 min from your door. ⚠️ Tight after a 12-hr tour — book for 21:15 or later, and if it feels like too much, do Botín on the 18th instead and keep tonight easy. In-budget fallback: La Sanabresa, menú ~€15. Pack; pre-book tomorrow's taxi.",
- None,21,120,False),
+ "🍽 ~8:45 PM farewell dinner (BOOK AHEAD — 6-week waitlist): Botín, the world\'s oldest restaurant, cochinillo ~€45–50 pp, 2 min from your door. The 19:45 return leaves a comfortable hour to drop bags and change first. In-budget fallback: La Sanabresa, menú ~€15. Pack tonight; pre-book tomorrow\'s taxi.",
+ None,20,120,False),
 
 # ---- Day 15: Fly home ----
 ("Free Madrid morning",40.4155,-3.7075,15,"attraction","Madrid",
@@ -541,12 +544,12 @@ LEGS = [
  # Day 14 guided coach: Madrid → Segovia → Toledo → Madrid
  # No hand-placed waypoints here: they dragged the coach off the motorway
  # (Madrid→Segovia came out 155 km against a real ~92). Let the router pick.
- {"name":"Madrid → Segovia","mode":"bus","day":14,"min":80,"note":"Tour coach · 08:30 dep · AP-6/AP-61 over the Guadarrama · ~92 km",
-  "a":(40.4300,-3.6670),"b":(40.9481,-4.1177)},
- {"name":"Segovia → Toledo","mode":"bus","day":14,"min":150,"note":"Tour coach · ~2h30 · round the west of Madrid · ~165 km",
-  "a":(40.9481,-4.1177),"b":(39.8570,-4.0273)},
- {"name":"Toledo → Madrid","mode":"bus","day":14,"min":75,"note":"Tour coach · A-42 back for 20:30 · ~75 km",
-  "a":(39.8570,-4.0273),"b":(40.4300,-3.6670)},
+ {"name":"Madrid → Toledo","mode":"bus","day":14,"min":60,"note":"Tour coach · 08:30–09:30 · A-42 south · ~75 km",
+  "a":(40.4300,-3.6670),"b":(39.8500,-4.0230)},
+ {"name":"Toledo → Segovia","mode":"bus","day":14,"min":120,"note":"Tour coach · 12:30–14:30 · round the west of Madrid · ~165 km",
+  "a":(39.8570,-4.0273),"b":(40.9481,-4.1177)},
+ {"name":"Segovia → Madrid","mode":"bus","day":14,"min":75,"note":"Tour coach · 18:30–19:45 · AP-61/AP-6 over the Guadarrama · ~92 km",
+  "a":(40.9481,-4.1177),"b":(40.4300,-3.6670)},
  # Transatlantic + US flight legs. Drawn on their day layer; the timeline
  # selector frames these only when you pick Day 1 or Day 15 (see build_scrubber),
  # so the rest of the trip keeps its Iberia-only zoom.
@@ -593,8 +596,8 @@ MODE_TO = {
  "🕌 Muralla Árabe":"taxi",
  "⭐ Templo de Debod (sunset) 🌄":"taxi",
  "Botín — farewell dinner":"metro",
- "🚌 Tour meet-up — Calle Julio Camba":"metro",
- "Lunch in Segovia (free time)":"walk",
+ "🚌 Tour meet-up — Ventas / Calle Julio Camba":"metro",
+ "Lunch in Segovia":"walk",
  "Sala VIP Cibeles (Priority Pass) — MAD 🛋️":"taxi",
 }
 
@@ -698,7 +701,7 @@ def _with_hotel_bookends(stops):
 SEG_VIA = {
  # ── Madrid Metro · line 2 along Calle de Alcalá (Sol ↔ Ventas) ──
  #   Sol·Sevilla·Banco de España·Retiro·Príncipe de Vergara·Goya·Manuel Becerra·Ventas
- ("Leave the Plaza Mayor flat","🚌 Tour meet-up — Calle Julio Camba"):
+ ("Leave the Plaza Mayor flat","🚌 Tour meet-up — Ventas / Calle Julio Camba"):
    [(40.4169,-3.7033),(40.4188,-3.6988),(40.4190,-3.6944),(40.4206,-3.6889),
     (40.4237,-3.6790),(40.4254,-3.6768),(40.4276,-3.6690),(40.4306,-3.6633)],
  ("🚌 Back in Madrid — tour drop-off","Botín — farewell dinner"):
@@ -1359,9 +1362,14 @@ def build_agenda(weather, paths):
       #af-q:focus::placeholder{{color:var(--ink3)}}
     }}
     
-    .fp.active{{opacity:1;font-weight:700;color:#fff;
-      background:var(--c,var(--brand));border-color:var(--c,var(--brand));
-      box-shadow:0 1px 5px color-mix(in srgb,var(--c,var(--brand)) 38%,transparent)}}
+    /* muted fill — darkened rather than lightened, so white text keeps its
+       contrast in both themes and the chip reads calm instead of neon */
+    .fp.active{{opacity:1;font-weight:650;box-shadow:none;color:rgba(255,255,255,0.94);
+      background:color-mix(in srgb,var(--c,var(--brand)) 84%,#000);
+      border-color:color-mix(in srgb,var(--c,var(--brand)) 84%,#000)}}
+    :root[data-theme="dark"] .fp.active{{color:rgba(255,255,255,0.90);
+      background:color-mix(in srgb,var(--c,var(--brand)) 66%,#000);
+      border-color:color-mix(in srgb,var(--c,var(--brand)) 72%,#000)}}
     .fp[data-f="all"].active{{background:var(--ink);border-color:var(--ink);color:var(--bg)}}
     #atl{{padding:16px 14px 4px;max-width:680px;margin:0 auto}}
     .dh{{display:flex;align-items:center;gap:11px;padding:24px 2px 11px;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-0.2px}}
