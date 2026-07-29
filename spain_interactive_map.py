@@ -1341,6 +1341,20 @@ def build_agenda(weather, paths):
       -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z'/%3E%3C/svg%3E") center/contain no-repeat}}
     #af-none{{display:none;max-width:700px;margin:26px auto;padding:0 18px;
       text-align:center;font-size:13px;color:var(--ink3)}}
+    /* On phones the field collapses to just the magnifier so it costs almost no
+       room in the sticky bar, and expands when tapped (or while it holds text). */
+    @media(max-width:600px){{
+      #af-q{{flex:0 0 34px;width:34px;min-width:34px;max-width:34px;padding:6px;
+        color:transparent;cursor:pointer;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23928c84' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E");
+        background-repeat:no-repeat;background-position:center;background-size:15px 15px;
+        transition:flex-basis .2s,max-width .2s,padding .2s}}
+      #af-q::placeholder{{color:transparent}}
+      #af-q:focus,#af-q:not(:placeholder-shown){{
+        flex:1 1 150px;max-width:100%;padding:6px 13px 6px 30px;color:var(--ink);
+        background-position:10px center;cursor:text}}
+      #af-q:focus::placeholder{{color:var(--ink3)}}
+    }}
     .fp:hover{{border-color:var(--ink3)}}
     .fp.active{{background:var(--accent-soft);border-color:currentColor}}
     .fp[data-f="all"].active{{background:var(--ink);border-color:var(--ink);color:var(--bg)}}
@@ -1757,16 +1771,19 @@ def build_scrubber():
         for(var k in window){ try{ if(window[k] && window[k] instanceof L.Map){ _map=window[k]; break; } }catch(e){} }
         return _map;
       }
+      function fitAll(mp){
+        // fitBounds works off the container size, so a fit run before the map
+        // has been laid out silently falls back to the old fixed zoom.
+        try{ mp.invalidateSize(false); }catch(e){}
+        var sm=window.matchMedia('(max-width:600px)').matches;
+        try{
+          mp.fitBounds(L.latLngBounds(AB),
+            {paddingTopLeft:[16, sm?90:96], paddingBottomRight:[16, sm?182:128]});
+        }catch(e){ mp.setView(MC, MZ); }
+      }
       function zoomTo(s){
         var mp=getMap(); if(!mp) return;
-        if(s==='all'){
-          // fit the trip's Iberian bounds instead of a fixed zoom level
-          var sm=window.matchMedia('(max-width:600px)').matches;
-          try{ mp.fitBounds(L.latLngBounds(AB),
-                 {paddingTopLeft:[18, sm?92:104], paddingBottomRight:[18, sm?188:150]}); }
-          catch(e){ mp.setView(MC, MZ); }
-          return;
-        }
+        if(s==='all'){ fitAll(mp); return; }
         var pts=(DAYS[s-1]||{}).pts;
         if(!pts||!pts.length){ mp.setView(MC, MZ); return; }
         if(pts.length===1){ mp.setView(pts[0], 13); return; }
@@ -1855,6 +1872,12 @@ def build_scrubber():
       track.addEventListener('pointermove',function(e){if(dragging)pick(dayFromX(e.clientX));});
       window.addEventListener('pointerup',function(){dragging=false;});
       allb.addEventListener('click',function(){pick('all');});
+      [400,1200].forEach(function(ms){ setTimeout(function(){
+        var mp=getMap(); if(mp&&sel==='all') fitAll(mp);
+      },ms); });
+      window.addEventListener('resize',function(){
+        var mp=getMap(); if(mp&&sel==='all') fitAll(mp);
+      });
       bFocus.addEventListener('click',function(e){e.stopPropagation();
         if(sel==='all')return; stopIdx=0; focusStop();});
       bNext.addEventListener('click',function(e){e.stopPropagation();
