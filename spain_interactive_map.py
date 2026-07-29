@@ -1254,7 +1254,10 @@ def build_agenda(weather, paths):
         <button class="fp active" data-f="moor" onclick="tf(this)">🕌 Moorish</button>
         <button class="fp active" data-f="food" onclick="tf(this)">🍽️ Food</button>
         <button class="fp active" data-f="hist" onclick="tf(this)">✊ History</button>
+        <input id="af-q" type="search" inputmode="search" autocomplete="off"
+               placeholder="Search stops…" aria-label="Search the itinerary" oninput="af()">
       </div>
+      <div id="af-none">No stops match — try a different word or clear the filters.</div>
       <div id="atl">{tl}
         <div style="max-width:700px;margin:8px auto 0;padding:0 4px">
           <div class="infocard">
@@ -1320,6 +1323,18 @@ def build_agenda(weather, paths):
     .ah-r{{font-size:11.5px;margin-top:7px;color:var(--ink3);letter-spacing:0.2px}}
     #af{{padding:11px 14px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:7px;position:sticky;top:0;z-index:100}}
     .fp{{padding:6px 13px;border:1px solid var(--line);border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;background:var(--panel);color:var(--ink2);transition:all 0.18s}}
+    /* search sits on the same row as the chips and shares their shape */
+    #af-q{{flex:1 1 130px;min-width:110px;max-width:260px;padding:6px 13px;
+      border:1px solid var(--line);border-radius:18px;font-size:12px;font-weight:600;
+      background:var(--panel);color:var(--ink);font-family:var(--sans);
+      outline:none;transition:all 0.18s;-webkit-appearance:none;appearance:none}}
+    #af-q::placeholder{{color:var(--ink3);font-weight:500}}
+    #af-q:focus{{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 18%,transparent)}}
+    #af-q::-webkit-search-cancel-button{{-webkit-appearance:none;height:14px;width:14px;
+      background:var(--ink3);cursor:pointer;
+      -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z'/%3E%3C/svg%3E") center/contain no-repeat}}
+    #af-none{{display:none;max-width:700px;margin:26px auto;padding:0 18px;
+      text-align:center;font-size:13px;color:var(--ink3)}}
     .fp:hover{{border-color:var(--ink3)}}
     .fp.active{{background:var(--accent-soft);border-color:currentColor}}
     .fp[data-f="all"].active{{background:var(--ink);border-color:var(--ink);color:var(--bg)}}
@@ -1390,7 +1405,35 @@ def build_agenda(weather, paths):
     var CITIES=['Porto','Lisbon','Seville','Granada','Madrid'];
     var _f=new Set(['all'].concat(CITIES).concat(['moor','food','hist']));
     function tf(b){{var f=b.getAttribute('data-f');if(f==='all'){{_f=new Set(['all'].concat(CITIES).concat(['moor','food','hist']));document.querySelectorAll('.fp').forEach(function(p){{p.className='fp active';}});}}else{{if(b.className.indexOf('active')>=0){{b.className='fp';_f.delete(f);}}else{{b.className='fp active';_f.add(f);}}if(CITIES.indexOf(f)>=0){{var ok=CITIES.every(function(x){{return _f.has(x);}});var ab=document.querySelector('[data-f="all"]');if(ok){{ab.className='fp active';_f.add('all');}}else{{ab.className='fp';_f.delete('all');}}}}}}af();}}
-    function af(){{var cs=document.querySelectorAll('#atl .sc');var hs=document.querySelectorAll('#atl .dh');for(var i=0;i<cs.length;i++){{var c=cs[i];var ci=c.getAttribute('data-city');var tp=c.getAttribute('data-type');var mo=c.getAttribute('data-moor');var hi=c.getAttribute('data-hist');if(!ci)continue;var cityOk=(ci==='Transit')||_f.has(ci);var tok=true;if(tp==='food'&&!_f.has('food'))tok=false;if(mo==='true'&&!_f.has('moor'))tok=false;if(hi==='true'&&!_f.has('hist'))tok=false;c.style.display=(cityOk&&tok)?'':'none';}}for(var j=0;j<hs.length;j++){{var h=hs[j];var hc=h.getAttribute('data-city');h.style.display=(hc==='Transit'||_f.has(hc))?'':'none';}}}}
+    function af(){{
+      var qi=document.getElementById('af-q');
+      var q=qi?qi.value.trim().toLowerCase():'';
+      var cs=document.querySelectorAll('#atl .sc');var hs=document.querySelectorAll('#atl .dh');
+      var hit={{}},shown=0;
+      for(var i=0;i<cs.length;i++){{
+        var c=cs[i];var ci=c.getAttribute('data-city');var tp=c.getAttribute('data-type');
+        var mo=c.getAttribute('data-moor');var hi=c.getAttribute('data-hist');
+        if(!ci)continue;
+        var cityOk=(ci==='Transit')||_f.has(ci);
+        var tok=true;
+        if(tp==='food'&&!_f.has('food'))tok=false;
+        if(mo==='true'&&!_f.has('moor'))tok=false;
+        if(hi==='true'&&!_f.has('hist'))tok=false;
+        // search matches anything in the card: name, notes, city, times, links
+        var qok=!q||(c.textContent||'').toLowerCase().indexOf(q)>=0;
+        var vis=cityOk&&tok&&qok;
+        c.style.display=vis?'':'none';
+        if(vis){{hit[c.getAttribute('data-day')]=1;shown++;}}
+      }}
+      for(var j=0;j<hs.length;j++){{
+        var h=hs[j];var hc=h.getAttribute('data-city');
+        // while searching, drop day headings that have nothing left under them
+        var hv=(hc==='Transit'||_f.has(hc))&&(!q||hit[h.getAttribute('data-day')]);
+        h.style.display=hv?'':'none';
+      }}
+      var nn=document.getElementById('af-none');
+      if(nn) nn.style.display=shown?'none':'block';
+    }}
     function asc(){{var n=new Date();var uh=n.getHours();var today=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');var td=null;for(var k in DD){{if(DD[k]===today)td=parseInt(k);}}if(!td)return;var cs=document.querySelectorAll('.sc[data-hour]');for(var i=0;i<cs.length;i++){{var c=cs[i];var cd=parseInt(c.getAttribute('data-day'));var ch=parseInt(c.getAttribute('data-hour'));if((cd===td&&ch>=uh)||cd>td){{c.className+=' now';(function(el){{setTimeout(function(){{el.scrollIntoView({{behavior:'smooth',block:'center'}});}},200);}})(c);return;}}}}}}
     if('serviceWorker' in navigator){{window.addEventListener('load',function(){{
       navigator.serviceWorker.register('sw.js',{{updateViaCache:'none'}}).then(function(reg){{
