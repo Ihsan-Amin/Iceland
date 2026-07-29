@@ -1252,11 +1252,11 @@ def build_agenda(weather, paths):
       </div>
       <div id="af">
         <button class="fp active" data-f="all" onclick="tf(this)">All</button>
-        <button class="fp active" data-f="Porto" onclick="tf(this)" style="border-color:{REGION_COLORS['Porto']};color:{REGION_COLORS['Porto']}">Porto</button>
-        <button class="fp active" data-f="Lisbon" onclick="tf(this)" style="border-color:{REGION_COLORS['Lisbon']};color:{REGION_COLORS['Lisbon']}">Lisbon</button>
-        <button class="fp active" data-f="Seville" onclick="tf(this)" style="border-color:{REGION_COLORS['Seville']};color:{REGION_COLORS['Seville']}">Seville</button>
-        <button class="fp active" data-f="Granada" onclick="tf(this)" style="border-color:{REGION_COLORS['Granada']};color:{REGION_COLORS['Granada']}">Granada</button>
-        <button class="fp active" data-f="Madrid" onclick="tf(this)" style="border-color:{REGION_COLORS['Madrid']};color:{REGION_COLORS['Madrid']}">Madrid</button>
+        <button class="fp active" data-f="Porto" onclick="tf(this)" style="--c:{REGION_COLORS['Porto']}">Porto</button>
+        <button class="fp active" data-f="Lisbon" onclick="tf(this)" style="--c:{REGION_COLORS['Lisbon']}">Lisbon</button>
+        <button class="fp active" data-f="Seville" onclick="tf(this)" style="--c:{REGION_COLORS['Seville']}">Seville</button>
+        <button class="fp active" data-f="Granada" onclick="tf(this)" style="--c:{REGION_COLORS['Granada']}">Granada</button>
+        <button class="fp active" data-f="Madrid" onclick="tf(this)" style="--c:{REGION_COLORS['Madrid']}">Madrid</button>
         <button class="fp active" data-f="moor" onclick="tf(this)">🕌 Moorish</button>
         <button class="fp active" data-f="food" onclick="tf(this)">🍽️ Food</button>
         <button class="fp active" data-f="hist" onclick="tf(this)">✊ History</button>
@@ -1328,7 +1328,10 @@ def build_agenda(weather, paths):
     .ah-s{{font-size:13px;margin-top:8px;font-weight:500;color:var(--ink2)}}
     .ah-r{{font-size:11.5px;margin-top:7px;color:var(--ink3);letter-spacing:0.2px}}
     #af{{padding:11px 14px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:7px;position:sticky;top:0;z-index:100}}
-    .fp{{padding:6px 13px;border:1px solid var(--line);border-radius:18px;font-size:12px;font-weight:600;cursor:pointer;background:var(--panel);color:var(--ink2);transition:all 0.18s}}
+    .fp{{padding:6px 13px;border:1.5px solid var(--line);border-radius:18px;font-size:12px;
+      font-weight:600;cursor:pointer;background:transparent;color:var(--ink3);opacity:0.55;
+      transition:all 0.18s;-webkit-tap-highlight-color:transparent}}
+    .fp:hover{{opacity:0.82}}
     /* search sits on the same row as the chips and shares their shape */
     #af-q{{flex:1 1 130px;min-width:110px;max-width:260px;padding:6px 13px;
       border:1px solid var(--line);border-radius:18px;font-size:12px;font-weight:600;
@@ -1355,8 +1358,10 @@ def build_agenda(weather, paths):
         background-position:10px center;cursor:text}}
       #af-q:focus::placeholder{{color:var(--ink3)}}
     }}
-    .fp:hover{{border-color:var(--ink3)}}
-    .fp.active{{background:var(--accent-soft);border-color:currentColor}}
+    
+    .fp.active{{opacity:1;font-weight:700;color:#fff;
+      background:var(--c,var(--brand));border-color:var(--c,var(--brand));
+      box-shadow:0 1px 5px color-mix(in srgb,var(--c,var(--brand)) 38%,transparent)}}
     .fp[data-f="all"].active{{background:var(--ink);border-color:var(--ink);color:var(--bg)}}
     #atl{{padding:16px 14px 4px;max-width:680px;margin:0 auto}}
     .dh{{display:flex;align-items:center;gap:11px;padding:24px 2px 11px;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-0.2px}}
@@ -1394,7 +1399,7 @@ def build_agenda(weather, paths):
     .sc.skipped{{opacity:0.5;filter:grayscale(0.8)}}
     .sc.skipped .sn,.sc.skipped .stp,.sc.skipped .snt{{text-decoration:line-through}}
     .sc.skipped .stog{{color:var(--ink) !important;border-color:var(--ink) !important}}
-    @media(max-width:600px){{ #vtog{{top:auto;bottom:98px}} #vtog button{{padding:6px 14px;font-size:12px}} .sc{{padding:13px 14px}} #af{{padding:10px 12px}} .ah{{padding:50px 16px 20px}} .ah-t{{font-size:26px}} }}
+    @media(max-width:600px){{ #vtog{{top:auto;bottom:98px}} #vtog button{{padding:6px 14px;font-size:12px}} .sc{{padding:13px 14px}} #af{{padding:10px 12px;position:static !important}} .ah{{padding:50px 16px 20px}} .ah-t{{font-size:26px}} }}
     </style>
     <script>
     var DD={dd_js};
@@ -1589,7 +1594,14 @@ def build_vscrubber():
         rail.appendChild(b); ticks.push(b);
       });
       function head(d){ return av.querySelector('.dh[data-day="'+d+'"]'); }
-      function barH(){ var b=document.getElementById('af'); return b?b.getBoundingClientRect().height:0; }
+      function barH(){
+        // only reserve room when the filter bar is actually pinned; on phones it
+        // now scrolls away with the header, so reserving its height would
+        // overshoot every day-jump by ~119px
+        var b=document.getElementById('af'); if(!b) return 0;
+        var pos=getComputedStyle(b).position;
+        return (pos==='sticky'||pos==='fixed') ? b.getBoundingClientRect().height : 0;
+      }
       function mark(d){
         for(var i=0;i<ticks.length;i++) ticks[i].classList.toggle('act', i+1===d);
         var o=VD[d-1]; if(!o) return;
