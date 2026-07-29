@@ -202,6 +202,9 @@ S = [
  "https://www.delta.com",21,0,True),
 
 # ---- Day 2: Arrive Porto → Ribeira ----
+("CDG — Paris layover ✈️",49.0097,2.5479,2,"flight","Transit",
+ "✈️ Land 11:15 AM (Fri Aug 7) off the overnight DL8752, then a 2h45 layover before DL8306 to Porto at 2:00 PM. You arrive 2E and depart from the Schengen 2F gates, so allow ~30 min for the transfer and passport control — this is where you clear EU immigration for the whole trip, so keep passports handy. ⚠️ No usable lounge: on a Main Basic fare the Air France lounges are out and the only Priority Pass option is the YOTELAIR cabins back in 2E. Grab food near 2F and reset your watch: Paris and Porto are an hour apart, so 2:00 PM here is 1:00 PM there.",
+ None,11,165,True),
 ("OPO Airport — Arrive Porto",41.2481,-8.6814,2,"flight","Porto",
  "Land 3:25 PM (Fri Aug 7). To Boavista: Metro Line E (violet) → Casa da Música ~25 min (€2.25 + Andante card) + 8–10 min walk, or taxi/Bolt €20–25. After a red-eye the taxi is worth it.",
  None,15,30,True),
@@ -549,6 +552,8 @@ LEGS = [
  # so the rest of the trip keeps its Iberia-only zoom.
  {"name":"Washington → Paris","mode":"flight","day":1,"far":True,"note":"Delta DL8752 (Air France) · IAD→CDG · ~7h30 overnight",
   "a":(38.9531,-77.4565),"b":(49.0097,2.5479)},
+ {"name":"Paris → Porto","mode":"flight","day":2,"far":True,"min":145,"note":"Delta DL8306 · CDG→OPO · 14:00–15:25 · ~2h25",
+  "a":(49.0097,2.5479),"b":(41.2481,-8.6814)},
  {"name":"Madrid → Boston","mode":"flight","day":15,"far":True,"note":"Delta DL63 · MAD→BOS · transatlantic ~8h",
   "a":(40.4936,-3.5668),"b":(42.3656,-71.0096)},
  {"name":"Boston → Washington","mode":"flight","day":15,"far":True,"note":"Delta DL5666 · BOS→DCA · ~1h30",
