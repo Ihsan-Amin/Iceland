@@ -691,6 +691,14 @@ def _with_hotel_bookends(stops):
 # through the real intermediate stations of the line they ride. Keyed by the
 # segment's (from, to) names; drawn as a polyline through these station coords.
 SEG_VIA = {
+ # ── Madrid Metro · line 2 along Calle de Alcalá (Sol ↔ Ventas) ──
+ #   Sol·Sevilla·Banco de España·Retiro·Príncipe de Vergara·Goya·Manuel Becerra·Ventas
+ ("Leave the Plaza Mayor flat","🚌 Tour meet-up — Calle Julio Camba"):
+   [(40.4169,-3.7033),(40.4188,-3.6988),(40.4190,-3.6944),(40.4206,-3.6889),
+    (40.4237,-3.6790),(40.4254,-3.6768),(40.4276,-3.6690),(40.4306,-3.6633)],
+ ("🚌 Back in Madrid — tour drop-off","Botín — farewell dinner"):
+   [(40.4306,-3.6633),(40.4276,-3.6690),(40.4254,-3.6768),(40.4237,-3.6790),
+    (40.4206,-3.6889),(40.4190,-3.6944),(40.4188,-3.6988),(40.4169,-3.7033)],
  # ── Lisbon Metro · Blue line (Santa Apolónia ↔ Praça de Espanha) ──
  #   Terreiro do Paço · Baixa-Chiado · Restauradores · Avenida · Marquês · Parque · São Sebastião
  ("Santa Apolónia","Corinthia Lisbon"):
