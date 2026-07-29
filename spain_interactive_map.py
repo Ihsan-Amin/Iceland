@@ -1079,7 +1079,8 @@ def popup_html(name, day, st, city, notes, link, lat, lon, wx=None):
 DAY_LAYER = {d: f"Day {d} — {DAY_DATES[d][5:].replace('-','/')} · {DAY_CITY[d]}" for d in range(1,16)}
 
 def build_map(paths, weather):
-    m=folium.Map(location=MAP_CENTER, zoom_start=ZOOM_START, tiles=None, control_scale=False)
+    m=folium.Map(location=MAP_CENTER, zoom_start=ZOOM_START, tiles=None,
+                 control_scale=False, zoom_snap=0.25, zoom_delta=0.5)
     folium.TileLayer("OpenStreetMap", name="🗺️ Street Map").add_to(m)
     folium.TileLayer(tiles="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",attr="© OpenStreetMap contributors © CARTO",name="🌙 Dark Matter").add_to(m)
     folium.TileLayer(tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",attr="Esri",name="🏔️ Terrain").add_to(m)
@@ -1676,6 +1677,12 @@ def build_scrubber():
                      "pts":_largest_cluster(allpts),          # default day zoom = main cluster
                      "stops":[{"lat":round(s[1],5),"lon":round(s[2],5),"name":s[0]}
                               for s in S if s[3]==d]})         # ordered → drives the stop-stepper
+    # Bounding box of every Iberian stop — the whole-trip view fits THIS rather
+    # than a fixed zoom, so it packs in as tightly as the screen allows and
+    # ignores the Washington/Paris/Boston outliers entirely.
+    ib=[(s[1],s[2]) for s in S if -10.0<=s[2]<=0.0 and 35.0<=s[1]<=44.0]
+    ALLB=[[min(p[0] for p in ib), min(p[1] for p in ib)],
+          [max(p[0] for p in ib), max(p[1] for p in ib)]]
     DAYS_JS=json.dumps(days)
     html=r"""
     <div id="scrub" role="group" aria-label="Trip day timeline">
@@ -1743,7 +1750,7 @@ def build_scrubber():
       var bFocus=document.getElementById('step-focus');
       var bNext=document.getElementById('step-next');
       var GRAD='linear-gradient(90deg,#41827b,#4c72a0,#c15f3c,#b3812f,#8c6183)';
-      var MC=[40.0,-5.6], MZ=6, _map=null;
+      var MC=[40.0,-5.6], MZ=6, AB=__ALLB__, _map=null;
       function getMap(){
         if(_map) return _map;
         if(!window.L) return null;
@@ -1752,7 +1759,14 @@ def build_scrubber():
       }
       function zoomTo(s){
         var mp=getMap(); if(!mp) return;
-        if(s==='all'){ mp.setView(MC, MZ); return; }
+        if(s==='all'){
+          // fit the trip's Iberian bounds instead of a fixed zoom level
+          var sm=window.matchMedia('(max-width:600px)').matches;
+          try{ mp.fitBounds(L.latLngBounds(AB),
+                 {paddingTopLeft:[18, sm?92:104], paddingBottomRight:[18, sm?188:150]}); }
+          catch(e){ mp.setView(MC, MZ); }
+          return;
+        }
         var pts=(DAYS[s-1]||{}).pts;
         if(!pts||!pts.length){ mp.setView(MC, MZ); return; }
         if(pts.length===1){ mp.setView(pts[0], 13); return; }
@@ -1855,7 +1869,7 @@ def build_scrubber():
     })();
     </script>
     """
-    return html.replace("__DAYS__", DAYS_JS)
+    return html.replace("__DAYS__", DAYS_JS).replace("__ALLB__", json.dumps(ALLB))
 
 def build_theme():
     # Anthropic-style system: warm ivory (light) + deep Claude-Code grey (dark).
