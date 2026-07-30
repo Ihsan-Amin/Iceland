@@ -1321,7 +1321,11 @@ def build_agenda(weather, paths):
       </div>
     </div>
     <style>
-    #vtog{{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:4px;box-shadow:var(--shadow);font-family:var(--sans)}}
+    /* height:fit-content matters — the mobile/standalone blocks below pin `bottom`,
+       and a fixed element with BOTH top and bottom set stretches to fill the screen.
+       Sizing it to its content makes that over-constrained case resolve to `top`
+       instead of turning the switcher into a full-height column. */
+    #vtog{{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2000;display:flex;height:fit-content;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:4px;box-shadow:var(--shadow);font-family:var(--sans)}}
     #vtog button{{padding:8px 20px;border:none;border-radius:18px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.25s;color:var(--ink2);background:transparent}}
     #vtog button:focus{{outline:none}}
     #vtog button.on{{background:var(--brand);color:#fff}}
@@ -2004,8 +2008,8 @@ def build_theme():
       #map-title .title-route{display:none;}          /* shorten the sub line on phones */
       /* respect the home-bar / Safari toolbar safe area */
       #scrub{bottom:calc(12px + env(safe-area-inset-bottom)) !important;}
-      #vtog{bottom:calc(118px + env(safe-area-inset-bottom)) !important;}  /* clears the ~95px scrubber sitting 12px up */
-      #vtog.agenda-mode{bottom:calc(16px + env(safe-area-inset-bottom)) !important;}  /* low, tab-bar style, in the itinerary */
+      #vtog{top:auto !important;bottom:calc(118px + env(safe-area-inset-bottom)) !important;}  /* clears the ~95px scrubber sitting 12px up */
+      #vtog.agenda-mode{top:auto !important;bottom:calc(16px + env(safe-area-inset-bottom)) !important;}  /* low, tab-bar style, in the itinerary */
       #d-fab{bottom:calc(24px + env(safe-area-inset-bottom)) !important;}
       /* shrink the OSM/CARTO credit and sit it flush on the very bottom edge */
       .leaflet-control-attribution{font-size:8px !important;line-height:1.2 !important;
@@ -2033,8 +2037,8 @@ def build_theme():
            never slide under the search bar or off the bottom of the screen. */
         :root{--chrome:max(100lvh - 100dvh - 40px, env(safe-area-inset-bottom) + 6px);}
         #scrub{bottom:calc(var(--chrome) + 2px) !important;}
-        #vtog{bottom:calc(var(--chrome) + 106px) !important;}
-        #vtog.agenda-mode{bottom:calc(var(--chrome) + 8px) !important;}
+        #vtog{top:auto !important;bottom:calc(var(--chrome) + 106px) !important;}
+        #vtog.agenda-mode{top:auto !important;bottom:calc(var(--chrome) + 8px) !important;}
         #d-fab{bottom:calc(var(--chrome) + 14px) !important;}
         /* left-hand bottom controls ride above the toolbar; the attribution
            deliberately stays flush on the true bottom edge */
@@ -2050,18 +2054,30 @@ def build_theme():
        page truly fills the display — but the status bar now floats OVER it,
        and there is no bottom toolbar to allow for. */
     @media all and (display-mode:standalone){
+      /* True at every width, because standalone always puts content under the
+         status bar — iPad included. */
       #map-title{top:calc(10px + env(safe-area-inset-top)) !important;}
       #theme-tog{top:calc(12px + env(safe-area-inset-top)) !important;}
-      .leaflet-top.leaflet-left{margin-top:calc(62px + env(safe-area-inset-top)) !important;}
-      .ah{padding-top:calc(env(safe-area-inset-top) + 16px) !important;}
+      /* 58px is the desktop allowance for the top-centred switcher; on phones the
+         switcher lives at the bottom, so 16px is all the header needs. */
+      .ah{padding-top:calc(env(safe-area-inset-top) + 58px) !important;}
       /* content runs under the status bar here, so the sticky filter bar has to
          park below it rather than at y=0 — otherwise it sits under the clock
          and collides with the dark-mode toggle */
       #af{top:env(safe-area-inset-top) !important;padding-right:62px !important;}
-      #scrub{bottom:calc(env(safe-area-inset-bottom) + 10px) !important;}
-      #vtog{bottom:calc(env(safe-area-inset-bottom) + 114px) !important;}
-      #vtog.agenda-mode{bottom:calc(env(safe-area-inset-bottom) + 12px) !important;}
-      #d-fab{bottom:calc(env(safe-area-inset-bottom) + 20px) !important;}
+      /* Everything below re-stacks the floating controls the way phones need
+         them (switcher above the scrubber, both hugging the bottom edge). On a
+         tablet the window is desktop-shaped and the desktop placement is right,
+         so this must NOT leak past 600px — unguarded, it pinned `bottom` on a
+         switcher that still had `top:12px` and stretched it down the screen. */
+      @media(max-width:600px){
+        .ah{padding-top:calc(env(safe-area-inset-top) + 16px) !important;}
+        .leaflet-top.leaflet-left{margin-top:calc(62px + env(safe-area-inset-top)) !important;}
+        #scrub{bottom:calc(env(safe-area-inset-bottom) + 10px) !important;}
+        #vtog{top:auto !important;bottom:calc(env(safe-area-inset-bottom) + 114px) !important;}
+        #vtog.agenda-mode{top:auto !important;bottom:calc(env(safe-area-inset-bottom) + 12px) !important;}
+        #d-fab{bottom:calc(env(safe-area-inset-bottom) + 20px) !important;}
+      }
     }
     </style>
     <script>
