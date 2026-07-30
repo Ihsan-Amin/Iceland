@@ -1164,6 +1164,19 @@ RESPONSIVE_CSS = """<style>
  .leaflet-popup-content{max-width:calc(100vw - 70px) !important;}
 }
 @media (min-width:601px) and (max-width:1024px){ #map-title{max-width:440px !important;} .title-credits{display:none !important;}}
+/* Tablets. A width breakpoint cannot catch these — an iPad in landscape reports
+   ~1366-1408 CSS px, indistinguishable from a laptop — so key off the input
+   device instead. Touch + no hover is true for every iPad and phone and false
+   for a desktop browser. */
+@media (hover:none) and (pointer:coarse){
+ /* the full legend is desktop detail; on a tablet it eats the top-left corner
+    of the map and swallows whatever the day zoom frames underneath it */
+ .title-legend{display:none !important;}
+ .title-credits{display:none !important;}
+ #map-title{max-width:min(420px, calc(100vw - 80px)) !important;padding:7px 13px !important;}
+ #map-title > div:first-child{font-size:15px !important;}
+ .title-sub{font-size:11px !important;}
+}
 </style>"""
 
 # ═══════════════════════ AGENDA VIEW ═══════════════════════
@@ -1412,6 +1425,12 @@ def build_agenda(weather, paths):
     .sc.skipped .sn,.sc.skipped .stp,.sc.skipped .snt{{text-decoration:line-through}}
     .sc.skipped .stog{{color:var(--ink) !important;border-color:var(--ink) !important}}
     @media(max-width:600px){{ #vtog{{top:auto;bottom:98px}} #vtog button{{padding:6px 14px;font-size:12px}} .sc{{padding:13px 14px}} #af{{padding:10px 12px;position:static !important}} .ah{{padding:50px 16px 20px}} .ah-t{{font-size:26px}} }}
+    /* Same on tablets: a pinned filter bar costs too much of the screen while
+       scrolling, and on an iPad it also collided with the top-centred view
+       switcher. Keyed off touch input rather than width — an iPad in landscape
+       is as wide as a laptop. barH() reads the computed position, so unsticking
+       it here automatically stops day-jumps reserving room for it. */
+    @media (hover:none) and (pointer:coarse){{ #af{{position:static !important}} }}
     </style>
     <script>
     var DD={dd_js};
@@ -1801,18 +1820,55 @@ def build_scrubber():
         try{ mp.invalidateSize(false); }catch(e){}
         var sm=window.matchMedia('(max-width:600px)').matches;
         try{
+          // the whole-trip view is deliberately tighter than a day fit — it only
+          // has to clear the chrome, not leave breathing room around a cluster
+          var o=fitPad(mp);
           mp.fitBounds(L.latLngBounds(AB),
-            {paddingTopLeft:[16, sm?90:96], paddingBottomRight:[16, sm?182:128]});
+            {paddingTopLeft:[16, Math.min(o.paddingTopLeft[1], sm?90:96)],
+             paddingBottomRight:[16, Math.min(o.paddingBottomRight[1], sm?182:128)]});
         }catch(e){ mp.setView(MC, MZ); }
+      }
+      // Tablet = touch input at desktop-ish width. iPads report ~1366-1408 CSS px
+      // in landscape, so width alone cannot tell one from a laptop.
+      function isTablet(){
+        return window.matchMedia('(hover:none) and (pointer:coarse)').matches
+            && !window.matchMedia('(max-width:600px)').matches;
+      }
+      // Measure the floating chrome rather than guessing at it. The old fixed
+      // [70,110] cleared the title card on a phone and on a desktop, but not on
+      // a tablet, where the card is both taller and wider — the first stops of
+      // a day ended up underneath it.
+      // A marker is anchored at its point but drawn ~41px ABOVE it, so padding
+      // only to the bottom of the key still lets the topmost pin ride up
+      // underneath it. Clear the pin's own height plus a little air.
+      var PIN=41;
+      function fitPad(mp){
+        var sz=mp.getSize(), padT=100, padB=150, padX=isTablet()?40:24;
+        var tl=document.getElementById('map-title');
+        if(tl){
+          var r=tl.getBoundingClientRect();
+          if(r.height) padT=Math.round(r.bottom+PIN+8);
+        }
+        var sc=document.getElementById('scrub');
+        if(sc){
+          var b=sc.getBoundingClientRect();
+          if(b.height) padB=Math.round(sz.y-b.top+16);
+        }
+        // never let the two together swallow the viewport on a short window
+        var cap=Math.round(sz.y*0.40);
+        return {paddingTopLeft:[padX, Math.min(padT,cap)],
+                paddingBottomRight:[padX, Math.min(padB,cap)]};
       }
       function zoomTo(s){
         var mp=getMap(); if(!mp) return;
         if(s==='all'){ fitAll(mp); return; }
         var pts=(DAYS[s-1]||{}).pts;
         if(!pts||!pts.length){ mp.setView(MC, MZ); return; }
-        if(pts.length===1){ mp.setView(pts[0], 13); return; }
-        try{ mp.fitBounds(L.latLngBounds(pts), {paddingTopLeft:[70,110], paddingBottomRight:[70,160], maxZoom:14}); }
-        catch(e){ mp.setView(pts[0], 12); }
+        var tab=isTablet();
+        if(pts.length===1){ mp.setView(pts[0], tab?12:13); return; }
+        var o=fitPad(mp); o.maxZoom = tab?13:14;   // a notch wider on tablets
+        try{ mp.fitBounds(L.latLngBounds(pts), o); }
+        catch(e){ mp.setView(pts[0], tab?11:12); }
       }
       function curStops(){ return (sel!=='all'&&DAYS[sel-1])?(DAYS[sel-1].stops||[]):[]; }
       function updateStepUI(){
@@ -1960,7 +2016,11 @@ def build_theme():
       border:1px solid var(--line);background:var(--panel);color:var(--ink);box-shadow:var(--shadow);
       font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:transform .18s;}
     #theme-tog:hover{transform:scale(1.07);}
-    .leaflet-top.leaflet-right{margin-top:52px;}
+    /* Clears the theme toggle, which sits at top:12 and is 40px tall. It has to
+       track the same safe-area inset the toggle uses — installed to the Home
+       Screen the inset is non-zero, and a flat 52px left the layers control
+       sitting underneath the toggle by exactly the inset. */
+    .leaflet-top.leaflet-right{margin-top:calc(52px + env(safe-area-inset-top));}
     /* Map title box → panel + serif */
     #map-title{background:var(--panel) !important;border:1px solid var(--line);border-radius:12px !important;
       box-shadow:var(--shadow) !important;}
