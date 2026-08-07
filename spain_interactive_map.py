@@ -766,7 +766,11 @@ SEG_VIA = {
  # ── Road corridors: without these the router loops the long way round ──
  ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):
    [(37.4150,-5.9050),(37.4020,-5.9450)],                        # straight down the A-4 into Seville
- ("🍷 Graham's 1890 Port Lodge","O Valentim (dinner, Matosinhos)"):
+ # Keyed to the cruise, not Graham's — the Six Bridges stop now sits between
+ # them, so the hop the map actually draws starts at the Cais de Gaia quay.
+ # Same corridor: walk up to Jardim do Morro, line D over the bridge, change
+ # at Trindade for line A out to Matosinhos.
+ ("🚢 Six Bridges Douro cruise","O Valentim (dinner, Matosinhos)"):
    # line D over the bridge: Jardim do Morro·São Bento·Aliados·Trindade, then
    # line A: Lapa·Carolina Michaëlis·Casa da Música·Francos·Ramalde·Viso·
    #         Sete Bicas·Senhora da Hora·Vasco da Gama·Estádio do Mar
