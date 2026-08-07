@@ -227,6 +227,9 @@ S = [
 # Anchored on the BOOKED 11:15 Livraria Lello slot. That takes the prime
 # morning, so the tower/bookshops run before it and the cathedral drops to the
 # afternoon, where it sits on the walk down to the Bolsa anyway.
+("Manteigaria — pastéis de nata ☕🥧",41.1464,-8.6138,3,"food","Porto",
+ "☕🥧 The nata benchmark, and the one you asked for. They bake in view all day and a bell rings for each fresh tray, so you eat them warm with cinnamon and icing sugar from the pots on the counter. €1.40 a tart, galão or espresso ~€1.20 — breakfast for three lands under €12. Opens 8:00 and sits 100 m from Clérigos, so it is the first stop of the day with no detour at all. Standing counter, in and out in 20 minutes — leave the Sheraton about 7:40 for the metro. (Castro on Rua das Flores this afternoon is the other one on your list — do both and pick a favourite.)",
+ "https://www.google.com/maps/search/?api=1&query=Manteigaria+Porto+Clerigos",8,25,False),
 ("Clérigos Tower",41.1456,-8.6142,3,"attraction","Porto",
  "⛪ 9:00 AM opening, straight off the metro — the baroque bell-tower climb (~€8, 225 steps) for the best rooftop view of Porto. First thing beats both the queue and the heat, and it puts you 4 min from Lello for later.",
  None,9,35,False),
@@ -305,6 +308,9 @@ S = [
 ("⭐ Pena Palace",38.7877,-9.3906,5,"attraction","Sintra",
  "⭐ 12:00 PM timed entry — book the official Pena + Moorish Castle combo (~€26) 1–2 weeks ahead; August sells out. Grounds rate above the interior if slots are tight.",
  "https://www.parquesdesintra.pt/en/",12,120,False),
+("Tascantiga — Sintra lunch 🍽",38.7976,-9.3894,5,"food","Sintra",
+ "🍽 Petiscos on a stepped terrace in the old town, and the sane answer to a Sintra day that otherwise runs from an 8 AM train to a 7 PM dinner with nothing in between. Sharing plates — alheira, octopus salad, chouriço, cheeses — at €6–9 each; three of you eat properly for about €20 a head with a jug of wine. Bus 434 drops you in town from Pena and it is a 10-min walk on to Regaleira. ⚠️ Take the full hour and Regaleira gets tight against the train back, which is why it is marked optional.",
+ None,14,60,False),
 ("⭐ Quinta da Regaleira (optional)",38.7963,-9.3963,5,"attraction","Sintra",
  "⭐ 2:30 PM optional — the initiation well (~€15). 25-min walk downhill from town or ~€8 tuk-tuk from Pena. Pena runs to 2 PM, so this is realistically a 2:40 arrival; the last entry is 6:30 PM so there is room.",
  None,15,90,False),
@@ -391,12 +397,18 @@ S = [
  None,21,0,False),
 
 # ---- Day 9: Seville's Moorish core ----
+("Bodega Santa Cruz — Las Columnas 🍤",37.3862,-5.9915,8,"food","Seville",
+ "🍤 After thirteen hours on a coach you want food that is close, fast and cheap — this is 300 m from the hotel door. A standing-room Seville institution: order at the bar, they chalk your tab straight onto the counter, montaditos and fried fish at €2.50–3.50 a plate. Three of you eat and drink well for €20–25 total, not each. Heaving and loud until midnight, which on a Thursday in August is the point. No reservations, no table service.",
+ None,21,60,False),
 ("🕌 Real Alcázar",37.3830,-5.9906,9,"moorish","Seville",
  "🕌 9:30 AM at opening — Spain's finest Mudéjar palace. Book the earliest slot 2+ weeks ahead on the OFFICIAL site (€15.50; resellers charge 2–3×). Allow 2.5h; add Cuarto Real Alto if offered.",
  "https://realalcazarsevilla.sacatuentrada.es/en",9,150,False),
 ("🕌 Cathedral + Giralda",37.3859,-5.9932,9,"moorish","Seville",
  "🕌 12:30 PM (~€13 timed) — climb the 12th-c. Almohad minaret; ramps, not stairs, built for a horse.",
  "https://www.catedraldesevilla.es",12,90,False),
+("Bodega Romero 🥪",37.3867,-5.9953,9,"food","Seville",
+ "🥪 Your own pick, and it slots exactly into the hole between the Cathedral and the siesta. An Arenal bodega famous for its pringá montadito — slow-cooked pork, beef and chorizo pressed into a soft roll — plus proper plates of solomillo and spinach with chickpeas. Montaditos ~€3, raciones €8–12, so lunch for three runs €30–40 total. 220 m from the Cathedral and on the walk back to the hotel. ⚠️ Pin is the Calle Harinas block, not a verified shopfront — tap Book / Info for the live listing. Aug 14 is a Friday, so the Sunday/Monday closures do not bite.",
+ "https://www.google.com/maps/search/?api=1&query=Bodega+Romero+Calle+Harinas+Sevilla",14,60,False),
 ("Siesta / pool 🏊",37.3833,-5.9822,9,"hotel","Seville",
  "☀️ 2:00–6:00 PM long lunch, siesta, pool — and you'll want it after yesterday's 13-hour tour. Heat protocol: sights 8:30–12:00, rest 14:00–18:00, back out after 19:00.",
  None,14,0,True),
@@ -423,6 +435,9 @@ S = [
 ("Meliá Granada 🏨",37.1735,-3.5990,10,"hotel","Granada",
  "🏨 Aug 15–17 (BOOKED, $438.50). Puerta Real — most central base of the trip. Premium Double booked for 3 — call +34 958 22 74 00 to add a bed. 15-min walk to Plaza Nueva. 1:30–6 PM check in, lunch, rest through the heat.",
  None,13,0,True),
+("Bodegas Castañeda 🍷",37.1763,-3.5977,10,"food","Granada",
+ "🍷 Drop the bags and eat — you land at 12:40 and the next thing on the day is a 9 PM crawl. A Granada institution since the 1920s: barrels behind the bar, hams overhead, and the free tapa with every drink that Granada is famous for. Order a ración of jamón or the tabla de quesos to go with it; raciones €9–14, drinks €2.50, so three of you eat and drink for €35–45 total. 500 m from the Meliá, on the way to everything. No bookings, standing at the barrels is normal.",
+ None,14,75,False),
 ("🕌 Albaicín → Mirador de San Nicolás 🌄",37.1809,-3.5924,10,"moorish","Granada",
  "🕌🌄 Head into the old Moorish quarter (UNESCO) ~7:30 PM and work your way up — but time it to be at the Mirador de San Nicolás railing for the ~9:08 PM sunset, when the light sets the Alhambra glowing with the Sierra Nevada behind. The single best free view of the trip; go early enough to claim a spot on the wall. 20–25 min uphill walk or C31/C32 minibus.",
  None,19,135,False),
@@ -437,6 +452,9 @@ S = [
 ("🕌 THE ALHAMBRA + Generalife",37.1760,-3.5881,11,"moorish","Granada",
  "🕌 8:00 AM (BOOKED, non-changeable). ⚠️ Be at the Nasrid Palaces gate 30 min before the printed slot — a missed window is forfeited. Passports scanned; screenshot the QR codes. Full circuit 3.5–4h: Nasrid Palaces → Alcazaba → Partal → Generalife. Stone stays cool until ~10 AM.",
  "https://tickets.alhambra-patronato.es/en/",8,240,False),
+("Los Diamantes — Plaza Nueva 🐟",37.1765,-3.5952,11,"food","Granada",
+ "🐟 Straight down off the Alhambra hill and you land on it — Plaza Nueva sits at the foot of the Cuesta de Gomérez. Granada fried fish done properly: boquerones, calamares, adobo. Every drink comes with a free tapa that is a real plate of food here, so three rounds is effectively lunch; add one ración and three of you are out for €30 or so. Loud, fast, standing at the bar. This is the Plaza Nueva branch, not the Calle Navas one you crawl past tomorrow night.",
+ None,13,60,False),
 ("Rest / pool 🏊",37.1735,-3.5990,11,"hotel","Granada",
  "☀️ 1:00–5:00 PM lunch, rest, pool. Los Manueles (famous croquetas) 5 min from the hotel.",
  None,13,0,True),
@@ -492,6 +510,9 @@ S = [
 ("⭐ Templo de Debod (sunset) 🌄",40.4240,-3.7176,13,"attraction","Madrid",
  "⭐ 8:20 PM an actual 2nd-c. BC Egyptian temple — Madrid's best sunset spot, free, ~12 min by taxi from the Prado door. ⏰ Sunset on Aug 18 is ~9:05 PM, so come straight from the Prado's 8 PM close and have 45 minutes in hand rather than arriving after the light has gone. Reflecting pool in front, Palacio Real behind you.",
  None,20,75,False),
+("Casa Revuelta — late bacalao 🍺",40.4144,-3.7092,13,"food","Madrid",
+ "🍺 Day 13 had no dinner on it at all — this fixes that without a reservation or a detour. A tiny 1960s bar 150 m from your door, famous for one thing: tajadas de bacalao, cod fried in a light batter and deboned by hand, ~€4 a plate with a caña. Add croquetas and callos and three of you are done for €25–30 total. ⏰ Coming off Debod around 9:15 you are here by 9:45; last orders are around 11 PM and they close Sunday nights and all August Mondays — Aug 18 is a Tuesday. Cash preferred. If you want a proper sit-down instead, Mercado de San Miguel is the same two minutes away.",
+ None,21,60,False),
 # ---- Day 14: Toledo + Segovia guided coach tour (operator schedule) ----
 ("🚌 Tour meet-up — Ventas / Calle Julio Camba",40.4300,-3.6670,14,"bus","Madrid",
  "🚌 BOOKED full-day guided tour (Ibetours): Toledo then Segovia. Departure 08:30 from Ventas — the guide waits where Calle Julio Camba meets Calle de Alcalá. ⚠️ Be there ~08:15. Metro line 2 runs straight from Sol to Ventas (~10 min) then a 4-min walk, so leave the flat by 07:45; taxi ~12 min. Back in Madrid 19:45. Water, hat, real walking shoes.",
@@ -615,6 +636,9 @@ MODE_TO = {
  "🕌 Alfama + Miradouro de Santa Luzia":"metro",
  "As Bifanas do Afonso 🥪":"metro",
  "⭐ Pena Palace":"bus",
+ "Tascantiga — Sintra lunch 🍽":"bus",
+ "Los Diamantes — Plaza Nueva 🐟":"bus",
+ "Casa Revuelta — late bacalao 🍺":"taxi",
  "🛍 Feira da Ladra flea market":"taxi",   # 8 km back from Belém — not a walk
  "⭐ Oceanário de Lisboa":"taxi",
  "🕌 National Tile Museum (Azulejo)":"taxi",
@@ -752,7 +776,7 @@ SEG_VIA = {
  ("🕌 National Tile Museum (Azulejo)","As Bifanas do Afonso 🥪"):
    [(38.7139,-9.1224),(38.7076,-9.1349)],                       # Santa Apolónia → Terreiro do Paço
  # ── Porto Metro · Line A, following Carolina Michaëlis / Lapa / Trindade ──
- ("Leave the Sheraton","Clérigos Tower"):
+ ("Leave the Sheraton","Manteigaria — pastéis de nata ☕🥧"):
    [(41.1580,-8.6295),(41.1575,-8.6218),(41.1592,-8.6152),(41.1522,-8.6094),(41.1487,-8.6111)],  # Casa da Música·Carolina Michaëlis·Lapa·Trindade·Aliados
  # Line A back east to Boavista; the hotel sits beside Casa da Música
  ("O Valentim (dinner, Matosinhos)","Back to the Sheraton"):
