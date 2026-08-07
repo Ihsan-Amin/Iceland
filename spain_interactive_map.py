@@ -260,11 +260,11 @@ S = [
 ("⭐ Palácio da Bolsa (Arab Room)",41.1414,-8.6153,3,"moorish","Porto",
  "🕌⭐ Book the 15:30 guided visit (~€12, 45 min): the gilded Arab Room is a 19th-c. neo-Moorish fantasy, a perfect on-theme bonus. 350 m downhill from Castro. ⚠️ Retimed twice — first off 11:00 because the morning never reached it, and now to the afternoon because the 11:15 Lello ticket owns the late morning. Tours run roughly hourly with the last around 17:00, so 15:30 or 16:00 both work.",
  "https://palaciodabolsa.com/en/",15,45,False),
-("🍷 Graham's 1890 Port Lodge",41.1360,-8.6210,3,"food","Porto",
- "🍷 Book the 4:30 PM tour + tasting (~€25–45), Vila Nova de Gaia — a ~8-min taxi over the bridge from the Bolsa. Everyone's 18+, so it works for all three. ⚠️ The lodge closes at 6 PM and 4:30 is close to the last tour, so this is the one booking to make early. Taylor's is the easier self-guided alternative if Graham's is full.",
- "https://www.grahams-port.com/visit-us",16,75,False),
+("🍷 Taylor's Port Cellars",41.1336,-8.6130,3,"food","Porto",
+ "🍷 Swapped in because Graham's is full — and it removes the day's tightest constraint. Taylor's visit is a SELF-GUIDED audio tour (~€20–25, includes a tasting of two or three ports), so there is no time slot to hit and nothing to reserve: you turn up. Rua do Choupelo, up the hill in Gaia, ~10-min taxi over the bridge from the Bolsa. Everyone's 18+, so it works for all three. The vaulted cellars, the peacocks in the garden and the terrace over the river are the draw. ⏰ Open 10:00–18:00, last admission 17:00 — arriving ~16:30 is fine, but the 6 PM close is firm and the 18:00 cruise leaves from the quay 10 min downhill, so this is a walk-out-at-17:45 stop, not a linger.",
+ "https://www.taylor.pt/en/visit-us",16,75,False),
 ("🚢 Six Bridges Douro cruise",41.1378,-8.6115,3,"attraction","Porto",
- "🚢 The 50-minute rabelo-boat loop under all six Douro bridges — Luís I, Infante, Maria Pia, São João, Freixo and Arrábida — exactly the thing to do with legs full of port. Boards at Cais de Gaia, ~10 min downhill from Graham's. €15–20 pp, boats leave roughly every 30 min until about 18:30 in August; buy at the quay or online. ⚠️ The last sailing is the one you want and there is no margin behind it: if Graham's overruns, skip the cruise rather than the dinner.",
+ "🚢 The 50-minute rabelo-boat loop under all six Douro bridges — Luís I, Infante, Maria Pia, São João, Freixo and Arrábida — exactly the thing to do with legs full of port. Boards at Cais de Gaia, ~10 min downhill from Taylor's. €15–20 pp, boats leave roughly every 30 min until about 18:30 in August; buy at the quay or online. ⚠️ The last sailing is the one you want and there is no margin behind it: if the cellars overrun, skip the cruise rather than the dinner.",
  "https://www.douroacima.pt/en/",18,50,False),
 ("O Valentim (dinner, Matosinhos)",41.1830,-8.6960,3,"food","Porto",
  "🍽 Matosinhos grilled-fish row, €15–25. Metro Line A from the Gaia quay via Trindade, ~55 min — off an 18:00 cruise you sit down about 8 PM. They serve late.",
@@ -610,7 +610,7 @@ MODE_STYLE = {
 # Straight from the itinerary's stated transport for each hop.
 MODE_TO = {
  "Ribeira riverfront":"taxi",
- "🍷 Graham's 1890 Port Lodge":"taxi",
+ "🍷 Taylor's Port Cellars":"taxi",
  "O Valentim (dinner, Matosinhos)":"metro",
  "🕌 Alfama + Miradouro de Santa Luzia":"metro",
  "As Bifanas do Afonso 🥪":"metro",
@@ -774,7 +774,7 @@ SEG_VIA = {
     (38.7522,-9.2437),(38.7539,-9.2318),(38.7503,-9.2013),(38.7397,-9.1689),
     (38.7285,-9.1710)],
  # ── Road corridors: without these the router loops the long way round ──
- # NOTE on Bolsa → Graham's: hand-placed vias were tried here and made it
+ # NOTE on Bolsa → the Gaia port cellars: hand-placed vias were tried here
  # worse (11.2 km → 12.2 km). Sub-leg timings show why: it is not the river
  # crossing. Two waypoints 0.5 km apart ON THE SAME Gaia bank routed 4.6 km,
  # so the quay and lodge-hill points snap to ways the auto router cannot
@@ -782,7 +782,7 @@ SEG_VIA = {
  # drawn line is long, and guessing further waypoints kept making it worse.
  ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):
    [(37.4150,-5.9050),(37.4020,-5.9450)],                        # straight down the A-4 into Seville
- # Keyed to the cruise, not Graham's — the Six Bridges stop now sits between
+ # Keyed to the cruise, not the port lodge — the Six Bridges stop sits between
  # them, so the hop the map actually draws starts at the Cais de Gaia quay.
  # Same corridor: walk up to Jardim do Morro, line D over the bridge, change
  # at Trindade for line A out to Matosinhos.
@@ -807,7 +807,7 @@ SEG_MIN = {
  # Straight-line distance here is 0.77 km, but it is 0.77 km ACROSS the Douro
  # with no bridge at that point — a taxi goes round via the Luis I lower deck
  # or the Ponte da Arrabida, about 3 km.
- ("⭐ Palácio da Bolsa (Arab Room)","🍷 Graham's 1890 Port Lodge"):10,
+ ("⭐ Palácio da Bolsa (Arab Room)","🍷 Taylor's Port Cellars"):10,
 }
 
 def _haversine(a, b):
@@ -839,7 +839,7 @@ def build_day_maps():
         if len(pts)<2: continue
         # Google's URL API takes at most 9 intermediate waypoints. Drop the
         # SHORTEST stops rather than thinning evenly — even sampling threw away
-        # Graham's and the Matosinhos dinner on Day 3 while keeping 15-minute
+        # the port lodge and the Matosinhos dinner on Day 3 while keeping 15-min
         # sandwich stops, which also collapsed the day's travel mode to walking.
         mid=pts[1:-1]
         if len(mid)>9:
