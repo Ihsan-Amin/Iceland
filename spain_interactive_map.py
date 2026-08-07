@@ -774,8 +774,15 @@ SEG_VIA = {
     (38.7522,-9.2437),(38.7539,-9.2318),(38.7503,-9.2013),(38.7397,-9.1689),
     (38.7285,-9.1710)],
  # ── Road corridors: without these the router loops the long way round ──
+ # Left alone the router returned 11.2 km for a 0.77 km hop — it will not use
+ # the Dom Luis I LOWER deck, which is the road deck and the obvious crossing.
+ # Porto approach · Gaia end of the deck · west along Avenida Diogo Leite.
+ ("⭐ Palácio da Bolsa (Arab Room)","🍷 Graham's 1890 Port Lodge"):
+   [(41.1404,-8.6110),(41.1378,-8.6089),(41.1370,-8.6145)],
+ # SVQ ran 27 km for a 12 km drive; pin it to the A-4 / Kansas City corridor
+ # past Santa Justa rather than whatever loop the router preferred.
  ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):
-   [(37.4150,-5.9050),(37.4020,-5.9450)],                        # straight down the A-4 into Seville
+   [(37.4110,-5.9200),(37.3990,-5.9660),(37.3919,-5.9752)],       # A-4 → Av. Kansas City → Santa Justa
  # Keyed to the cruise, not Graham's — the Six Bridges stop now sits between
  # them, so the hop the map actually draws starts at the Cais de Gaia quay.
  # Same corridor: walk up to Jardim do Morro, line D over the bridge, change
