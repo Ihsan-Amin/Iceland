@@ -73,22 +73,12 @@ DAY_LABELS = {
 }
 
 # ─── Per-day route in Google Maps (🗺 links straight from the itinerary) ────
-DAY_MAP = {
- 2:"https://www.google.com/maps/dir/?api=1&origin=Porto%20Airport%20OPO&destination=Adega%20Sao%20Nicolau%2C%20Porto&waypoints=Sheraton%20Porto%20Hotel%20%26%20Spa%2C%20Porto%7CRibeira%2C%20Porto%7CPonte%20Luis%20I%2C%20Porto&travelmode=driving",
- 3:"https://www.google.com/maps/dir/?api=1&origin=Sheraton%20Porto%20Hotel%20%26%20Spa%2C%20Porto&destination=O%20Valentim%2C%20Matosinhos&waypoints=Livraria%20Lello%2C%20Porto%7CSao%20Bento%20Station%2C%20Porto%7CPalacio%20da%20Bolsa%2C%20Porto%7CMercado%20do%20Bolhao%2C%20Porto%7CGraham%27s%20Port%20Lodge%2C%20Vila%20Nova%20de%20Gaia&travelmode=walking",
- 4:"https://www.google.com/maps/dir/?api=1&origin=Lisboa%20Santa%20Apolonia%20Station&destination=Taberna%20Sal%20Grosso%2C%20Lisbon&waypoints=Corinthia%20Lisbon%2C%20Lisbon%7CMiradouro%20de%20Santa%20Luzia%2C%20Lisbon%7CMuseu%20do%20Aljube%2C%20Lisbon%7CCastelo%20de%20Sao%20Jorge%2C%20Lisbon&travelmode=driving",
- 5:"https://www.google.com/maps/dir/?api=1&origin=Sete%20Rios%20Station%2C%20Lisbon&destination=Tascantiga%2C%20Sintra&waypoints=Sintra%20Station%7CCastelo%20dos%20Mouros%2C%20Sintra%7CPalacio%20Nacional%20da%20Pena%2C%20Sintra&travelmode=transit",
- 6:"https://www.google.com/maps/dir/?api=1&origin=Corinthia%20Lisbon%2C%20Lisbon&destination=Time%20Out%20Market%2C%20Lisbon&waypoints=Mosteiro%20dos%20Jeronimos%2C%20Lisbon%7CPasteis%20de%20Belem%2C%20Lisbon%7CEmbaixada%2C%20Principe%20Real%2C%20Lisbon%7CA%20Vida%20Portuguesa%2C%20Rua%20Anchieta%2C%20Lisbon%7CLargo%20do%20Carmo%2C%20Lisbon&travelmode=driving",
- 7:"https://www.google.com/maps/dir/?api=1&origin=Seville%20Airport&destination=Bodega%20Santa%20Cruz%20Las%20Columnas%2C%20Seville&waypoints=Prado%20de%20San%20Sebastian%2C%20Seville%7CHotel%20Giralda%20Center%2C%20Seville%7CBarrio%20Santa%20Cruz%2C%20Seville&travelmode=driving",
- 8:"https://www.google.com/maps/dir/?api=1&origin=Avenida%20de%20Menendez%20Pelayo%201%2C%20Sevilla&destination=Avenida%20de%20Menendez%20Pelayo%201%2C%20Sevilla&waypoints=Mezquita-Catedral%20de%20Cordoba%7CSetenil%20de%20las%20Bodegas%7CPuente%20Nuevo%2C%20Ronda&travelmode=driving",
- 9:"https://www.google.com/maps/dir/?api=1&origin=Hotel%20Giralda%20Center%2C%20Seville&destination=Plaza%20de%20Espana%2C%20Seville&waypoints=Real%20Alcazar%2C%20Seville%7CCatedral%20de%20Sevilla%7CEl%20Rinconcillo%2C%20Seville%7CCasa%20de%20Pilatos%2C%20Seville%7CSetas%20de%20Sevilla&travelmode=walking",
- 10:"https://www.google.com/maps/dir/?api=1&origin=Granada%20Railway%20Station&destination=Los%20Diamantes%2C%20Calle%20Navas%2C%20Granada&waypoints=Melia%20Granada%7CPlaza%20Nueva%2C%20Granada%7CMirador%20de%20San%20Nicolas%2C%20Granada&travelmode=driving",
- 11:"https://www.google.com/maps/dir/?api=1&origin=Melia%20Granada&destination=Casa%20Juanillo%2C%20Sacromonte%2C%20Granada&waypoints=Alhambra%2C%20Granada%7CCapilla%20Real%20de%20Granada%7CCentro%20Federico%20Garcia%20Lorca%2C%20Granada&travelmode=walking",
- 12:"https://www.google.com/maps/dir/?api=1&origin=Madrid%20Atocha%20Station&destination=Mercado%20de%20San%20Miguel%2C%20Madrid&waypoints=Calle%20de%20Felipe%20III%206%2C%20Madrid%7CLa%20Casa%20del%20Abuelo%2C%20Madrid%7CLa%20Latina%2C%20Madrid&travelmode=walking",
- 13:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Felipe%20III%206%2C%20Madrid&destination=Templo%20de%20Debod%2C%20Madrid&waypoints=Museo%20Reina%20Sofia%2C%20Madrid%7CCuesta%20de%20Moyano%2C%20Madrid%7CMuralla%20Arabe%2C%20Madrid%7CChocolateria%20San%20Gines%2C%20Madrid%7CCasa%20Hernanz%2C%20Madrid%7CMuseo%20del%20Prado%2C%20Madrid&travelmode=walking",
- 14:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&destination=Calle%20de%20Julio%20Camba%2013%2C%20Madrid&waypoints=Catedral%20de%20Toledo%7CAcueducto%20de%20Segovia%7CAlcazar%20de%20Segovia&travelmode=driving",
- 15:"https://www.google.com/maps/dir/?api=1&origin=Calle%20de%20Felipe%20III%206%2C%20Madrid&destination=Adolfo%20Suarez%20Madrid-Barajas%20Airport&travelmode=driving",
-}
+# Built from S further down rather than hand-written. The hand-maintained
+# version drifted badly: every day was missing stops and several pointed at
+# places that were never on the itinerary (Adega Sao Nicolau, Taberna Sal
+# Grosso, Tascantiga...). Generating it means adding a stop updates the day
+# route for free, and the link can never disagree with the pins again.
+DAY_MAP = {}   # populated by build_day_maps() once S and the hotels exist
 
 # ─── August climate normals (from the itinerary heat outlook, NOT a forecast) ─
 CLIMATE = {
@@ -212,60 +202,60 @@ S = [
  "🏨 Aug 7–9 (BOOKED, $511.29). Boavista, 2.5 km from Ribeira. Premium Queen listed for 2 — call +351 22 040 4000 to arrange third-person bedding. Real pool + spa after the red-eye.",
  None,17,0,True),
 ("Ribeira riverfront",41.1408,-8.6110,2,"attraction","Porto",
- "Evening stroll along the Douro. ~5:45 PM from the hotel — taxi ~10 min €8, or metro to São Bento + walk down.",
- None,18,60,False),
+ "Evening stroll along the Douro. ~5:45 PM from the hotel — taxi ~10 min €8, or metro to São Bento + walk down. ⏰ Keep it to 45 min tonight: the Gaia cable car stops at 20:00 and you want its bottom station by 19:30, so cross the bridge's lower deck around 18:50.",
+ None,18,45,False),
 ("🌄 Pedra dos Gatinhos",41.1381,-8.6071,2,"viewpoint","Porto",
  "🌄 The flat rock shelf at the water's edge on the Gaia bank, a couple of minutes upriver from the bridge — the low-angle shot with the Dom Luís I deck arcing overhead and Ribeira's facades stacked behind. Free, no gate, reached along the riverside path. ⚠️ The pin is the right stretch of bank rather than an exact address: follow the promenade under the bridge and look for the flat rocks people are standing on. No railing and slick where the water reaches, so watch your footing. Cross on the LOWER deck from Ribeira (5 min) — you'll come back over the top one.",
  None,19,15,False),
 ("🚡 Teleférico de Gaia (cable car)",41.1376,-8.6104,2,"attraction","Porto",
  "🚡 Ride it UP from the Cais de Gaia station to Jardim do Morro — 5 minutes, 600 m, glass gondolas drifting over the port lodge roofs with the whole Ribeira laid out beside you. €7 one way, €10 return; one way is the right buy since you'll walk back across the bridge's upper deck. ⚠️ Summer hours are 10:00–20:00 and the last car goes ON the hour — be at the bottom station by 19:30 or it's a steep walk up instead.",
  "https://gaiacablecar.com/en/",19,25,False),
-("Dom Luís I Bridge 🌄",41.1399,-8.6094,2,"viewpoint","Porto",
- "Walk the upper deck back across to Porto for the classic skyline — you cross to Gaia on the lower deck earlier, ride the cable car up, and take the top deck home. Sunset ~8:50 PM, plenty of light.",
- None,20,45,False),
 ("Jardim do Morro 🌄",41.1385,-8.6090,2,"viewpoint","Porto",
  "🌄 The postcard shot: the Dom Luís I bridge broadside with Ribeira's old town stacked across the Douro. A terraced garden right where the upper deck lands in Gaia — Porto's favourite sunset lawn, the first stop off the bridge. Free and open; grab it at golden hour. The Teleférico de Gaia cable car also drifts down past this same view to the quay (~€7 one-way).",
  None,20,25,False),
 ("Miradouro da Serra do Pilar 🌄",41.1373,-8.6098,2,"viewpoint","Porto",
  "🌄 The higher, wider panorama — the whole Ribeira waterfront and both decks of the bridge line up from this UNESCO-listed monastery terrace, a 3-min climb above Jardim do Morro. Catch it before the ~8:50 PM sunset (esplanade free; monastery dome/cloister ~€4).",
  None,20,30,False),
+("Dom Luís I Bridge 🌄",41.1399,-8.6094,2,"viewpoint","Porto",
+ "The walk home: the upper deck back across to Porto, 60 m above the Douro with the whole Ribeira lit up below. You crossed to Gaia on the LOWER deck earlier and rode the cable car up, so this is the return — 20 min, and the best 20 minutes of the day. Sunset ~8:50 PM, so you will be up here just after it.",
+ None,21,20,False),
 ("Café Santiago (dinner)",41.1487,-8.6060,2,"food","Porto",
- "🍽 ~9 PM, after the sunset from the bridge — the Francesinha benchmark, ~€13; expect a short queue. Or book a river-view table in Ribeira. Early night after the red-eye.",
+ "🍽 ~9:30 PM, straight off the bridge — the Francesinha benchmark, ~€13; expect a short queue. Kitchen runs to 11 PM, so the late sit-down is fine. Or book a river-view table in Ribeira. Early night after the red-eye either way.",
  None,21,60,False),
 
 # ---- Day 3: Porto full day + port lodges ----
 ("Livraria Lello 📚",41.1470,-8.6146,3,"shop","Porto",
  "📚 9:00 AM timed entry (book ahead; €8 voucher credits toward a book). One of the world's most beautiful bookshops.",
  "https://www.livrarialello.pt",9,45,False),
+("✊ UNICEPE bookshop",41.1478,-8.6155,3,"history","Porto",
+ "✊📚 Porto's student book cooperative, a left-wing institution since 1964, on Praça de Carlos Alberto — 300 m from Lello, which is why it sits here rather than in the afternoon. 15-min browse; if shut, Livraria Latina fills in.",
+ None,9,15,False),
 ("Clérigos Tower",41.1456,-8.6142,3,"attraction","Porto",
- "Baroque bell-tower climb, then the São Bento azulejo hall (free) 8-min walk downhill.",
- None,10,45,False),
+ "Baroque bell-tower climb (~€8, 225 steps), then the São Bento azulejo hall (free) 8-min walk downhill. 35 min is enough for the climb and the view.",
+ None,10,35,False),
 ("São Bento azulejo hall",41.1457,-8.6106,3,"moorish","Porto",
  "🕌 Blue-and-white azulejo tiles — the Portuguese craft that descends directly from Moorish tradition. Free station concourse.",
  None,10,20,False),
 ("Sé do Porto (Cathedral)",41.1426,-8.6115,3,"attraction","Porto",
- "The hilltop Romanesque cathedral above Ribeira — its Gothic cloister is lined with blue azulejos, and the terrace (Terreiro da Sé) opens a sweeping view over the old town. 5-min walk uphill from São Bento; free entry, cloister ~€3. Quick 25-min stop before the 11 AM Bolsa slot.",
- None,10,25,False),
+ "The hilltop Romanesque cathedral above Ribeira — its Gothic cloister is lined with blue azulejos, and the terrace (Terreiro da Sé) opens a sweeping view over the old town. 5-min walk uphill from São Bento; free entry, cloister ~€3. Quick 25-min stop before the Bolsa tour.",
+ None,11,25,False),
 ("⭐ Palácio da Bolsa (Arab Room)",41.1414,-8.6153,3,"moorish","Porto",
- "🕌⭐ 11:00 AM guided visit (~€12, 45 min): the gilded Arab Room is a 19th-c. neo-Moorish fantasy — a perfect on-theme bonus.",
- "https://palaciodabolsa.com/en/",11,45,False),
+ "🕌⭐ Book the NOON guided visit, not 11:00 (~€12, 45 min): the gilded Arab Room is a 19th-c. neo-Moorish fantasy, a perfect on-theme bonus. ⚠️ Retimed after checking the morning against real walking times — Lello, Clérigos, São Bento and the Sé run you to about 11:40, so an 11:00 slot was gone before you reached the door. Tours go roughly hourly.",
+ "https://palaciodabolsa.com/en/",12,45,False),
 ("Mercado do Bolhão (lunch)",41.1497,-8.6062,3,"food","Porto",
- "🍽 12:30 PM graze the restored market counters, €8–15.",
- None,12,60,False),
+ "🍽 1:00 PM graze the restored market counters, €8–15. Keep it to 40 min — Graham's is a booked 4 PM slot and the afternoon between here and there has no slack.",
+ None,13,40,False),
 ("Casa Guedes 🥪",41.1477,-8.6045,3,"food","Porto",
  "🥪 A pernil sandwich — slow-roasted pork shank with melting Serra da Estrela cheese, ~€5. Anthony Bourdain filmed here (Parts Unknown) at the tiny original on Praça dos Poveiros. 4-min walk down from Bolhão; share one on the way to Gazela.",
- None,13,15,False),
+ None,14,15,False),
 ("Cervejaria Gazela 🌭",41.1449,-8.6064,3,"food","Porto",
  "🌭 One cachorrinho each — the crisp, spicy mini hot-dogs Anthony Bourdain wolfed down here on camera. A Porto institution by Praça da Batalha, 5-min walk from Bolhão; ~15 min standing at the counter with a cold Super Bock. Open from noon, Mon–Sat.",
- None,13,15,False),
+ None,14,15,False),
 ("Rua das Flores 🛍",41.1435,-8.6118,3,"shop","Porto",
- "⭐🛍 Shopping stroll: Claus Porto flagship (heritage soaps/leather) + Portuguese-cotton shops. Scout prices — the bigger haul is Lisbon Day 6.",
- None,14,45,False),
+ "⭐🛍 Shopping stroll: Claus Porto flagship (heritage soaps/leather) + Portuguese-cotton shops. Scout prices — the bigger haul is Lisbon Day 6. 30 min keeps the 4 PM Graham's booking intact — you already scouted these shops, and Lisbon is the real haul.",
+ None,15,30,False),
 ("Castro — Atelier de Pastéis de Nata 🥧",41.1441,-8.6134,3,"food","Porto",
  "🥧 Rua das Flores 151, mid-street — so it's a step off the shopping you're already doing, not a detour. Custard tarts baked in batches through the day; ask for one straight out of the oven and dust it with cinnamon. ~€1.60 a tart, coffee under €2. Small room, often a short queue that moves fast. (Your note said 'near Tia das Flores' — this is the Rua das Flores one.)",
- None,14,20,False),
-("✊ UNICEPE bookshop",41.1478,-8.6155,3,"history","Porto",
- "✊📚 Porto's student book cooperative, a left-wing institution since 1964, near Praça de Carlos Alberto. 15-min browse. If shut, Livraria Latina fills in.",
  None,15,20,False),
 ("🍷 Graham's 1890 Port Lodge",41.1360,-8.6210,3,"food","Porto",
  "🍷 4:00 PM guided tour + tasting (reserve, ~€25–45), Vila Nova de Gaia. Everyone's 18+, so it works for all three. Taylor's is the easier self-guided alt.",
@@ -292,7 +282,7 @@ S = [
  None,16,45,False),
 ("Pastelaria Santo António 🥧",38.7112,-9.1325,4,"food","Lisbon",
  "🥧 Two minutes below the castle gate on Rua Milagre de Santo António — the neighbourhood nata, crisp shell, served warm, and a fraction of the Belém queue you'll join on Tuesday. ~€1.30 a tart. Right on the climb from the Aljube up to São Jorge, so it costs you nothing but the stop.",
- None,16,15,False),
+ None,17,15,False),
 ("🕌 Castelo de São Jorge",38.7139,-9.1335,4,"moorish","Lisbon",
  "🕌 5:30 PM (book online, ~€15): the Moorish-era citadel, for sweeping views over the city and river. Open till ~9 PM in summer — true golden light isn't until ~8 PM, so linger or come back later if you want it.",
  "https://castelodesaojorge.pt/en/",17,90,False),
@@ -314,8 +304,8 @@ S = [
  "⭐ 12:00 PM timed entry — book the official Pena + Moorish Castle combo (~€26) 1–2 weeks ahead; August sells out. Grounds rate above the interior if slots are tight.",
  "https://www.parquesdesintra.pt/en/",12,120,False),
 ("⭐ Quinta da Regaleira (optional)",38.7963,-9.3963,5,"attraction","Sintra",
- "⭐ 2:30 PM optional — the initiation well (~€15). 25-min walk downhill from town or ~€8 tuk-tuk from Pena.",
- None,14,90,False),
+ "⭐ 2:30 PM optional — the initiation well (~€15). 25-min walk downhill from town or ~€8 tuk-tuk from Pena. Pena runs to 2 PM, so this is realistically a 2:40 arrival; the last entry is 6:30 PM so there is room.",
+ None,15,90,False),
 ("A Ginjinha 🍒",38.7145,-9.1388,5,"food","Lisbon",
  "🍒 A €1.50 shot of ginjinha — Lisbon's sour-cherry liqueur — knocked back standing at this hole-in-the-wall by Rossio, pouring since 1840. Anthony Bourdain stopped here; ask for it 'com' (with a boozy cherry) or 'sem'. 5 min as you come off the Sintra train, then up to Bairro Alto.",
  None,18,10,False),
@@ -368,12 +358,12 @@ S = [
 ("Hotel Giralda Center 🏨",37.3833,-5.9822,7,"hotel","Seville",
  "🏨 Aug 12–15 (BOOKED, $516.60). San Bernardo — 1 double + 2 twins + sofa bed, the room genuinely built for 3. Rooftop pool. To hotel: Tussam EA bus €4 + walk, or taxi €25.",
  None,21,0,True),
-("Barrio Santa Cruz — late tapas",37.3855,-5.9905,7,"food","Seville",
- "🍽 9:45 PM Santa Cruz lanes by night, then late tapas — Spanish dinner time from night one. Pair it with the EME rooftop below, either before or after.",
- None,22,90,False),
 ("La Terraza de EME 🍸🌄",37.3860,-5.9928,7,"food","Seville",
- "🍸🌄 Rooftop bar on the EME Catedral hotel, close enough to the Giralda that the tower fills the frame — floodlit once it's dark, which on your first night lands perfectly. 150 m from your hotel and from the Santa Cruz lanes, so it's an easy either-side-of-dinner stop. Drinks ~€12–16; no booking needed for the bar, but head up before ~11 PM on an August night or you'll queue. Smart-casual — no beachwear or flip-flops.",
- None,22,45,False),
+ "🍸🌄 Rooftop bar on the EME Catedral hotel, close enough to the Giralda that the tower fills the frame — floodlit once it's dark, which on your first night lands perfectly. 150 m from your hotel and from the Santa Cruz lanes, so it's a 5-minute walk from dropping the bags. Drinks ~€12–16; no booking needed for the bar, but head up before ~11 PM on an August night or you'll queue. Smart-casual — no beachwear or flip-flops.",
+ None,21,45,False),
+("Barrio Santa Cruz — late tapas",37.3855,-5.9905,7,"food","Seville",
+ "🍽 9:45 PM Santa Cruz lanes by night, then late tapas — Spanish dinner time from night one. Follows the EME rooftop above — drinks at 9:30 while the Giralda lights come on, then tapas at 10.",
+ None,22,90,False),
 
 # ---- Day 8: Córdoba · Setenil · Ronda (guided bus tour) ----
 ("🚌 Tour pickup — Prado de San Sebastián",37.3852,-5.9857,8,"bus","Seville",
@@ -438,8 +428,8 @@ S = [
  "🍽 ~9:30 PM free-tapas crawl on Calle Navas or Plaza Nueva (Granada eats late — a post-sunset start is normal) — a ~€3 drink still buys a tapa. Bodegas Castañeda, Los Diamantes, Bar Poë.",
  None,21,90,False),
 ("Taberna La Tana 🍷",37.1726,-3.5946,10,"food","Granada",
- "🍷 Anthony Bourdain's Granada tapas stop on 'Parts Unknown' — a snug Realejo wine bar (since 1993) with a 600-bottle cellar and a free tapa with every glass (~€3). A few doors off the Calle Navas crawl; the deepest wine list in town.",
- None,22,45,False),
+ "🍷 Anthony Bourdain's Granada tapas stop on 'Parts Unknown' — a snug Realejo wine bar (since 1993) with a 600-bottle cellar and a free tapa with every glass (~€3). A few doors off the Calle Navas crawl; the deepest wine list in town. Realistically an 11 PM nightcap once the crawl winds down — it serves till 1 AM.",
+ None,23,45,False),
 
 # ---- Day 11: The Alhambra ----
 ("🕌 THE ALHAMBRA + Generalife",37.1760,-3.5881,11,"moorish","Granada",
@@ -452,8 +442,8 @@ S = [
  "⭐ 5:00 PM (~€13; verify Sunday hours) — the tombs of Ferdinand and Isabella, the Reconquista's endpoint: the perfect counterweight to the morning. Or 🛁 Hammam Al Ándalus Arab baths (€45–75, book ahead).",
  "https://granada.hammamalandalus.com/en/",17,60,False),
 ("✊ Centro Federico García Lorca",37.1760,-3.6000,11,"history","Granada",
- "✊ Lorca — Spain's great leftist literary martyr — was executed by Francoist forces outside Granada in August 1936. His centre (often free); his summer house Huerta de San Vicente sits in a park 15 min south for the fuller pilgrimage.",
- None,17,45,False),
+ "✊ Lorca — Spain's great leftist literary martyr — was executed by Francoist forces outside Granada in August 1936. His centre (often free); his summer house Huerta de San Vicente sits in a park 15 min south for the fuller pilgrimage. Follows the Royal Chapel, which runs to 6 PM — the centre is 400 m away and open till 8.",
+ None,18,45,False),
 ("Sacromonte — carmen dinner 🌄",37.1830,-3.5870,11,"food","Granada",
  "🍽 8:30 PM Sacromonte cave district; dinner at a carmen with Alhambra views — Carmen Mirador de Aixa or Casa Juanillo (in-budget). Reserve. The terrace catches the ~9:08 PM Alhambra sunset; later, the Perseids are still flying (just past their Aug 12–13 peak) and the young crescent Moon sets early for decent dark skies.",
  None,20,120,False),
@@ -477,29 +467,29 @@ S = [
  "✊ 10:00 AM (€12) — built around Picasso's Guernica, the century's great anti-fascist painting. 🇪🇸 One friend rates it over the Prado; the Prado is later today in its free window.",
  "https://www.museoreinasofia.es/en",10,105,False),
 ("📚 Cuesta de Moyano book stalls",40.4103,-3.6890,13,"history","Madrid",
- "📚 11:45 AM open-air secondhand book stalls (since 1925) on the rise between Atocha and Retiro — Madrid's classic radical-and-rare browse, 20 min, en route to the Muralla. ✒️ Your Postal y Tinta note fits here: it's the stationery/print corner of this same browse — old postcards, prints and inks. Ask at the stalls; several of the casetas along the rise deal in exactly that.",
- None,11,20,False),
+ "📚 Noon — open-air secondhand book stalls (since 1925) on the rise between Atocha and Retiro — Madrid's classic radical-and-rare browse, 20 min, en route to the Muralla. ✒️ Your Postal y Tinta note fits here: it's the stationery/print corner of this same browse — old postcards, prints and inks. Ask at the stalls; several of the casetas along the rise deal in exactly that.",
+ None,12,20,False),
 ("🕌 Muralla Árabe",40.4150,-3.7135,13,"moorish","Madrid",
- "🕌 12:30 PM the 9th-c. Arab wall below Almudena Cathedral, from Madrid's founding as Moorish Mayrit (free). 🇪🇸 From this low angle the cathedral finally shows real depth — the below-the-parks approach the friends recommend.",
- None,12,45,False),
+ "🕌 1:00 PM the 9th-c. Arab wall below Almudena Cathedral, from Madrid's founding as Moorish Mayrit (free). 🇪🇸 From this low angle the cathedral finally shows real depth — the below-the-parks approach the friends recommend.",
+ None,13,45,False),
 ("⭐ San Ginés churros",40.4165,-3.7065,13,"food","Madrid",
  "🍽⭐ 2:00 PM long lunch; San Ginés churros con chocolate (since 1894) for dessert, 12-min walk up Calle Mayor. Casa Revuelta (fried bacalao) 2 min from the Airbnb.",
  None,14,90,False),
 ("🛍 Gritos de Madrid (tiles)",40.4160,-3.7078,13,"shop","Madrid",
  "🛍 Hand-painted replicas of Madrid's old pictorial street-name tiles — the little ceramic plaques with the illustrated scenes. Sits in the lanes between San Ginés and Casa Botín, so it's a two-minute detour off the churros without leaving the block. Small tiles from ~€10 and they wrap them for a suitcase. ⚠️ The pin is the right block rather than the exact shopfront — tap Book / Info for the live listing before you walk it.",
- "https://www.google.com/maps/search/?api=1&query=Gritos+de+Madrid+azulejos+Madrid",14,20,False),
+ "https://www.google.com/maps/search/?api=1&query=Gritos+de+Madrid+azulejos+Madrid",15,20,False),
 ("⭐🛍 Casa Hernanz → Gran Vía shops",40.4130,-3.7080,13,"shop","Madrid",
- "⭐🛍 4:30 PM Casa Hernanz (handmade espadrilles since 1845, from ~€15), then Gran Vía → Calle Fuencarral/Chueca for Spanish brands, or Calle de Serrano for leather (Loewe, Camper). Collect tax-free forms; refund at MAD DIVA kiosks tomorrow.",
- None,16,90,False),
+ "⭐🛍 4:00 PM Casa Hernanz (handmade espadrilles since 1845, from ~€15), then browse Gran Vía → Calle Fuencarral on the way north to Crespo. Collect tax-free forms; refund at MAD DIVA kiosks tomorrow. ⏰ 45 min here, not 90 — the Prado's free window opens at 6 and you want the full two hours of it, not one.",
+ None,16,45,False),
 ("🛍 Antigua Casa Crespo (espadrilles)",40.4270,-3.7027,13,"shop","Madrid",
- "🛍 Espadrille maker since 1863, in Malasaña a few minutes north of Gran Vía — hand-stitched jute soles, a wall of colours, and they measure and fit you properly. This is the answer to your 'instead of Casa Hernanz?' note: it's not either/or. Hernanz is bigger, cheaper (~€15) and near Plaza Mayor; Crespo is smaller, pricier (~€25–45) and the far nicer experience. Doing Hernanz at 4:30 and Crespo now means you can compare before you buy. ⏰ Tight but fine — 30 min here, 20 min across to the Prado for the 6 PM free window. Closed 2–5 PM and all day Sunday; Aug 18 is a Tuesday.",
+ "🛍 Espadrille maker since 1863, in Malasaña a few minutes north of Gran Vía — hand-stitched jute soles, a wall of colours, and they measure and fit you properly. This is the answer to your 'instead of Casa Hernanz?' note: it's not either/or. Hernanz is bigger, cheaper (~€15) and near Plaza Mayor; Crespo is smaller, pricier (~€25–45) and the far nicer experience. Doing Hernanz at 4:30 and Crespo now means you can compare before you buy. ⏰ Tight but fine — 30 min here, 20 min across to the Prado for the 6 PM free window. Closed 2–5 PM and all day Sunday; Aug 18 is a Tuesday. ⏰ Hernanz 4:00–4:45, walk up 20 min, 30 min here, then a 12-min taxi puts you at the Prado door for 6:00.",
  None,17,30,False),
 ("⭐ Museo del Prado",40.4138,-3.6921,13,"museum","Madrid",
- "⭐ 6:00 PM the Prado in its free window (Mon–Sat 18:00–20:00) — walk over from the Gran Vía shops, skip the ticket line and hit the greatest hits: Velázquez's Las Meninas, Goya's black paintings, Bosch's Garden of Earthly Delights (~1.5-hr focused loop). Then taxi to Debod for the sunset. The Reina Sofía this morning is its modern counterpart on the same Paseo del Prado axis.",
- "https://www.museodelprado.es/en",18,105,False),
+ "⭐ 6:00 PM the Prado in its free window (Mon–Sat 18:00–20:00) — walk over from the Gran Vía shops, skip the ticket line and hit the greatest hits: Velázquez's Las Meninas, Goya's black paintings, Bosch's Garden of Earthly Delights (~1.5-hr focused loop). Stay to the 8 PM close, then taxi to Debod. The Reina Sofía this morning is its modern counterpart on the same Paseo del Prado axis.",
+ "https://www.museodelprado.es/en",18,120,False),
 ("⭐ Templo de Debod (sunset) 🌄",40.4240,-3.7176,13,"attraction","Madrid",
- "⭐ 8:45 PM an actual 2nd-c. BC Egyptian temple — Madrid's best sunset spot, free, ~25 min on foot from the Airbnb and worth every step at dusk.",
- None,20,45,False),
+ "⭐ 8:20 PM an actual 2nd-c. BC Egyptian temple — Madrid's best sunset spot, free, ~12 min by taxi from the Prado door. ⏰ Sunset on Aug 18 is ~9:05 PM, so come straight from the Prado's 8 PM close and have 45 minutes in hand rather than arriving after the light has gone. Reflecting pool in front, Palacio Real behind you.",
+ None,20,75,False),
 # ---- Day 14: Toledo + Segovia guided coach tour (operator schedule) ----
 ("🚌 Tour meet-up — Ventas / Calle Julio Camba",40.4300,-3.6670,14,"bus","Madrid",
  "🚌 BOOKED full-day guided tour (Ibetours): Toledo then Segovia. Departure 08:30 from Ventas — the guide waits where Calle Julio Camba meets Calle de Alcalá. ⚠️ Be there ~08:15. Metro line 2 runs straight from Sol to Ventas (~10 min) then a 4-min walk, so leave the flat by 07:45; taxi ~12 min. Back in Madrid 19:45. Water, hat, real walking shoes.",
@@ -729,9 +719,13 @@ def _with_hotel_bookends(stops):
                 max(0,ds[0][8]-1),0,False))
         if end and _haversine((ds[-1][1],ds[-1][2]), _C[end])>0.15:
             la,lo=_C[end]
+            # +1 hour flat was wrong whenever the last stop was long: a 90-min
+            # dinner starting at 20:00 does not put you back at 21:00. Round up
+            # over the stop's own duration plus ~20 min to get home.
+            back=ds[-1][8] + -(-(ds[-1][9]+20)//60)
             ds.append((f"Back to {HOTEL_LABEL[end]}",la,lo,d,"hotel",HOTEL_CITY[end],
                 f"🏨 Wind down — back to {HOTEL_LABEL[end]} for the night.",None,
-                min(23,ds[-1][8]+1),0,False))
+                min(23,back),0,False))
         out.extend(ds)
     return out
 
@@ -797,6 +791,42 @@ def _haversine(a, b):
     return 2*6371*asin(sqrt(h))
 
 S = _with_hotel_bookends(S)   # every day now reads hotel → … → hotel
+
+def build_day_maps():
+    """Fill DAY_MAP from the real stop list, so the 🗺 Day route link always
+    matches the pins. Uses coordinates rather than place names: a name can
+    resolve to the wrong branch of a chain, a coordinate cannot."""
+    for d in range(1,16):
+        day=[s for s in S if s[3]==d]
+        # On a travel day the useful route is the destination city, not 300 km
+        # of railway: start after the last flight/train, provided enough of the
+        # day remains on the far side of it (on Day 15 the flight is the end).
+        cut=-1
+        for i,s in enumerate(day):
+            if s[4] in ("flight","train") and len([
+                    x for x in day[i+1:]
+                    if x[4] not in ("flight","train","lounge","eclipse")])>=2:
+                cut=i
+        day=day[cut+1:]
+        pts=[(s[0],s[1],s[2]) for s in day
+             if s[4] not in ("flight","train","lounge","eclipse")]
+        if len(pts)<2: continue
+        # Google's URL API takes at most 9 intermediate waypoints. Keep the
+        # ends and thin the middle evenly rather than truncating the evening.
+        mid=pts[1:-1]
+        if len(mid)>9:
+            step=(len(mid)-1)/9.0
+            mid=[mid[round(i*step)] for i in range(9)]
+        chain=[pts[0]]+mid+[pts[-1]]
+        gap=max(_haversine((a[1],a[2]),(b[1],b[2])) for a,b in zip(chain,chain[1:]))
+        mode="walking" if gap<=3.5 else ("transit" if gap<=40 else "driving")
+        q=lambda p:f"{p[1]:.5f},{p[2]:.5f}"
+        url=("https://www.google.com/maps/dir/?api=1"
+             f"&origin={q(chain[0])}&destination={q(chain[-1])}")
+        if len(chain)>2:
+            url+="&waypoints="+"%7C".join(q(p) for p in chain[1:-1])
+        DAY_MAP[d]=url+f"&travelmode={mode}"
+build_day_maps()
 
 def build_segments():
     """Ordered intra-day hops between consecutive place-stops, plus the explicit
@@ -1034,21 +1064,19 @@ GUIDE = {
  "🕌 Cathedral + Giralda":"https://en.wikipedia.org/wiki/Seville_Cathedral",
  "⭐🕌 Casa de Pilatos":"https://en.wikipedia.org/wiki/Casa_de_Pilatos",
  "⭐ Plaza de España":"https://en.wikipedia.org/wiki/Plaza_de_España,_Seville",
- "🕌 Mezquita-Catedral, Cordoba":"https://en.wikipedia.org/wiki/Mosque–Cathedral_of_Córdoba",
- "Alcázar + Judería + Roman bridge":"https://en.wikipedia.org/wiki/Alcázar_de_los_Reyes_Cristianos",
- "⭐ Palacio de Viana (patios)":"https://en.wikipedia.org/wiki/Palacio_de_Viana",
+ "⭐🕌 Mezquita-Catedral, Córdoba":"https://en.wikipedia.org/wiki/Mosque–Cathedral_of_Córdoba",
+ "🕌 Córdoba old town — guided walk":"https://en.wikipedia.org/wiki/Alcázar_de_los_Reyes_Cristianos",
  "🕌 Albaicín → Mirador de San Nicolás 🌄":"https://en.wikipedia.org/wiki/Albaicín",
  "🕌 THE ALHAMBRA + Generalife":"https://en.wikipedia.org/wiki/Alhambra",
  "⭐ Royal Chapel + Cathedral":"https://en.wikipedia.org/wiki/Royal_Chapel_of_Granada",
  "✊ Centro Federico García Lorca":"https://en.wikipedia.org/wiki/Federico_García_Lorca",
  "Sacromonte — carmen dinner 🌄":"https://en.wikipedia.org/wiki/Sacromonte",
- "Royal Palace + Campo del Moro":"https://en.wikipedia.org/wiki/Royal_Palace_of_Madrid",
+ "Royal Palace (from below) + Campo del Moro":"https://en.wikipedia.org/wiki/Royal_Palace_of_Madrid",
  "✊ Reina Sofía (Guernica)":"https://en.wikipedia.org/wiki/Museo_Reina_Sofía",
  "🕌 Muralla Árabe":"https://en.wikipedia.org/wiki/Walls_of_Madrid",
  "⭐ Templo de Debod (sunset) 🌄":"https://en.wikipedia.org/wiki/Temple_of_Debod",
- "🕌 Mezquita del Cristo de la Luz":"https://en.wikipedia.org/wiki/Mosque_of_Cristo_de_la_Luz",
- "🕌 Santa María la Blanca + El Tránsito":"https://en.wikipedia.org/wiki/Santa_María_la_Blanca",
- "⭐ Santo Tomé (El Greco) + Cathedral":"https://en.wikipedia.org/wiki/The_Burial_of_the_Count_of_Orgaz",
+ "🕌 Cristo de la Luz / Santa María la Blanca (free time)":"https://en.wikipedia.org/wiki/Mosque_of_Cristo_de_la_Luz",
+ "⭐ Santo Tomé (El Greco) — free time":"https://en.wikipedia.org/wiki/The_Burial_of_the_Count_of_Orgaz",
  "Free Madrid morning":"https://en.wikipedia.org/wiki/Plaza_Mayor,_Madrid",
 }
 GUIDE_STOPS = set(GUIDE)   # which sightseeing stops get a Visitor Guide
@@ -1098,8 +1126,7 @@ BOOKINFO = {
  "⭐🕌 Jerónimos Monastery, Belém":"https://www.patrimoniocultural.gov.pt",
  "🕌 National Tile Museum (Azulejo)":"https://www.museudoazulejo.gov.pt",
  "⭐🕌 Casa de Pilatos":"https://www.fundacionmedinaceli.org",
- "🕌 Santa María la Blanca + El Tránsito":"https://toledomonumental.com",
- "⭐ Santo Tomé (El Greco) + Cathedral":"https://santotome.org",
+ "⭐ Santo Tomé (El Greco) — free time":"https://santotome.org",
 }
 
 def popup_html(name, day, st, city, notes, link, lat, lon, wx=None):
