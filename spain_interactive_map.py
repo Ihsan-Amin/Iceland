@@ -757,6 +757,20 @@ SEG_VIA = {
    [(41.1880,-8.6790),(41.1868,-8.6700),(41.1855,-8.6600),(41.1810,-8.6560),
     (41.1745,-8.6500),(41.1700,-8.6440),(41.1637,-8.6390),(41.1580,-8.6295)],
  # Gaia → bridge → Trindade, change to Line A and curve NW out to the Matosinhos coast
+ # ── CP Linha de Sintra — the last two straight lines left on the map, each
+ #    cutting 20 km across the western suburbs instead of following the rails.
+ #    Benfica·Amadora·Reboleira·Queluz-Belas·Monte Abraão·Massamá-Barcarena·
+ #    Agualva-Cacém·Rio de Mouro·Mercês·Algueirão-Mem Martins·Portela de Sintra
+ ("Sete Rios station","Sintra station"):
+   [(38.7503,-9.2013),(38.7539,-9.2318),(38.7522,-9.2437),(38.7563,-9.2585),
+    (38.7595,-9.2680),(38.7607,-9.2793),(38.7690,-9.2977),(38.7749,-9.3286),
+    (38.7856,-9.3496),(38.7930,-9.3557),(38.7986,-9.3739)],
+ # Coming back you ride through to Rossio, so the tail adds Sete Rios·Campolide
+ ("Sintra station","Rossio station"):
+   [(38.7986,-9.3739),(38.7930,-9.3557),(38.7856,-9.3496),(38.7749,-9.3286),
+    (38.7690,-9.2977),(38.7607,-9.2793),(38.7595,-9.2680),(38.7563,-9.2585),
+    (38.7522,-9.2437),(38.7539,-9.2318),(38.7503,-9.2013),(38.7397,-9.1689),
+    (38.7285,-9.1710)],
  # ── Road corridors: without these the router loops the long way round ──
  ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):
    [(37.4150,-5.9050),(37.4020,-5.9450)],                        # straight down the A-4 into Seville
