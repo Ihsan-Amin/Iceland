@@ -224,49 +224,51 @@ S = [
  None,21,60,False),
 
 # ---- Day 3: Porto full day + port lodges ----
-("Livraria Lello 📚",41.1470,-8.6146,3,"shop","Porto",
- "📚 9:00 AM timed entry (book ahead; €8 voucher credits toward a book). One of the world's most beautiful bookshops.",
- "https://www.livrarialello.pt",9,45,False),
-("✊ UNICEPE bookshop",41.1478,-8.6155,3,"history","Porto",
- "✊📚 Porto's student book cooperative, a left-wing institution since 1964, on Praça de Carlos Alberto — 300 m from Lello, which is why it sits here rather than in the afternoon. 15-min browse; if shut, Livraria Latina fills in.",
- None,9,15,False),
+# Anchored on the BOOKED 11:15 Livraria Lello slot. That takes the prime
+# morning, so the tower/bookshops run before it and the cathedral drops to the
+# afternoon, where it sits on the walk down to the Bolsa anyway.
 ("Clérigos Tower",41.1456,-8.6142,3,"attraction","Porto",
- "Baroque bell-tower climb (~€8, 225 steps), then the São Bento azulejo hall (free) 8-min walk downhill. 35 min is enough for the climb and the view.",
- None,10,35,False),
+ "⛪ 9:00 AM opening, straight off the metro — the baroque bell-tower climb (~€8, 225 steps) for the best rooftop view of Porto. First thing beats both the queue and the heat, and it puts you 4 min from Lello for later.",
+ None,9,35,False),
+("✊ UNICEPE bookshop",41.1478,-8.6155,3,"history","Porto",
+ "✊📚 Porto's student book cooperative, a left-wing institution since 1964, on Praça de Carlos Alberto — 260 m from Clérigos and 300 m from Lello, so it costs you a 4-minute walk. 15-min browse; if shut, Livraria Latina fills in.",
+ None,9,15,False),
 ("São Bento azulejo hall",41.1457,-8.6106,3,"moorish","Porto",
- "🕌 Blue-and-white azulejo tiles — the Portuguese craft that descends directly from Moorish tradition. Free station concourse.",
- None,10,20,False),
-("Sé do Porto (Cathedral)",41.1426,-8.6115,3,"attraction","Porto",
- "The hilltop Romanesque cathedral above Ribeira — its Gothic cloister is lined with blue azulejos, and the terrace (Terreiro da Sé) opens a sweeping view over the old town. 5-min walk uphill from São Bento; free entry, cloister ~€3. Quick 25-min stop before the Bolsa tour.",
- None,11,25,False),
-("⭐ Palácio da Bolsa (Arab Room)",41.1414,-8.6153,3,"moorish","Porto",
- "🕌⭐ Book the NOON guided visit, not 11:00 (~€12, 45 min): the gilded Arab Room is a 19th-c. neo-Moorish fantasy, a perfect on-theme bonus. ⚠️ Retimed after checking the morning against real walking times — Lello, Clérigos, São Bento and the Sé run you to about 11:40, so an 11:00 slot was gone before you reached the door. Tours go roughly hourly.",
- "https://palaciodabolsa.com/en/",12,45,False),
+ "🕌 Blue-and-white azulejo tiles — the Portuguese craft that descends directly from Moorish tradition. Free station concourse, 7 min downhill from UNICEPE. ⏰ You finish here around 10:45 with 30 minutes before the Lello slot — that gap is deliberate, not slack: Saturday is Lello's busiest day and the timed queue still forms outside. Spend it on Praça da Liberdade and Avenida dos Aliados, which are 2 min away and directly on the climb back up.",
+ None,10,25,False),
+("Livraria Lello 📚",41.1470,-8.6146,3,"shop","Porto",
+ "📚 BOOKED — Saturday 8 August, 11:15 timed entry (€8 voucher credits toward a book). One of the world's most beautiful bookshops. ⏰ The whole day is built around this slot: be at the door by 11:05, because the timed queue still forms outside and latecomers get folded into the next entry. Roughly 45 min inside including the staircase photo scrum.",
+ "https://www.livrarialello.pt",11,45,False),
 ("Mercado do Bolhão (lunch)",41.1497,-8.6062,3,"food","Porto",
- "🍽 1:00 PM graze the restored market counters, €8–15. Keep it to 40 min — Graham's is a booked 4 PM slot and the afternoon between here and there has no slack.",
- None,13,40,False),
+ "🍽 ~12:15 PM, an 11-min walk east from Lello — graze the restored market counters, €8–15. 40 min: the afternoon from here to the port lodge is a chain of short stops with no slack.",
+ None,12,40,False),
 ("Casa Guedes 🥪",41.1477,-8.6045,3,"food","Porto",
  "🥪 A pernil sandwich — slow-roasted pork shank with melting Serra da Estrela cheese, ~€5. Anthony Bourdain filmed here (Parts Unknown) at the tiny original on Praça dos Poveiros. 4-min walk down from Bolhão; share one on the way to Gazela.",
- None,14,15,False),
+ None,13,15,False),
 ("Cervejaria Gazela 🌭",41.1449,-8.6064,3,"food","Porto",
- "🌭 One cachorrinho each — the crisp, spicy mini hot-dogs Anthony Bourdain wolfed down here on camera. A Porto institution by Praça da Batalha, 5-min walk from Bolhão; ~15 min standing at the counter with a cold Super Bock. Open from noon, Mon–Sat.",
- None,14,15,False),
+ "🌭 One cachorrinho each — the crisp, spicy mini hot-dogs Anthony Bourdain wolfed down here on camera. A Porto institution by Praça da Batalha; ~15 min standing at the counter with a cold Super Bock. Open from noon, Mon–Sat.",
+ None,13,15,False),
+("Sé do Porto (Cathedral)",41.1426,-8.6115,3,"attraction","Porto",
+ "The hilltop Romanesque cathedral above Ribeira — its Gothic cloister is lined with blue azulejos, and the terrace (Terreiro da Sé) opens a sweeping view over the old town. Free entry, cloister ~€3. Moved to the afternoon by the 11:15 Lello booking, which is no loss: it is 500 m from Gazela and sits directly on the walk down to Rua das Flores and the Bolsa.",
+ None,14,25,False),
 ("Rua das Flores 🛍",41.1435,-8.6118,3,"shop","Porto",
- "⭐🛍 Shopping stroll: Claus Porto flagship (heritage soaps/leather) + Portuguese-cotton shops. Scout prices — the bigger haul is Lisbon Day 6. 30 min keeps the 4 PM Graham's booking intact — you already scouted these shops, and Lisbon is the real haul.",
- None,15,30,False),
+ "⭐🛍 Shopping stroll downhill from the Sé: Claus Porto flagship (heritage soaps/leather) + Portuguese-cotton shops. Scout prices — the bigger haul is Lisbon Day 6. 30 min keeps the port lodge on schedule.",
+ None,14,30,False),
 ("Castro — Atelier de Pastéis de Nata 🥧",41.1441,-8.6134,3,"food","Porto",
- "🥧 Rua das Flores 151, mid-street — so it's a step off the shopping you're already doing, not a detour. Custard tarts baked in batches through the day; ask for one straight out of the oven and dust it with cinnamon. ~€1.60 a tart, coffee under €2. Small room, often a short queue that moves fast. (Your note said 'near Tia das Flores' — this is the Rua das Flores one.)",
+ "🥧 Rua das Flores 151, mid-street — a step off the shopping you're already doing, not a detour. Custard tarts baked in batches through the day; ask for one straight out of the oven and dust it with cinnamon. ~€1.60 a tart, coffee under €2. Small room, often a short queue that moves fast. (Your note said 'near Tia das Flores' — this is the Rua das Flores one.)",
  None,15,20,False),
+("⭐ Palácio da Bolsa (Arab Room)",41.1414,-8.6153,3,"moorish","Porto",
+ "🕌⭐ Book the 15:30 guided visit (~€12, 45 min): the gilded Arab Room is a 19th-c. neo-Moorish fantasy, a perfect on-theme bonus. 350 m downhill from Castro. ⚠️ Retimed twice — first off 11:00 because the morning never reached it, and now to the afternoon because the 11:15 Lello ticket owns the late morning. Tours run roughly hourly with the last around 17:00, so 15:30 or 16:00 both work.",
+ "https://palaciodabolsa.com/en/",15,45,False),
 ("🍷 Graham's 1890 Port Lodge",41.1360,-8.6210,3,"food","Porto",
- "🍷 4:00 PM guided tour + tasting (reserve, ~€25–45), Vila Nova de Gaia. Everyone's 18+, so it works for all three. Taylor's is the easier self-guided alt.",
- "https://www.grahams-port.com/visit-us",16,90,False),
+ "🍷 Book the 4:30 PM tour + tasting (~€25–45), Vila Nova de Gaia — a ~8-min taxi over the bridge from the Bolsa. Everyone's 18+, so it works for all three. ⚠️ The lodge closes at 6 PM and 4:30 is close to the last tour, so this is the one booking to make early. Taylor's is the easier self-guided alternative if Graham's is full.",
+ "https://www.grahams-port.com/visit-us",16,75,False),
 ("🚢 Six Bridges Douro cruise",41.1378,-8.6115,3,"attraction","Porto",
- "🚢 The 50-minute rabelo-boat loop under all six Douro bridges — Luís I, Infante, Maria Pia, São João, Freixo and Arrábida — which is exactly the thing to do with legs full of port. Boards at Cais de Gaia, ~10 min downhill from Graham's. €15–20 pp, boats leave roughly every 30 min until about 18:30 in August; buy at the quay or online. ⚠️ Genuinely tight against dinner: an 18:00 sailing is back at 18:50 and O Valentim in Matosinhos is ~45 min away by metro, so you'd sit down around 19:45. If the 18:00 is gone, drop the cruise rather than the dinner.",
+ "🚢 The 50-minute rabelo-boat loop under all six Douro bridges — Luís I, Infante, Maria Pia, São João, Freixo and Arrábida — exactly the thing to do with legs full of port. Boards at Cais de Gaia, ~10 min downhill from Graham's. €15–20 pp, boats leave roughly every 30 min until about 18:30 in August; buy at the quay or online. ⚠️ The last sailing is the one you want and there is no margin behind it: if Graham's overruns, skip the cruise rather than the dinner.",
  "https://www.douroacima.pt/en/",18,50,False),
 ("O Valentim (dinner, Matosinhos)",41.1830,-8.6960,3,"food","Porto",
- "🍽 Matosinhos grilled-fish row, €15–25. Metro Line A direct from Casa da Música ~20 min. Coming off the 6-Bridges cruise you'll be sitting down closer to 7:45 PM — fine here, they serve late.",
+ "🍽 Matosinhos grilled-fish row, €15–25. Metro Line A from the Gaia quay via Trindade, ~55 min — off an 18:00 cruise you sit down about 8 PM. They serve late.",
  None,20,90,False),
-
 # ---- Day 4: Train to Lisbon → Alfama ----
 ("Porto Campanhã → Lisbon 🚆",41.1490,-8.5850,4,"train","Lisbon",
  "🚆 BOOKED — Intercidades 522, 08:45 Porto Campanhã → 12:00 Lisboa Santa Apolónia (2ª classe, Sun Aug 9). Taxi to Campanhã (NOT São Bento) ~12 min; drop bags / check in, then Alfama at 2.",
@@ -750,7 +752,7 @@ SEG_VIA = {
  ("🕌 National Tile Museum (Azulejo)","As Bifanas do Afonso 🥪"):
    [(38.7139,-9.1224),(38.7076,-9.1349)],                       # Santa Apolónia → Terreiro do Paço
  # ── Porto Metro · Line A, following Carolina Michaëlis / Lapa / Trindade ──
- ("Leave the Sheraton","Livraria Lello 📚"):
+ ("Leave the Sheraton","Clérigos Tower"):
    [(41.1580,-8.6295),(41.1575,-8.6218),(41.1592,-8.6152),(41.1522,-8.6094),(41.1487,-8.6111)],  # Casa da Música·Carolina Michaëlis·Lapa·Trindade·Aliados
  # Line A back east to Boavista; the hotel sits beside Casa da Música
  ("O Valentim (dinner, Matosinhos)","Back to the Sheraton"):
@@ -796,6 +798,10 @@ SEG_MIN = {
  ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):20,
  ("Royal Palace (from below) + Campo del Moro","Sala VIP Cibeles (Priority Pass) — MAD 🛋️"):30,
  ("Gulbenkian Museum","LIS Airport"):20,
+ # Straight-line distance here is 0.77 km, but it is 0.77 km ACROSS the Douro
+ # with no bridge at that point — a taxi goes round via the Luis I lower deck
+ # or the Ponte da Arrabida, about 3 km.
+ ("⭐ Palácio da Bolsa (Arab Room)","🍷 Graham's 1890 Port Lodge"):10,
 }
 
 def _haversine(a, b):
@@ -822,15 +828,17 @@ def build_day_maps():
                     if x[4] not in ("flight","train","lounge","eclipse")])>=2:
                 cut=i
         day=day[cut+1:]
-        pts=[(s[0],s[1],s[2]) for s in day
+        pts=[(s[0],s[1],s[2],s[9]) for s in day
              if s[4] not in ("flight","train","lounge","eclipse")]
         if len(pts)<2: continue
-        # Google's URL API takes at most 9 intermediate waypoints. Keep the
-        # ends and thin the middle evenly rather than truncating the evening.
+        # Google's URL API takes at most 9 intermediate waypoints. Drop the
+        # SHORTEST stops rather than thinning evenly — even sampling threw away
+        # Graham's and the Matosinhos dinner on Day 3 while keeping 15-minute
+        # sandwich stops, which also collapsed the day's travel mode to walking.
         mid=pts[1:-1]
         if len(mid)>9:
-            step=(len(mid)-1)/9.0
-            mid=[mid[round(i*step)] for i in range(9)]
+            keep=set(id(x) for x in sorted(mid,key=lambda x:-x[3])[:9])
+            mid=[x for x in mid if id(x) in keep]
         chain=[pts[0]]+mid+[pts[-1]]
         gap=max(_haversine((a[1],a[2]),(b[1],b[2])) for a,b in zip(chain,chain[1:]))
         mode="walking" if gap<=3.5 else ("transit" if gap<=40 else "driving")
