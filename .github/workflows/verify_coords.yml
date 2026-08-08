@@ -1,0 +1,35 @@
+name: 📍 Verify stop coordinates
+
+# Geocodes every pinned stop and commits a report of how far each pin sits from
+# what the geocoder returns. Manual only — this is a review aid, not something
+# that should rewrite coordinates on a schedule.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Geocode every stop
+        run: python3 verify_coords.py --out spain_geocode_report.json
+
+      - name: Commit the report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add spain_geocode_report.json
+          git diff --staged --quiet || git commit -m "📍 Coordinate verification report [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          git push
