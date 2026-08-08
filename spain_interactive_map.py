@@ -804,8 +804,11 @@ SEG_VIA = {
  # so the quay and lodge-hill points snap to ways the auto router cannot
  # reach directly. The 10-min SEG_MIN below is the real taxi time; only the
  # drawn line is long, and guessing further waypoints kept making it worse.
- ("🌘 Solar eclipse — SVQ arrival","Hotel Giralda Center 🏨"):
-   [(37.4150,-5.9050),(37.4020,-5.9450)],                        # straight down the A-4 into Seville
+ # SVQ → hotel deliberately has NO via. The hand-placed corridor was aimed at
+ # a hotel pin that was 254 m out, and once the pin was corrected it made the
+ # route worse, not better (26.97 km → 30.92 km). Same lesson as Bolsa →
+ # Graham's: with the endpoints right, let the router route. The 20-min
+ # SEG_MIN below is the real airport transfer time either way.
  # Keyed to the cruise, not the port lodge — the Six Bridges stop sits between
  # them, so the hop the map actually draws starts at the Cais de Gaia quay.
  # Same corridor: walk up to Jardim do Morro, line D over the bridge, change
