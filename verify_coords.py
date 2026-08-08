@@ -26,7 +26,8 @@ NOMINATIM = "https://nominatim.openstreetmap.org/search"
 SKIP = re.compile(
     r'^(Leave |Back to )|layover|Free Madrid morning|Siesta|Rest / pool'
     r'|free time\)$|— guided walk|walking tour|panoramic tour|Tour meet-up'
-    r'|Tour pickup|Back in |drop-off|Solar eclipse|Lunch in |evening\)$',
+    r'|Tour pickup|Back in |drop-off|Solar eclipse|Lunch in |evening\)$'
+    r'|Seville → Granada|Granada → Madrid',
     re.I)
 
 # Where the stop's display name is not a searchable place name, give the
@@ -82,6 +83,36 @@ QUERY = {
  "Lunch in Segovia":                   "Plaza Mayor, Segovia, Spain",
  "Segovia Aqueduct + walking tour":    "Acueducto de Segovia, Spain",
  "Bairro Alto (evening)":              "Bairro Alto, Lisboa, Portugal",
+ # ── Second pass. Queries above that returned nothing, or returned a
+ #    same-named street in the wrong town / the wrong branch of a chain.
+ "Ribeira riverfront":                 "Cais da Ribeira, Porto, Portugal",
+ "Dom Luís I Bridge 🌄":                "Ponte Luiz I, Porto, Portugal",
+ "O Valentim (dinner, Matosinhos)":    "Rua Heróis de França, Matosinhos, Portugal",
+ "Porto Campanhã → Lisbon 🚆":          "Estação de Porto-Campanhã, Porto, Portugal",
+ "Rua das Flores 🛍":                   "Rua das Flores, Vitória, Porto, Portugal",
+ "Sete Rios → Sintra train 🚆":         "Estação de Sete Rios, Lisboa, Portugal",
+ "Tasca do Chico (fado + dinner)":     "Tasca do Chico, Rua do Diário de Notícias, Bairro Alto, Lisboa",
+ "⭐ Pena Palace":                      "Palácio Nacional da Pena, Sintra, Portugal",
+ "🌘 Solar eclipse — SVQ arrival":      "Aeropuerto de Sevilla San Pablo, Sevilla, Spain",
+ "🚌 Tour pickup — Prado de San Sebastián":"Avenida de Menéndez Pelayo, Sevilla, Spain",
+ "Barrio Santa Cruz — late tapas":     "Barrio de Santa Cruz, Sevilla, Spain",
+ "🕌 Cathedral + Giralda":              "Catedral de Sevilla, Spain",
+ "La Terraza de EME 🍸🌄":               "EME Catedral Hotel, Sevilla, Spain",
+ "Bodega Romero 🥪":                    "Calle Harinas, Sevilla, Spain",
+ "🕌 Córdoba old town — guided walk":   "Judería de Córdoba, Córdoba, Spain",
+ "Setenil de las Bodegas 🌄":           "Calle Cuevas del Sol, Setenil de las Bodegas, Spain",
+ "⭐ Ronda — Puente Nuevo 🌄":           "Puente Nuevo, Ronda, Spain",
+ "🕌 Albaicín → Mirador de San Nicolás 🌄":"Mirador de San Nicolás, Granada, Spain",
+ "Calle Navas — free-tapas crawl":     "Calle Navas, Granada, Spain",
+ "🕌 THE ALHAMBRA + Generalife":        "Alhambra, Granada, Spain",
+ "⭐ Royal Chapel + Cathedral":         "Capilla Real de Granada, Spain",
+ "Sacromonte — carmen dinner 🌄":       "Sacromonte, Granada, Spain",
+ "La Casa del Abuelo 🦐":               "La Casa del Abuelo, Calle de la Victoria, Madrid, Spain",
+ "La Latina → Mercado de San Miguel":  "Mercado de San Miguel, Madrid, Spain",
+ "🕌 Muralla Árabe":                    "Muralla Árabe, Madrid, Spain",
+ "Botín — farewell dinner":            "Sobrino de Botín, Madrid, Spain",
+ "⭐ Santo Tomé (El Greco) — free time":"Iglesia de Santo Tomé, Toledo, Spain",
+ "Segovia Aqueduct + walking tour":    "Plaza del Azoguejo, Segovia, Spain",
 }
 
 COUNTRY = {"Porto":"Portugal","Lisbon":"Portugal","Sintra":"Portugal",
