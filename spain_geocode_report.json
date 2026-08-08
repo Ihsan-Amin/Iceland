@@ -13,7 +13,7 @@
     "lat": 41.248962,
     "lon": -8.68028,
     "metres_off": 134,
-    "display": "Aeroporto Francisco Sá Carneiro, Rua da Telheira, Santa Cruz do Bispo, Matosinhos, Porto, 4455-561, Portugal",
+    "display": "Aeroporto Francisco Sá Carneiro, Rua 101, Vilar de Pinheiro, Vila do Conde, Porto, 4485-823, Portugal",
     "class": "aeroway",
     "type": "aerodrome"
    }
@@ -45,12 +45,37 @@
   "name": "Ribeira riverfront",
   "day": 2,
   "city": "Porto",
-  "query": "Ribeira riverfront, Porto, Portugal",
+  "query": "Cais da Ribeira, Porto, Portugal",
   "current": [
    41.1408,
    -8.611
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 41.140546,
+    "lon": -8.611842,
+    "metres_off": 76,
+    "display": "Cais da Ribeira, Barredo, Ribeira, Centro Histórico do Porto, Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vi",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 41.140352,
+    "lon": -8.613047,
+    "metres_off": 179,
+    "display": "Cais da Ribeira, Barredo, Ribeira, Centro Histórico do Porto, Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vi",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 41.1405,
+    "lon": -8.61114,
+    "metres_off": 35,
+    "display": "Cais da Ribeira, Lada, Ribeira, Centro Histórico do Porto, Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e Vitór",
+    "class": "highway",
+    "type": "pedestrian"
+   }
+  ],
   "error": null
  },
  {
@@ -138,8 +163,8 @@
   ],
   "candidates": [
    {
-    "lat": 41.137613,
-    "lon": -8.608727,
+    "lat": 41.13762,
+    "lon": -8.608689,
     "metres_off": 101,
     "display": "Jardim do Morro, Avenida da República, Devesas, Santa Marinha, Vila Nova de Gaia, Porto, 4430-148, Portugal",
     "class": "railway",
@@ -189,12 +214,37 @@
   "name": "Dom Luís I Bridge 🌄",
   "day": 2,
   "city": "Porto",
-  "query": "Dom Luís I Bridge, Porto, Portugal",
+  "query": "Ponte Luiz I, Porto, Portugal",
   "current": [
    41.1399,
    -8.6094
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 41.139659,
+    "lon": -8.609351,
+    "metres_off": 27,
+    "display": "Ponte Luiz I, Ponte Luiz I (tabuleiro inferior), Santa Marinha, Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e ",
+    "class": "man_made",
+    "type": "bridge"
+   },
+   {
+    "lat": 41.14017,
+    "lon": -8.609458,
+    "metres_off": 30,
+    "display": "Ponte Luiz I (tabuleiro superior), Guindais, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofeita, Santo Ild",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 41.140116,
+    "lon": -8.609542,
+    "metres_off": 27,
+    "display": "Ponte Luiz I (tabuleiro superior), Lada, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofeita, Santo Ildefon",
+    "class": "highway",
+    "type": "pedestrian"
+   }
+  ],
   "error": null
  },
  {
@@ -366,9 +416,9 @@
     "type": "marketplace"
    },
    {
-    "lat": 41.149256,
-    "lon": -8.607706,
-    "metres_off": 135,
+    "lat": 41.149613,
+    "lon": -8.607378,
+    "metres_off": 99,
     "display": "Mercado do Bolhão, Rua de Sá da Bandeira, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofei",
     "class": "highway",
     "type": "bus_stop"
@@ -377,7 +427,7 @@
     "lat": 41.148888,
     "lon": -8.608378,
     "metres_off": 203,
-    "display": "Mercado do Bolhão, Rua Formosa, Baixa do Porto, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeita, Santo Il",
+    "display": "Mercado do Bolhão, Rua Formosa, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofeita, Santo ",
     "class": "highway",
     "type": "bus_stop"
    }
@@ -416,20 +466,20 @@
   ],
   "candidates": [
    {
-    "lat": 41.144859,
-    "lon": -8.60656,
-    "metres_off": 14,
-    "display": "Cervejaria Gazela, 8-10, Rua de Entreparedes, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Ced",
-    "class": "amenity",
-    "type": "restaurant"
-   },
-   {
     "lat": 41.144893,
     "lon": -8.607597,
     "metres_off": 100,
     "display": "Cervejaria Gazela, 4, Travessa de Cimo de Vila, Santo Ildefonso, Conjunto Urbano da Ribeira, Centro Histórico do Porto, ",
     "class": "amenity",
     "type": "pub"
+   },
+   {
+    "lat": 41.144859,
+    "lon": -8.60656,
+    "metres_off": 14,
+    "display": "Cervejaria Gazela, 8-10, Rua de Entreparedes, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Ced",
+    "class": "amenity",
+    "type": "restaurant"
    }
   ],
   "error": null
@@ -467,20 +517,12 @@
   "name": "Rua das Flores 🛍",
   "day": 3,
   "city": "Porto",
-  "query": "Rua das Flores, Porto, Portugal",
+  "query": "Rua das Flores, Vitória, Porto, Portugal",
   "current": [
    41.1435,
    -8.6118
   ],
   "candidates": [
-   {
-    "lat": 41.187439,
-    "lon": -8.61118,
-    "metres_off": 4886,
-    "display": "Rua das Flores, Telheiro, São Mamede de Infesta, Matosinhos, Porto, 4465-266, Portugal",
-    "class": "highway",
-    "type": "residential"
-   },
    {
     "lat": 41.144455,
     "lon": -8.612639,
@@ -494,6 +536,14 @@
     "lon": -8.611502,
     "metres_off": 171,
     "display": "Rua das Flores, Lóios, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeita, Santo Ildefonso, Sé, Miragaia, Sã",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 41.143691,
+    "lon": -8.614078,
+    "metres_off": 192,
+    "display": "Rua das Flores, São Domingos, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeita, Santo Ildefonso, Sé, Mirag",
     "class": "highway",
     "type": "pedestrian"
    }
@@ -564,8 +614,8 @@
     "lon": -8.614403,
     "metres_off": 143,
     "display": "Taylor's, 250, Rua do Choupelo, Devesas, Santa Marinha, Vila Nova de Gaia, Porto, 4400-088, Portugal",
-    "class": "shop",
-    "type": "alcohol"
+    "class": "tourism",
+    "type": "museum"
    }
   ],
   "error": null
@@ -611,24 +661,66 @@
   "name": "O Valentim (dinner, Matosinhos)",
   "day": 3,
   "city": "Porto",
-  "query": "O Valentim, Matosinhos, Portugal",
+  "query": "Rua Heróis de França, Matosinhos, Portugal",
   "current": [
    41.183,
    -8.696
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 41.179083,
+    "lon": -8.691111,
+    "metres_off": 598,
+    "display": "Rua Heróis de França, Matosinhos Sul, Matosinhos, Porto, 4450-156, Portugal",
+    "class": "highway",
+    "type": "residential"
+   },
+   {
+    "lat": 41.182329,
+    "lon": -8.69424,
+    "metres_off": 165,
+    "display": "Rua Heróis de França, Brito Capelo, Matosinhos, Porto, 4450-277, Portugal",
+    "class": "highway",
+    "type": "tertiary"
+   },
+   {
+    "lat": 41.181522,
+    "lon": -8.693468,
+    "metres_off": 268,
+    "display": "Rua Heróis de França, Matosinhos Sul, Matosinhos, Porto, 4450-159, Portugal",
+    "class": "highway",
+    "type": "tertiary"
+   }
+  ],
   "error": null
  },
  {
   "name": "Porto Campanhã → Lisbon 🚆",
   "day": 4,
   "city": "Lisbon",
-  "query": "Porto Campanhã Lisbon, Lisbon, Portugal",
+  "query": "Estação de Porto-Campanhã, Porto, Portugal",
   "current": [
    41.149,
    -8.585
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 41.148741,
+    "lon": -8.585458,
+    "metres_off": 48,
+    "display": "Estação Ferroviária de Porto - Campanhã, Largo da Estação, Estação, Campanhã, Porto, 4300-173, Portugal",
+    "class": "building",
+    "type": "train_station"
+   },
+   {
+    "lat": 41.149192,
+    "lon": -8.58471,
+    "metres_off": 32,
+    "display": "Porto - Campanhã, Passagem Inferior Pedonal - Sul, Estação, Campanhã, Porto, 4300-414, Portugal",
+    "class": "railway",
+    "type": "station"
+   }
+  ],
   "error": null
  },
  {
@@ -671,17 +763,17 @@
     "type": "viewpoint"
    },
    {
-    "lat": 38.711317,
-    "lon": -9.130666,
-    "metres_off": 79,
+    "lat": 38.711478,
+    "lon": -9.130617,
+    "metres_off": 64,
     "display": "Miradouro de Santa Luzia, Rua do Limoeiro, Santiago, Santa Maria Maior, Madalena, Lisboa, 1100-487, Portugal",
     "class": "railway",
     "type": "tram_stop"
    },
    {
-    "lat": 38.711313,
-    "lon": -9.130702,
-    "metres_off": 81,
+    "lat": 38.711472,
+    "lon": -9.130599,
+    "metres_off": 63,
     "display": "Miradouro de Santa Luzia, Rua do Limoeiro, Santiago, Santa Maria Maior, Madalena, Lisboa, 1100-487, Portugal",
     "class": "highway",
     "type": "bus_stop"
@@ -761,7 +853,7 @@
     "lat": 38.712014,
     "lon": -9.133218,
     "metres_off": 211,
-    "display": "Castelo de São Jorge, Praça de Armas, Castelo, Santa Maria Maior, Madalena, Lisboa, 1100-129, Portugal",
+    "display": "Castelo de São Jorge, Costa do Castelo, São Vicente de Fora, Alfama, São Vicente, Lisboa, 1100-335, Portugal",
     "class": "place",
     "type": "house"
    },
@@ -792,19 +884,19 @@
   "name": "Tasca do Chico (fado + dinner)",
   "day": 4,
   "city": "Lisbon",
-  "query": "Tasca do Chico, Lisbon, Portugal",
+  "query": "Tasca do Chico, Rua do Diário de Notícias, Bairro Alto, Lisboa",
   "current": [
    38.7113,
    -9.1447
   ],
   "candidates": [
    {
-    "lat": 38.71248,
-    "lon": -9.12656,
-    "metres_off": 1579,
-    "display": "Tasca do Chico, Rua de Santo Estêvão, Alfama, Santa Maria Maior, Madalena, Lisboa, 1100-615, Portugal",
+    "lat": 38.711631,
+    "lon": -9.144132,
+    "metres_off": 62,
+    "display": "A Tasca do Chico, 39, Rua do Diário de Notícias, Bairro Alto, Misericórdia, Lisboa, 1200-108, Portugal",
     "class": "amenity",
-    "type": "restaurant"
+    "type": "pub"
    }
   ],
   "error": null
@@ -813,12 +905,37 @@
   "name": "Sete Rios → Sintra train 🚆",
   "day": 5,
   "city": "Sintra",
-  "query": "Sete Rios Sintra train, Sintra, Portugal",
+  "query": "Estação de Sete Rios, Lisboa, Portugal",
   "current": [
    38.7397,
    -9.1689
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 38.740241,
+    "lon": -9.167203,
+    "metres_off": 159,
+    "display": "Estação de Sete Rios, Avenida Columbano Bordalo Pinheiro, São Domingos de Benfica, Lisboa, 1070-067, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
+   },
+   {
+    "lat": 38.739222,
+    "lon": -9.168223,
+    "metres_off": 79,
+    "display": "Estação de Sete Rios, Rua Canto da Maya, Sete Rios, Campolide, Lisboa, 1070-996, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
+   },
+   {
+    "lat": 38.740673,
+    "lon": -9.167476,
+    "metres_off": 164,
+    "display": "Estação de Sete Rios, Rua Professor Lima Basto, São Domingos de Benfica, Lisboa, 1070-067, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
+   }
+  ],
   "error": null
  },
  {
@@ -854,20 +971,12 @@
   "name": "⭐ Pena Palace",
   "day": 5,
   "city": "Sintra",
-  "query": "Pena Palace, Sintra, Portugal",
+  "query": "Palácio Nacional da Pena, Sintra, Portugal",
   "current": [
    38.7877,
    -9.3906
   ],
   "candidates": [
-   {
-    "lat": 38.787966,
-    "lon": -9.387128,
-    "metres_off": 302,
-    "display": "Palácio da Pena, Calçada da Pena, São Pedro de Penaferrim, Sintra, Sintra (Santa Maria e São Miguel, São Martinho e São ",
-    "class": "highway",
-    "type": "bus_stop"
-   },
    {
     "lat": 38.787568,
     "lon": -9.390565,
@@ -875,6 +984,14 @@
     "display": "Palácio da Pena, Estrada da Pena, Quinta do Castanheiro, Sintra - São Martinho, Sintra - Santa Maria, Sintra, Sintra (Sa",
     "class": "tourism",
     "type": "attraction"
+   },
+   {
+    "lat": 38.787867,
+    "lon": -9.390391,
+    "metres_off": 26,
+    "display": "Pena, Sintra (Santa Maria e São Miguel, São Martinho e São Pedro de Penaferrim), Sintra, Lisboa, 2710-609, Portugal",
+    "class": "natural",
+    "type": "peak"
    }
   ],
   "error": null
@@ -1053,20 +1170,20 @@
     "type": "aquarium"
    },
    {
-    "lat": 38.76111,
-    "lon": -9.096439,
-    "metres_off": 342,
-    "display": "Oceanário de Lisboa, Alameda dos Oceanos, Parque das Nações, Lisboa, 1990-175, Portugal",
-    "class": "highway",
-    "type": "bus_stop"
-   },
-   {
     "lat": 38.762281,
     "lon": -9.093729,
     "metres_off": 125,
     "display": "Oceanário de Lisboa, Esplanada Dom Carlos I, Parque das Nações, Lisboa, 1990-011, Portugal",
     "class": "shop",
     "type": "gift"
+   },
+   {
+    "lat": 38.76111,
+    "lon": -9.096439,
+    "metres_off": 342,
+    "display": "Oceanário de Lisboa, Alameda dos Oceanos, Parque das Nações, Lisboa, 1990-175, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
    }
   ],
   "error": null
@@ -1136,20 +1253,20 @@
   ],
   "candidates": [
    {
-    "lat": 38.716885,
-    "lon": -9.14831,
-    "metres_off": 34,
-    "display": "Embaixada - Concept Store, 26, Praça do Príncipe Real, Mercês, Santo António, Misericórdia, Lisboa, 1250-184, Portugal",
-    "class": "shop",
-    "type": "clothes"
-   },
-   {
     "lat": 38.721753,
     "lon": -9.160106,
     "metres_off": 1127,
     "display": "Embaixada, Travessa do Barbosa, Amoreiras, Santa Isabel, Campo de Ourique, Lisboa, 1250-259, Portugal",
     "class": "office",
     "type": "diplomatic"
+   },
+   {
+    "lat": 38.716885,
+    "lon": -9.14831,
+    "metres_off": 34,
+    "display": "Embaixada - Concept Store, 26, Praça do Príncipe Real, Mercês, Santo António, Misericórdia, Lisboa, 1250-184, Portugal",
+    "class": "shop",
+    "type": "clothes"
    },
    {
     "lat": 38.70731,
@@ -1245,33 +1362,17 @@
   "name": "🌘 Solar eclipse — SVQ arrival",
   "day": 7,
   "city": "Seville",
-  "query": "Aeropuerto de Sevilla, Spain",
+  "query": "Aeropuerto de Sevilla San Pablo, Sevilla, Spain",
   "current": [
    37.418,
    -5.8931
   ],
   "candidates": [
    {
-    "lat": 37.328665,
-    "lon": -5.725604,
-    "metres_off": 17825,
-    "display": "Aeródromo Los Alcores, SE-3202, Mairena del Alcor, Sevilla, Andalucía, 41510, España",
-    "class": "aeroway",
-    "type": "aerodrome"
-   },
-   {
     "lat": 37.417703,
     "lon": -5.894929,
     "metres_off": 165,
-    "display": "Aeropuerto internacional de Sevilla - San Pablo, Calle María Zambrano, Parque Alcosa, Distrito Este-Alcosa-Torreblanca, ",
-    "class": "aeroway",
-    "type": "aerodrome"
-   },
-   {
-    "lat": 37.553896,
-    "lon": -5.981003,
-    "metres_off": 16985,
-    "display": "Aeródromo Alcalá del Río, SE-9025, Alcalá del Río, Sevilla, Andalucía, 41200, España",
+    "display": "Aeropuerto internacional de Sevilla - San Pablo, Avenida República de China, Sevilla Este, Distrito Este-Alcosa-Torrebla",
     "class": "aeroway",
     "type": "aerodrome"
    }
@@ -1303,7 +1404,7 @@
   "name": "La Terraza de EME 🍸🌄",
   "day": 7,
   "city": "Seville",
-  "query": "EME Catedral Mercer, Calle Alemanes, Sevilla, Spain",
+  "query": "EME Catedral Hotel, Sevilla, Spain",
   "current": [
    37.386,
    -5.9928
@@ -1315,47 +1416,48 @@
   "name": "Barrio Santa Cruz — late tapas",
   "day": 7,
   "city": "Seville",
-  "query": "Barrio Santa Cruz late tapas, Seville, Spain",
+  "query": "Barrio de Santa Cruz, Sevilla, Spain",
   "current": [
    37.3855,
    -5.9905
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.38623,
+    "lon": -5.99163,
+    "metres_off": 129,
+    "display": "Barrio Santa cruz, Plaza Virgen de los Reyes, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
+    "class": "tourism",
+    "type": "attraction"
+   }
+  ],
   "error": null
  },
  {
   "name": "🚌 Tour pickup — Prado de San Sebastián",
   "day": 8,
   "city": "Seville",
-  "query": "Prado de San Sebastian, Sevilla, Spain",
+  "query": "Avenida de Menéndez Pelayo, Sevilla, Spain",
   "current": [
    37.3852,
    -5.9857
   ],
   "candidates": [
    {
-    "lat": 37.379435,
-    "lon": -5.986702,
-    "metres_off": 647,
-    "display": "Prado de San Sebastián, Distrito Sur, Sevilla, Andalucía, España",
-    "class": "leisure",
-    "type": "park"
-   },
-   {
-    "lat": 37.54285,
-    "lon": -6.057127,
-    "metres_off": 18629,
-    "display": "Prado de San Sebastián, Guillena, Sevilla, Andalucía, España",
-    "class": "leisure",
-    "type": "park"
-   },
-   {
-    "lat": 37.380501,
-    "lon": -5.985985,
-    "metres_off": 523,
-    "display": "Prado de San Sebastián (Carlos V), Avenida de Carlos V, San Bernardo, Nervión, Distrito Sur, Sevilla, Andalucía, 41004, ",
+    "lat": 37.382186,
+    "lon": -5.987902,
+    "metres_off": 388,
+    "display": "Avenida de Menéndez Pelayo, San Bernardo, Nervión, Sevilla, Andalucía, 41004, España",
     "class": "highway",
-    "type": "bus_stop"
+    "type": "primary"
+   },
+   {
+    "lat": 37.384003,
+    "lon": -5.986945,
+    "metres_off": 173,
+    "display": "Avenida de Menéndez Pelayo, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
+    "class": "highway",
+    "type": "primary"
    }
   ],
   "error": null
@@ -1364,7 +1466,7 @@
   "name": "🕌 Córdoba old town — guided walk",
   "day": 8,
   "city": "Cordoba",
-  "query": "Juderia, Cordoba, Spain",
+  "query": "Judería de Córdoba, Córdoba, Spain",
   "current": [
    37.8785,
    -4.78
@@ -1382,7 +1484,7 @@
     "lat": 37.873041,
     "lon": -4.767854,
     "metres_off": 1227,
-    "display": "Calle Judería, Distrito Sureste, Córdoba, Andalucía, 14010, España",
+    "display": "Calle Judería, Distrito Sureste, Córdoba, Andalucía, 14009, España",
     "class": "highway",
     "type": "pedestrian"
    },
@@ -1459,19 +1561,19 @@
   "name": "Setenil de las Bodegas 🌄",
   "day": 8,
   "city": "Setenil",
-  "query": "Setenil de las Bodegas, Setenil, Spain",
+  "query": "Calle Cuevas del Sol, Setenil de las Bodegas, Spain",
   "current": [
    36.8642,
    -5.1808
   ],
   "candidates": [
    {
-    "lat": 36.862354,
-    "lon": -5.176501,
-    "metres_off": 434,
-    "display": "Setenil de las Bodegas, CA-9113, Casas Nuevas, Setenil de las Bodegas, Sierra de Cádiz, Cádiz, Andalucía, 11692, España",
+    "lat": 36.861865,
+    "lon": -5.177919,
+    "metres_off": 365,
+    "display": "Calle Cuevas del Sol, Casas Nuevas, Setenil de las Bodegas, Sierra de Cádiz, Cádiz, Andalucía, 11692, España",
     "class": "highway",
-    "type": "bus_stop"
+    "type": "residential"
    }
   ],
   "error": null
@@ -1480,12 +1582,29 @@
   "name": "⭐ Ronda — Puente Nuevo 🌄",
   "day": 8,
   "city": "Ronda",
-  "query": "Ronda Puente Nuevo, Ronda, Spain",
+  "query": "Puente Nuevo, Ronda, Spain",
   "current": [
    36.742,
    -5.1662
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 36.740715,
+    "lon": -5.165877,
+    "metres_off": 146,
+    "display": "Puente Nuevo, Desfiladero del Tajo, Ronda, Serranía de Ronda, Málaga, Andalucía, 29400, España",
+    "class": "man_made",
+    "type": "bridge"
+   },
+   {
+    "lat": 36.740719,
+    "lon": -5.16588,
+    "metres_off": 145,
+    "display": "Puente Nuevo, Ronda, Serranía de Ronda, Málaga, Andalucía, 29400, España",
+    "class": "highway",
+    "type": "living_street"
+   }
+  ],
   "error": null
  },
  {
@@ -1542,19 +1661,19 @@
   "name": "🕌 Cathedral + Giralda",
   "day": 9,
   "city": "Seville",
-  "query": "Cathedral Giralda, Seville, Spain",
+  "query": "Catedral de Sevilla, Spain",
   "current": [
    37.3859,
    -5.9932
   ],
   "candidates": [
    {
-    "lat": 37.387264,
-    "lon": -5.99333,
-    "metres_off": 152,
-    "display": "Great apt super close to the Cathedral and Giralda!, 2, Calle Rodríguez Zapata, Santa Cruz, Casco Antiguo, Sevilla, Anda",
-    "class": "tourism",
-    "type": "apartment"
+    "lat": 37.385915,
+    "lon": -5.993141,
+    "metres_off": 6,
+    "display": "Catedral de Sevilla, Calle Fray Ceferino González, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
+    "class": "amenity",
+    "type": "place_of_worship"
    }
   ],
   "error": null
@@ -1563,12 +1682,37 @@
   "name": "Bodega Romero 🥪",
   "day": 9,
   "city": "Seville",
-  "query": "Bodega Romero, Calle Harinas, Sevilla, Spain",
+  "query": "Calle Harinas, Sevilla, Spain",
   "current": [
    37.3867,
    -5.9953
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.386785,
+    "lon": -5.995715,
+    "metres_off": 38,
+    "display": "Calle Harinas, El Arenal, Casco Antiguo, Sevilla, Andalucía, 41001, España",
+    "class": "highway",
+    "type": "living_street"
+   },
+   {
+    "lat": 36.922417,
+    "lon": -6.07911,
+    "metres_off": 52158,
+    "display": "Calle Harinas, Barriada Virgen del Castillo, Lebrija, Sevilla, Andalucía, 41740, España",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 36.922318,
+    "lon": -6.079956,
+    "metres_off": 52179,
+    "display": "Calle Harinas, Barriada Virgen del Castillo, Lebrija, Sevilla, Andalucía, 41740, España",
+    "class": "highway",
+    "type": "living_street"
+   }
+  ],
   "error": null
  },
  {
@@ -1725,18 +1869,6 @@
   "error": null
  },
  {
-  "name": "Seville → Granada 🚆",
-  "day": 10,
-  "city": "Granada",
-  "query": "Seville Granada, Granada, Spain",
-  "current": [
-   37.3919,
-   -5.9757
-  ],
-  "candidates": [],
-  "error": null
- },
- {
   "name": "Meliá Granada 🏨",
   "day": 10,
   "city": "Granada",
@@ -1790,24 +1922,50 @@
   "name": "🕌 Albaicín → Mirador de San Nicolás 🌄",
   "day": 10,
   "city": "Granada",
-  "query": "Albaicín Mirador de San Nicolás, Granada, Spain",
+  "query": "Mirador de San Nicolás, Granada, Spain",
   "current": [
    37.1809,
    -3.5924
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.181041,
+    "lon": -3.592662,
+    "metres_off": 28,
+    "display": "Mirador de San Nicolás, Plaza Mirador de San Nicolás, Albaicín Alto, Albaicín, Granada, Comarca de la Vega de Granada, G",
+    "class": "tourism",
+    "type": "viewpoint"
+   }
+  ],
   "error": null
  },
  {
   "name": "Calle Navas — free-tapas crawl",
   "day": 10,
   "city": "Granada",
-  "query": "Calle Navas free-tapas crawl, Granada, Spain",
+  "query": "Calle Navas, Granada, Spain",
   "current": [
    37.174,
    -3.5975
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.173455,
+    "lon": -3.597845,
+    "metres_off": 68,
+    "display": "Calle Navas, La Manigua, San Matías - Realejo, Centro, Granada, Comarca de la Vega de Granada, Granada, Andalucía, 18009",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 37.442938,
+    "lon": -3.439997,
+    "metres_off": 32990,
+    "display": "Calle Navas, Píñar, Comarca de Los Montes, Granada, Andalucía, 18568, España",
+    "class": "highway",
+    "type": "residential"
+   }
+  ],
   "error": null
  },
  {
@@ -1835,12 +1993,21 @@
   "name": "🕌 THE ALHAMBRA + Generalife",
   "day": 11,
   "city": "Granada",
-  "query": "THE ALHAMBRA Generalife, Granada, Spain",
+  "query": "Alhambra, Granada, Spain",
   "current": [
    37.176,
    -3.5881
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.176055,
+    "lon": -3.58811,
+    "metres_off": 6,
+    "display": "Alhambra, Placeta del Moral, La Antequeruela, San Matías - Realejo, Centro, Granada, Comarca de la Vega de Granada, Gran",
+    "class": "historic",
+    "type": "castle"
+   }
+  ],
   "error": null
  },
  {
@@ -1868,12 +2035,21 @@
   "name": "⭐ Royal Chapel + Cathedral",
   "day": 11,
   "city": "Granada",
-  "query": "Royal Chapel Cathedral, Granada, Spain",
+  "query": "Capilla Real de Granada, Spain",
   "current": [
    37.1765,
    -3.5985
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 37.176296,
+    "lon": -3.598565,
+    "metres_off": 23,
+    "display": "Capilla Real, Calle Oficios, Sagrario, Centro - Sagrario, Centro, Granada, Comarca de la Vega de Granada, Granada, Andal",
+    "class": "amenity",
+    "type": "place_of_worship"
+   }
+  ],
   "error": null
  },
  {
@@ -1901,47 +2077,19 @@
   "name": "Sacromonte — carmen dinner 🌄",
   "day": 11,
   "city": "Granada",
-  "query": "Sacromonte carmen dinner, Granada, Spain",
+  "query": "Sacromonte, Granada, Spain",
   "current": [
    37.183,
    -3.587
   ],
-  "candidates": [],
-  "error": null
- },
- {
-  "name": "Granada → Madrid 🚆",
-  "day": 12,
-  "city": "Madrid",
-  "query": "Granada Madrid, Madrid, Spain",
-  "current": [
-   37.1918,
-   -3.6089
-  ],
   "candidates": [
    {
-    "lat": 40.419652,
-    "lon": -3.710065,
-    "metres_off": 359028,
-    "display": "Palacio del Duque de Granada de Ega, Calle de la Bola, Palacio, Centro, Madrid, Comunidad de Madrid, 28013, España",
-    "class": "historic",
-    "type": "manor"
-   },
-   {
-    "lat": 40.403842,
-    "lon": -3.677103,
-    "metres_off": 357212,
-    "display": "Calle de Granada, Pacífico, Retiro, Madrid, Comunidad de Madrid, 28007, España",
-    "class": "highway",
-    "type": "residential"
-   },
-   {
-    "lat": 40.421305,
-    "lon": -3.629147,
-    "metres_off": 359109,
-    "display": "Parroquia de Nuestra Señora de la Granada, 3, Calle de Villasilos, Pueblo Nuevo, Ciudad Lineal, Madrid, Comunidad de Mad",
-    "class": "amenity",
-    "type": "place_of_worship"
+    "lat": 37.181872,
+    "lon": -3.58499,
+    "metres_off": 218,
+    "display": "Sacromonte, Albaicín, Granada, Comarca de la Vega de Granada, Granada, Andalucía, España",
+    "class": "boundary",
+    "type": "administrative"
    }
   ],
   "error": null
@@ -1962,33 +2110,17 @@
   "name": "La Casa del Abuelo 🦐",
   "day": 12,
   "city": "Madrid",
-  "query": "La Casa del Abuelo, Madrid, Spain",
+  "query": "La Casa del Abuelo, Calle de la Victoria, Madrid, Spain",
   "current": [
    40.4165,
    -3.7018
   ],
   "candidates": [
    {
-    "lat": 40.425192,
-    "lon": -3.681194,
-    "metres_off": 1994,
-    "display": "La Casa del Abuelo, Calle de Goya, Recoletos, Salamanca, Madrid, Comunidad de Madrid, 28001, España",
-    "class": "amenity",
-    "type": "bar"
-   },
-   {
-    "lat": 40.415677,
-    "lon": -3.701196,
-    "metres_off": 105,
-    "display": "La Casa del Abuelo, 5, Calle de Núñez de Arce, Barrio de las Letras, Cortes, Centro, Madrid, Comunidad de Madrid, 28012,",
-    "class": "amenity",
-    "type": "restaurant"
-   },
-   {
-    "lat": 40.414574,
-    "lon": -3.707499,
-    "metres_off": 528,
-    "display": "La Casa del Abuelo, 11, Calle de Toledo, Barrio de los Austrias, Sol, Centro, Madrid, Comunidad de Madrid, 28005, España",
+    "lat": 40.41574,
+    "lon": -3.701762,
+    "metres_off": 85,
+    "display": "La Casa del Abuelo, 12, Calle de la Victoria, Sol, Centro, Madrid, Comunidad de Madrid, 28012, España",
     "class": "amenity",
     "type": "restaurant"
    }
@@ -1999,12 +2131,21 @@
   "name": "La Latina → Mercado de San Miguel",
   "day": 12,
   "city": "Madrid",
-  "query": "La Latina Mercado de San Miguel, Madrid, Spain",
+  "query": "Mercado de San Miguel, Madrid, Spain",
   "current": [
    40.4154,
    -3.709
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 40.415374,
+    "lon": -3.709015,
+    "metres_off": 3,
+    "display": "Mercado de San Miguel, Plaza de San Miguel, Barrio de la Latina, Palacio, Centro, Madrid, Comunidad de Madrid, 28005, Es",
+    "class": "amenity",
+    "type": "marketplace"
+   }
+  ],
   "error": null
  },
  {
@@ -2077,12 +2218,21 @@
   "name": "🕌 Muralla Árabe",
   "day": 13,
   "city": "Madrid",
-  "query": "Muralla arabe de Madrid, Cuesta de la Vega, Madrid, Spain",
+  "query": "Muralla Árabe, Madrid, Spain",
   "current": [
    40.415,
    -3.7135
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 40.414927,
+    "lon": -3.714488,
+    "metres_off": 84,
+    "display": "Muralla Árabe, Calle Mayor, Barrio de la Latina, Palacio, Centro, Madrid, Comunidad de Madrid, 28013, España",
+    "class": "tourism",
+    "type": "attraction"
+   }
+  ],
   "error": null
  },
  {
@@ -2355,12 +2505,21 @@
   "name": "⭐ Santo Tomé (El Greco) — free time",
   "day": 14,
   "city": "Toledo",
-  "query": "Santo Tomé (El Greco) free time, Toledo, Spain",
+  "query": "Iglesia de Santo Tomé, Toledo, Spain",
   "current": [
    39.8574,
    -4.0283
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 39.85675,
+    "lon": -4.028196,
+    "metres_off": 73,
+    "display": "Iglesia de Santo Tomé, 4, Plaza del Conde, Toledo, Castilla-La Mancha, 45002, España",
+    "class": "amenity",
+    "type": "place_of_worship"
+   }
+  ],
   "error": null
  },
  {
@@ -2407,8 +2566,8 @@
     "lon": -4.123986,
     "metres_off": 456,
     "display": "Plaza Mayor, La Judería, Sexmo de Segovia, La Albuera, Comunidad de Ciudad y Tierra de Segovia, Segovia, Castilla y León",
-    "class": "place",
-    "type": "square"
+    "class": "highway",
+    "type": "pedestrian"
    },
    {
     "lat": 41.191758,
@@ -2433,19 +2592,27 @@
   "name": "Segovia Aqueduct + walking tour",
   "day": 14,
   "city": "Segovia",
-  "query": "Acueducto de Segovia, Spain",
+  "query": "Plaza del Azoguejo, Segovia, Spain",
   "current": [
    40.9481,
    -4.1177
   ],
   "candidates": [
    {
-    "lat": 40.943613,
-    "lon": -4.109304,
-    "metres_off": 864,
-    "display": "Acueducto de Segovia, Carretera de Trescasas, Montecorredores, Comunidad de Ciudad y Tierra de Segovia, San Cristóbal de",
-    "class": "historic",
-    "type": "aqueduct"
+    "lat": 40.94788,
+    "lon": -4.118151,
+    "metres_off": 45,
+    "display": "Plaza del Azoguejo, Santa Columba, Sexmo de Segovia, La Albuera, Comunidad de Ciudad y Tierra de Segovia, Segovia, Casti",
+    "class": "highway",
+    "type": "pedestrian"
+   },
+   {
+    "lat": 40.947793,
+    "lon": -4.117928,
+    "metres_off": 39,
+    "display": "Plaza del Azoguejo, Santa Columba, Sexmo de Segovia, La Albuera, Comunidad de Ciudad y Tierra de Segovia, Segovia, Casti",
+    "class": "highway",
+    "type": "pedestrian"
    }
   ],
   "error": null
@@ -2496,7 +2663,7 @@
   "name": "Botín — farewell dinner",
   "day": 14,
   "city": "Madrid",
-  "query": "Botín farewell dinner, Madrid, Spain",
+  "query": "Sobrino de Botín, Madrid, Spain",
   "current": [
    40.4147,
    -3.7085
