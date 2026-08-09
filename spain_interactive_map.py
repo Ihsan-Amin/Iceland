@@ -18,7 +18,7 @@ import folium
 from folium import FeatureGroup, Marker, PolyLine, Popup, Icon, LayerControl
 from folium.plugins import LocateControl
 import polyline as pl_lib
-import requests, json, time, os, hashlib
+import requests, json, time, os, hashlib, re, urllib.parse
 
 MAP_CENTER = [40.0, -5.6]
 ZOOM_START = 6
@@ -409,7 +409,7 @@ S = [
 ("Bodega Romero 🥪",37.3867,-5.9953,9,"food","Seville",
  "🥪 Your own pick, and it slots exactly into the hole between the Cathedral and the siesta. An Arenal bodega famous for its pringá montadito — slow-cooked pork, beef and chorizo pressed into a soft roll — plus proper plates of solomillo and spinach with chickpeas. Montaditos ~€3, raciones €8–12, so lunch for three runs €30–40 total. 220 m from the Cathedral and on the walk back to the hotel. ⚠️ Pin is the Calle Harinas block, not a verified shopfront — tap Book / Info for the live listing. Aug 14 is a Friday, so the Sunday/Monday closures do not bite.",
  "https://www.google.com/maps/search/?api=1&query=Bodega+Romero+Calle+Harinas+Sevilla",14,60,False),
-("Siesta / pool 🏊",37.3833,-5.9822,9,"hotel","Seville",
+("Siesta / pool 🏊",37.381102,-5.982991,9,"hotel","Seville",
  "☀️ 2:00–6:00 PM long lunch, siesta, pool — and you'll want it after yesterday's 13-hour tour. Heat protocol: sights 8:30–12:00, rest 14:00–18:00, back out after 19:00.",
  None,14,0,True),
 ("🛍 Calle Sierpes & Calle Tetuán",37.391095,-5.994567,9,"shop","Seville",
@@ -1184,6 +1184,146 @@ BOOKINFO = {
  "⭐ Santo Tomé (El Greco) — free time":"https://santotome.org",
 }
 
+# ─── 📍 Map links ───────────────────────────────────────────────────────────
+# A bare ?q=lat,lon drops an unnamed pin: no photos, no hours, no reviews, no
+# "Directions" button that knows what it is pointing at. The /maps/place/ form
+# resolves the NAME near those coordinates instead, so the link opens Google's
+# actual place card. The coordinate stays in the URL as the anchor, so even if
+# a name fails to resolve the map still lands in the right spot.
+#
+# Queries are the ones already verified against Nominatim in verify_coords.py —
+# reusing them means the two agree by construction rather than by luck.
+MAP_PLACE = {
+ "🌄 Pedra dos Gatinhos":"Cais de Gaia, Vila Nova de Gaia",
+ "🚡 Teleférico de Gaia (cable car)":"Teleférico de Gaia",
+ "Castro — Atelier de Pastéis de Nata 🥧":"Castro Atelier de Natas, Rua das Flores, Porto",
+ "Manteigaria — pastéis de nata ☕🥧":"Manteigaria, Rua dos Clérigos, Porto",
+ "🚢 Six Bridges Douro cruise":"Cais de Gaia, Vila Nova de Gaia",
+ "🍷 Taylor's Port Cellars":"Taylor's Port, Rua do Choupelo, Vila Nova de Gaia",
+ "São Bento azulejo hall":"Estação de São Bento, Porto",
+ "Sé do Porto (Cathedral)":"Sé do Porto",
+ "✊ UNICEPE bookshop":"UNICEPE, Praça de Carlos Alberto, Porto",
+ "Ribeira riverfront":"Cais da Ribeira, Porto",
+ "Dom Luís I Bridge 🌄":"Ponte Luís I, Porto",
+ "Rua das Flores 🛍":"Rua das Flores, Porto",
+ "O Valentim (dinner, Matosinhos)":"O Valentim, Matosinhos",
+ "Café Santiago (dinner)":"Café Santiago, Rua de Passos Manuel, Porto",
+ "Porto Campanhã → Lisbon 🚆":"Estação de Porto-Campanhã",
+ "Sete Rios → Sintra train 🚆":"Estação de Sete Rios, Lisboa",
+ "Pastelaria Santo António 🥧":"Rua do Milagre de Santo António, Lisboa",
+ "🌄 Miradouro da Senhora do Monte":"Miradouro da Senhora do Monte, Lisboa",
+ "🛍 Feira da Ladra flea market":"Feira da Ladra, Lisboa",
+ "🕌 Alfama + Miradouro de Santa Luzia":"Miradouro de Santa Luzia, Lisboa",
+ "⭐ Tram 28 / Ler Devagar 📚":"Ler Devagar, LX Factory, Lisboa",
+ "Tasca do Chico (fado + dinner)":"Tasca do Chico, Bairro Alto, Lisboa",
+ "⭐ Pena Palace":"Palácio Nacional da Pena, Sintra",
+ "⭐ Quinta da Regaleira (optional)":"Quinta da Regaleira, Sintra",
+ "Tascantiga — Sintra lunch 🍽":"Tascantiga, Sintra",
+ "Bairro Alto (evening)":"Bairro Alto, Lisboa",
+ "🌘 Solar eclipse — SVQ arrival":"Aeropuerto de Sevilla",
+ "OPO Airport — Arrive Porto":"Aeroporto Francisco Sá Carneiro",
+ "🕌 Cathedral + Giralda":"Catedral de Sevilla",
+ "La Terraza de EME 🍸🌄":"La Terraza de EME, Sevilla",
+ "Barrio Santa Cruz — late tapas":"Barrio de Santa Cruz, Sevilla",
+ "🛍 Calle Sierpes & Calle Tetuán":"Calle Sierpes, Sevilla",
+ "Triana + Calle Betis 🌆":"Calle Betis, Sevilla",
+ "El Rinconcillo 🍷":"El Rinconcillo, Sevilla",
+ "Bodega Romero 🥪":"Bodega Romero, Calle Harinas, Sevilla",
+ "Bodega Santa Cruz — Las Columnas 🍤":"Bodega Santa Cruz Las Columnas, Sevilla",
+ "🚌 Tour pickup — Prado de San Sebastián":"Prado de San Sebastián, Sevilla",
+ "🕌 Córdoba old town — guided walk":"Judería de Córdoba",
+ "Lunch in Córdoba (free time)":"Calle Cardenal Herrero, Córdoba",
+ "Setenil de las Bodegas 🌄":"Calle Cuevas del Sol, Setenil de las Bodegas",
+ "⭐ Ronda — Puente Nuevo 🌄":"Puente Nuevo, Ronda",
+ "🕌 Albaicín → Mirador de San Nicolás 🌄":"Mirador de San Nicolás, Granada",
+ "Calle Navas — free-tapas crawl":"Calle Navas, Granada",
+ "Bodegas Castañeda 🍷":"Bodegas Castañeda, Granada",
+ "Taberna La Tana 🍷":"Taberna La Tana, Granada",
+ "🕌 THE ALHAMBRA + Generalife":"Alhambra, Granada",
+ "⭐ Royal Chapel + Cathedral":"Capilla Real de Granada",
+ "Los Diamantes — Plaza Nueva 🐟":"Los Diamantes, Plaza Nueva, Granada",
+ "Sacromonte — carmen dinner 🌄":"Sacromonte, Granada",
+ "✊ Centro Federico García Lorca":"Centro Federico García Lorca, Granada",
+ "La Casa del Abuelo 🦐":"La Casa del Abuelo, Calle de la Victoria, Madrid",
+ "La Latina → Mercado de San Miguel":"Mercado de San Miguel, Madrid",
+ "📚 Cuesta de Moyano book stalls":"Cuesta de Moyano, Madrid",
+ "🕌 Muralla Árabe":"Muralla Árabe, Madrid",
+ "⭐ San Ginés churros":"Chocolatería San Ginés, Madrid",
+ "🛍 Gritos de Madrid (tiles)":"Gritos de Madrid",
+ "⭐🛍 Casa Hernanz → Gran Vía shops":"Casa Hernanz, Madrid",
+ "🛍 Antigua Casa Crespo (espadrilles)":"Antigua Casa Crespo, Madrid",
+ "⭐ Templo de Debod (sunset) 🌄":"Templo de Debod, Madrid",
+ "Casa Revuelta — late bacalao 🍺":"Casa Revuelta, Madrid",
+ "Royal Palace (from below) + Campo del Moro":"Jardines del Campo del Moro, Madrid",
+ "Botín — farewell dinner":"Sobrino de Botín, Madrid",
+ "🚌 Tour meet-up — Ventas / Calle Julio Camba":"Calle de Julio Camba, Madrid",
+ "🌄 Toledo panoramic tour (from the coach)":"Mirador del Valle, Toledo",
+ "⭐ Toledo walking tour + Cathedral":"Catedral de Toledo",
+ "⭐ Santo Tomé (El Greco) — free time":"Iglesia de Santo Tomé, Toledo",
+ "🕌 Cristo de la Luz / Santa María la Blanca (free time)":"Mezquita del Cristo de la Luz, Toledo",
+ "Lunch in Segovia":"Plaza Mayor, Segovia",
+ "Segovia Aqueduct + walking tour":"Acueducto de Segovia",
+ "⭐ Alcázar of Segovia":"Alcázar de Segovia",
+ "🌄 Mirador de la Pradera de San Marcos (optional)":"Pradera de San Marcos, Segovia",
+ # The siesta blocks are the hotel pool, so point them at the hotel.
+ "Siesta / pool 🏊":"Hotel Giralda Center, Sevilla",
+ "Rest / pool 🏊":"Meliá Granada",
+ # Hotel bookends: full registered name beats the stripped label.
+ "Leave the Sheraton":"Sheraton Porto Hotel & Spa",
+ "Back to the Sheraton":"Sheraton Porto Hotel & Spa",
+ "Leave the Corinthia":"Corinthia Lisbon",
+ "Back to the Corinthia":"Corinthia Lisbon",
+ "Leave the Giralda Center":"Hotel Giralda Center, Sevilla",
+ "Back to the Giralda Center":"Hotel Giralda Center, Sevilla",
+ "Leave the Meliá":"Meliá Granada",
+ "Back to the Meliá":"Meliá Granada",
+ # Doubled city from the generic builder, or a name Google files differently.
+ "🕌 Castelo dos Mouros, Sintra":"Castelo dos Mouros, Sintra",
+ "⭐🕌 Mezquita-Catedral, Córdoba":"Mezquita-Catedral de Córdoba",
+ "🕌 National Tile Museum (Azulejo)":"Museu Nacional do Azulejo, Lisboa",
+ "A Ginjinha 🍒":"A Ginjinha, Lisboa",
+ "⭐🕌 Jerónimos Monastery, Belém":"Mosteiro dos Jerónimos, Lisboa",
+ # Lounges are real Google places and the card is worth having (hours, photos).
+ "Capital One Lounge — IAD 🛋️":"Capital One Lounge, Washington Dulles International Airport",
+ "Sala VIP Cibeles (Priority Pass) — MAD 🛋️":"Sala VIP Cibeles, Aeropuerto Adolfo Suárez Madrid-Barajas",
+ "Chase Sapphire Lounge — BOS 🛋️":"Chase Sapphire Lounge, Boston Logan International Airport",
+ # Airports and stations are exactly where a Google card earns its keep —
+ # terminal layout, live departures, entrances. An entry here beats _NO_PLACE.
+ "IAD — Depart Washington ✈️":"Washington Dulles International Airport",
+ "CDG — Paris layover ✈️":"Paris Charles de Gaulle Airport",
+ "LIS → Seville ✈️ (Ryanair FR3628)":"Aeroporto Humberto Delgado, Lisboa",
+ "MAD → DCA ✈️ (depart 2:35 PM)":"Aeropuerto Adolfo Suárez Madrid-Barajas",
+ "Seville → Granada 🚆":"Estación de Sevilla-Santa Justa",
+ "Granada → Madrid 🚆":"Estación de Granada",
+ "🚌 Back in Seville":"Prado de San Sebastián, Sevilla",
+ "🚌 Back in Madrid — tour drop-off":"Calle de Julio Camba, Madrid",
+}
+# Stops with no place card worth opening: a private flat, an aircraft, a block
+# of free time. These keep the plain coordinate pin.
+_NO_PLACE = ("Airbnb", "Plaza Mayor flat", "Free Madrid morning", "layover", "Depart Washington",
+             "→ Seville ✈️", "→ DCA ✈️", "Seville → Granada", "Granada → Madrid",
+             "🚌 Back in", "drop-off")
+
+def place_url(name, city, lat, lon):
+    """Google Maps URL that opens the place card, not an anonymous pin."""
+    q = MAP_PLACE.get(name)
+    # An explicit entry always wins: that is how the airports and stations get
+    # a card despite matching the blocklist below.
+    if q is None and any(k in name for k in _NO_PLACE):
+        return f"https://www.google.com/maps?q={lat},{lon}"
+    if q is None:
+        base = name
+        if base.startswith("Leave "):   base = base[6:]
+        elif base.startswith("Back to "): base = base[8:]
+        base = re.sub(r'[\U0001F000-\U0001FAFF\u2190-\u2BFF\uFE0F\u200D\u2B50]', '', base)
+        base = re.sub(r'\s*\([^)]*\)\s*$', '', base).replace('—',' ').strip()
+        base = re.sub(r'^the\s+', '', base)      # "the Sheraton", not "A Ginjinha"
+        base = ' '.join(base.split())            # the em-dash strip leaves doubles
+        if not base: return f"https://www.google.com/maps?q={lat},{lon}"
+        q = f"{base}, {city}" if city and city != "Transit" else base
+    return ("https://www.google.com/maps/place/"
+            + urllib.parse.quote(q) + f"/@{lat},{lon},17z")
+
 def popup_html(name, day, st, city, notes, link, lat, lon, wx=None):
     c=rcolor(city)
     link = link or BOOKINFO.get(name)
@@ -1201,7 +1341,7 @@ def popup_html(name, day, st, city, notes, link, lat, lon, wx=None):
     if link:
         parts.append(f'<a href="{link}" target="_blank" style="color:{c};text-decoration:none;font-size:12.5px;font-weight:600;">🔗 Book / Info →</a>')
     parts += guide_links(name, city, c)
-    parts.append(f'<a href="https://www.google.com/maps?q={lat},{lon}" target="_blank" style="color:{c};text-decoration:none;font-size:12.5px;font-weight:600;">📍 Map</a>')
+    parts.append(f'<a href="{place_url(name, city, lat, lon)}" target="_blank" style="color:{c};text-decoration:none;font-size:12.5px;font-weight:600;">📍 Map</a>')
     if day in DAY_MAP:
         parts.append(f'<a href="{DAY_MAP[day]}" target="_blank" style="color:{c};text-decoration:none;font-size:12.5px;font-weight:600;">🗺 Day route</a>')
     h+=f'<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--line);display:flex;gap:14px;flex-wrap:wrap;">{"".join(parts)}</div>'
@@ -1353,7 +1493,7 @@ def _card(name,lat,lon,day,st,city,notes,link,hr,dur,anchor,wx=None,arrive=None)
     h+='<div class="sl">'
     if link: h+=f'<a href="{link}" target="_blank" style="color:{c}">🔗 Book / Info →</a>'
     for g in guide_links(name, city, c, small=True): h+=g
-    h+=f'<a href="https://www.google.com/maps?q={lat},{lon}" target="_blank" style="color:{c}">📍 Map</a>'
+    h+=f'<a href="{place_url(name, city, lat, lon)}" target="_blank" style="color:{c}">📍 Map</a>'
     if day in DAY_MAP: h+=f'<a href="{DAY_MAP[day]}" target="_blank" style="color:{c}">🗺 Day route</a>'
     h+='</div></div>'
     return h
