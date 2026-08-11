@@ -337,26 +337,29 @@ S = [
 ("🕌 National Tile Museum (Azulejo)",38.7247,-9.1136,6,"moorish","Lisbon",
  "🕌 …or the Museu do Azulejo — the tile tradition is a direct Moorish inheritance, also A/C. (Alternative to the Oceanário.)",
  None,13,120,False),
-("As Bifanas do Afonso 🥪",38.7121,-9.1356,6,"food","Lisbon",
- "🥪 A bifana pit stop — the garlicky slow-cooked pork sandwich Anthony Bourdain rated one of Lisbon's best, at this tiny standing counter on Rua da Madalena in Baixa (right on the Tram 28 line you're about to ride). ~€2.50, eat on your feet, 15 min. Open Mon–Sat.",
- None,15,15,False),
 ("⭐ Tram 28 / Ler Devagar 📚",38.7159,-9.1338,6,"attraction","Lisbon",
- "⭐ 4:00 PM ride tram 28 end-to-end through Graça/Alfama (board mid-afternoon to dodge pickpocket crowds) — or LX Factory + 📚 Ler Devagar, the bookshop in a former print works.",
- None,16,60,False),
+ "⭐ 3:15 PM ride tram 28 end-to-end through Graça/Alfama (board mid-afternoon to dodge pickpocket crowds) — or LX Factory + 📚 Ler Devagar, the bookshop in a former print works. Moved up an hour now the bifanas stop is cut and dinner is booked for 6:30.",
+ None,15,60,False),
 ("⭐🛍 Embaixada (Príncipe Real)",38.7169,-9.1487,6,"shop","Lisbon",
- "⭐🛍 5:30 PM Portuguese cotton/linen/leather run — Embaixada (Portuguese designers in a Neo-Moorish palace 🕌), then A Vida Portuguesa in Chiado. Ask every shop for the tax-free form.",
- None,17,60,False),
+ "⭐🛍 4:30 PM Portuguese cotton/linen/leather run — Embaixada (Portuguese designers in a Neo-Moorish palace 🕌), then A Vida Portuguesa in Chiado. Ask every shop for the tax-free form.",
+ None,16,60,False),
 ("✊ Largo do Carmo",38.7118,-9.1401,6,"history","Lisbon",
- "✊ 7:15 PM the square where the Carnation Revolution ended on 25 April 1974 — the regime surrendered here while soldiers carried carnations in their rifles. The ruined Carmo Convent above is Lisbon's most atmospheric shell.",
- None,19,20,False),
-("Time Out Market (dinner)",38.7071,-9.1459,6,"food","Lisbon",
- "🍽 8:00 PM Time Out Market or Cais do Sodré. Pack for the early flight; check in online.",
- None,20,90,False),
+ "✊ 5:45 PM the square where the Carnation Revolution ended on 25 April 1974 — the regime surrendered here while soldiers carried carnations in their rifles. The ruined Carmo Convent above is Lisbon's most atmospheric shell. Ten minutes downhill from Embaixada and ten more to dinner.",
+ None,17,20,False),
+("A Nossa Casa — dinner 🍽",38.7105,-9.1420,6,"food","Lisbon",
+ "🍽 BOOKED — 6:30 PM tonight. Replaces the Time Out Market dinner, which moves to lunch tomorrow. ⚠️ Pin is provisional pending a geocode check — tap Book / Info for the live listing and confirm the walk before you set off. The afternoon was pulled forward an hour to clear the slot: tram 28 at 3:15, Embaixada at 4:30, Largo do Carmo at 5:45, here for 6:30.",
+ "https://www.google.com/maps/search/?api=1&query=A+Nossa+Casa+restaurante+Lisboa",18,120,False),
 
 # ---- Day 7: Lisbon AM → fly to Seville → Eclipse ----
+("🏊 Pool + spa, Corinthia (2 hrs)",38.738765,-9.16649,7,"hotel","Lisbon",
+ "🏊 Two clear hours in the water before the day starts — 8:00 to 10:00. The Corinthia's indoor pool, sauna and steam are part of your rate and the spa opens early, so you get it near-empty. Breakfast is included too; eat after, not before. ⏰ Check out on the way up: leave the bags with the concierge rather than dragging them round the Gulbenkian, and have the airport taxi swing back for them — the hotel sits almost exactly on the line from Time Out to LIS, so the detour costs about 1 km.",
+ None,8,120,False),
 ("⭐ Calouste Gulbenkian Museum",38.7376,-9.1537,7,"museum","Lisbon",
  "⭐ 10:00 AM (~€14, 10-min walk) — one of Europe's great private collections, Egyptian to Lalique, with a strong Islamic-art room 🕌. A/C, in gardens. Open Wednesdays.",
- "https://gulbenkian.pt/museu/en/",10,150,False),
+ "https://gulbenkian.pt/museu/en/",10,135,False),
+("Time Out Market (lunch)",38.7071,-9.1459,7,"food","Lisbon",
+ "🍽 Moved here from last night — 12:45 for a proper last Portuguese meal, 26 kitchens under one roof at Cais do Sodré, most plates €9–15. Henrique Sá Pessoa and Marlene Vieira both have counters; the seafood and the bifana stand are the picks. ⏰ Out by 2 PM: grab the bags at the Corinthia on the way (~1 km off the line) and you are at LIS by 2:45 for the 5 PM Ryanair — comfortably inside their 2-hour international window.",
+ None,12,75,False),
 ("LIS → Seville ✈️ (Ryanair FR3628)",38.7742,-9.1342,7,"flight","Seville",
  "✈️ 2:50 PM taxi to LIS. FR3628 departs 5:20 PM, 1h05 nonstop → land SVQ 7:25 PM (Spain +1h). Priority + 2 cabin + 3×10 kg checked bags already paid. Check the boarding pass for T2.",
  "https://www.ryanair.com",17,120,True),
@@ -634,15 +637,15 @@ MODE_TO = {
  "🍷 Taylor's Port Cellars":"taxi",
  "O Valentim (dinner, Matosinhos)":"metro",
  "🕌 Alfama + Miradouro de Santa Luzia":"metro",
- "As Bifanas do Afonso 🥪":"metro",
  "⭐ Pena Palace":"bus",
  "Tascantiga — Sintra lunch 🍽":"bus",
  "Los Diamantes — Plaza Nueva 🐟":"bus",
  "Casa Revuelta — late bacalao 🍺":"taxi",
  "🛍 Feira da Ladra flea market":"taxi",   # 8 km back from Belém — not a walk
  "⭐ Oceanário de Lisboa":"taxi",
+ "Time Out Market (lunch)":"taxi",   # Gulbenkian → Cais do Sodré, 3.5 km
  "🕌 National Tile Museum (Azulejo)":"taxi",
- "⭐ Tram 28 / Ler Devagar 📚":"tram",
+ "⭐ Tram 28 / Ler Devagar 📚":"taxi",   # 7 km from the Azulejo now the bifanas hop is gone
  "⭐🛍 Embaixada (Príncipe Real)":"walk",   # no clean single metro line to Príncipe Real
  "Hotel Giralda Center 🏨":"taxi",
  "⭐ Ronda — Puente Nuevo 🌄":"bus",
@@ -773,8 +776,6 @@ SEG_VIA = {
    [(38.7076,-9.1349),(38.7107,-9.1394),(38.7147,-9.1416),(38.7199,-9.1451),(38.7247,-9.1503),(38.7277,-9.1495),(38.7371,-9.1543)],
  ("Corinthia Lisbon 🏨","🕌 Alfama + Miradouro de Santa Luzia"):
    [(38.7371,-9.1543),(38.7277,-9.1495),(38.7247,-9.1503),(38.7199,-9.1451),(38.7147,-9.1416),(38.7107,-9.1394),(38.7076,-9.1349)],
- ("🕌 National Tile Museum (Azulejo)","As Bifanas do Afonso 🥪"):
-   [(38.7139,-9.1224),(38.7076,-9.1349)],                       # Santa Apolónia → Terreiro do Paço
  # ── Porto Metro · Line A, following Carolina Michaëlis / Lapa / Trindade ──
  ("Leave the Sheraton","Manteigaria — pastéis de nata ☕🥧"):
    [(41.1580,-8.6295),(41.1575,-8.6218),(41.1592,-8.6152),(41.1522,-8.6094),(41.1487,-8.6111)],  # Casa da Música·Carolina Michaëlis·Lapa·Trindade·Aliados
@@ -1282,6 +1283,8 @@ MAP_PLACE = {
  "⭐🕌 Mezquita-Catedral, Córdoba":"Mezquita-Catedral de Córdoba",
  "🕌 National Tile Museum (Azulejo)":"Museu Nacional do Azulejo, Lisboa",
  "A Ginjinha 🍒":"A Ginjinha, Lisboa",
+ "Time Out Market (lunch)":"Time Out Market, Lisboa",
+ "🏊 Pool + spa, Corinthia (2 hrs)":"Corinthia Lisbon",
  "⭐🕌 Jerónimos Monastery, Belém":"Mosteiro dos Jerónimos, Lisboa",
  # Lounges are real Google places and the card is worth having (hours, photos).
  "Capital One Lounge — IAD 🛋️":"Capital One Lounge, Washington Dulles International Airport",
