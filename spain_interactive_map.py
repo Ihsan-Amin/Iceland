@@ -334,11 +334,8 @@ S = [
 ("🛍 Feira da Ladra flea market",38.7157,-9.1252,6,"shop","Lisbon",
  "🛍 Lisbon's 'thieves' market', spread across Campo de Santa Clara behind São Vicente — azulejo tiles prised off old buildings, brass, vinyl, colonial junk and the occasional real find. Bring cash and haggle. ✅ It only runs Tuesdays and Saturdays, and Aug 11 is a Tuesday — this is the single day of your Lisbon stay it's actually on, which is why it goes here and not on Day 4. Roughly 9:00–18:00; late morning beats the heat. Slots straight into the gap after Belém: ~25 min by taxi, or tram 15 back to Praça do Comércio and the 728 bus.",
  None,12,45,False),
-("⭐ Oceanário de Lisboa",38.7634,-9.0938,6,"attraction","Lisbon",
- "⭐ 1:00 PM choose one: Oceanário (one of the world's best aquariums, ~€25, A/C, a guaranteed hit)…",
- "https://www.oceanario.pt/en",13,120,False),
 ("🕌 National Tile Museum (Azulejo)",38.7247,-9.1136,6,"moorish","Lisbon",
- "🕌 …or the Museu do Azulejo — the tile tradition is a direct Moorish inheritance, also A/C. (Alternative to the Oceanário.)",
+ "🕌 1:00 PM the Museu Nacional do Azulejo — the tile tradition is a direct Moorish inheritance, and the single most on-theme museum of the whole trip. Air-conditioned, rarely crowded, and the 16th-c. cloister café is a good light lunch if you want one. Now the sole afternoon museum: the aquarium is dropped.",
  None,13,120,False),
 ("⭐ Tram 28 / Ler Devagar 📚",38.7159,-9.1338,6,"attraction","Lisbon",
  "⭐ 3:15 PM ride tram 28 end-to-end through Graça/Alfama (board mid-afternoon to dodge pickpocket crowds) — or LX Factory + 📚 Ler Devagar, the bookshop in a former print works. Moved up an hour now the bifanas stop is cut and dinner is booked for 6:30.",
@@ -645,7 +642,6 @@ MODE_TO = {
  "Los Diamantes — Plaza Nueva 🐟":"bus",
  "Casa Revuelta — late bacalao 🍺":"taxi",
  "🛍 Feira da Ladra flea market":"taxi",   # 8 km back from Belém — not a walk
- "⭐ Oceanário de Lisboa":"taxi",
  "Time Out Market (lunch)":"taxi",   # Gulbenkian → Cais do Sodré, 3.5 km
  "🕌 National Tile Museum (Azulejo)":"taxi",
  "⭐ Tram 28 / Ler Devagar 📚":"taxi",   # 7 km from the Azulejo now the bifanas hop is gone
@@ -1118,7 +1114,6 @@ GUIDE = {
  "⭐ Tram 28 / Ler Devagar 📚":"https://en.wikipedia.org/wiki/Trams_in_Lisbon",
  "✊ Largo do Carmo":"https://en.wikipedia.org/wiki/Carmo_Convent_(Lisbon)",
  "⭐ Calouste Gulbenkian Museum":"https://en.wikipedia.org/wiki/Calouste_Gulbenkian_Museum",
- "⭐ Oceanário de Lisboa":"https://en.wikipedia.org/wiki/Lisbon_Oceanarium",
  "🕌 Real Alcázar":"https://en.wikipedia.org/wiki/Alcázar_of_Seville",
  "🕌 Cathedral + Giralda":"https://en.wikipedia.org/wiki/Seville_Cathedral",
  "⭐🕌 Casa de Pilatos":"https://en.wikipedia.org/wiki/Casa_de_Pilatos",
