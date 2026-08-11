@@ -346,9 +346,9 @@ S = [
 ("✊ Largo do Carmo",38.7118,-9.1401,6,"history","Lisbon",
  "✊ 5:45 PM the square where the Carnation Revolution ended on 25 April 1974 — the regime surrendered here while soldiers carried carnations in their rifles. The ruined Carmo Convent above is Lisbon's most atmospheric shell. Ten minutes downhill from Embaixada and ten more to dinner.",
  None,17,20,False),
-("A Nossa Casa — dinner 🍽",38.7105,-9.1420,6,"food","Lisbon",
- "🍽 BOOKED — 6:30 PM tonight. Replaces the Time Out Market dinner, which moves to lunch tomorrow. ⚠️ Pin is provisional pending a geocode check — tap Book / Info for the live listing and confirm the walk before you set off. The afternoon was pulled forward an hour to clear the slot: tram 28 at 3:15, Embaixada at 4:30, Largo do Carmo at 5:45, here for 6:30.",
- "https://www.google.com/maps/search/?api=1&query=A+Nossa+Casa+restaurante+Lisboa",18,120,False),
+("A Nossa Casa — dinner 🍽",38.711826,-9.144958,6,"food","Lisbon",
+ "🍽 BOOKED — 6:30 PM tonight, Rua da Atalaia 31 in Bairro Alto. Pin verified against OpenStreetMap, so the Map link opens the real place. Replaces the Time Out Market dinner, which moves to lunch tomorrow. 🚶 420 m from Largo do Carmo — about 6 minutes up through Chiado — so the evening runs Embaixada 4:30, Largo do Carmo 5:45, and you are at the table early rather than rushing. Bairro Alto is on the doorstep afterwards if you want a drink.",
+ None,18,120,False),
 
 # ---- Day 7: Lisbon AM → fly to Seville → Eclipse ----
 ("🏊 Pool + spa, Corinthia (2 hrs)",38.738765,-9.16649,7,"hotel","Lisbon",
@@ -1283,6 +1283,7 @@ MAP_PLACE = {
  "⭐🕌 Mezquita-Catedral, Córdoba":"Mezquita-Catedral de Córdoba",
  "🕌 National Tile Museum (Azulejo)":"Museu Nacional do Azulejo, Lisboa",
  "A Ginjinha 🍒":"A Ginjinha, Lisboa",
+ "A Nossa Casa — dinner 🍽":"A Nossa Casa, Rua da Atalaia, Bairro Alto, Lisboa",
  "Time Out Market (lunch)":"Time Out Market, Lisboa",
  "🏊 Pool + spa, Corinthia (2 hrs)":"Corinthia Lisbon",
  "⭐🕌 Jerónimos Monastery, Belém":"Mosteiro dos Jerónimos, Lisboa",

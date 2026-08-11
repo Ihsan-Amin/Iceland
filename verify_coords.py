@@ -85,7 +85,7 @@ QUERY = {
  "Bairro Alto (evening)":              "Bairro Alto, Lisboa, Portugal",
  "A Nossa Casa — dinner 🍽":           "A Nossa Casa, Lisboa, Portugal",
  "🏊 Pool + spa, Corinthia (2 hrs)":   "Corinthia Lisbon, Lisboa, Portugal",
- "Time Out Market (lunch)":            "Time Out Market, Cais do Sodre, Lisboa, Portugal",
+ "Time Out Market (lunch)":            "Mercado da Ribeira, Cais do Sodre, Lisboa, Portugal",
  # ── Second pass. Queries above that returned nothing, or returned a
  #    same-named street in the wrong town / the wrong branch of a chain.
  "Ribeira riverfront":                 "Cais da Ribeira, Porto, Portugal",
