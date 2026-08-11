@@ -347,7 +347,7 @@ S = [
  "✊ 5:45 PM the square where the Carnation Revolution ended on 25 April 1974 — the regime surrendered here while soldiers carried carnations in their rifles. The ruined Carmo Convent above is Lisbon's most atmospheric shell. Ten minutes downhill from Embaixada and ten more to dinner.",
  None,17,20,False),
 ("A Nossa Casa — dinner 🍽",38.711826,-9.144958,6,"food","Lisbon",
- "🍽 BOOKED — 6:30 PM tonight, Rua da Atalaia 31 in Bairro Alto. Pin verified against OpenStreetMap, so the Map link opens the real place. Replaces the Time Out Market dinner, which moves to lunch tomorrow. 🚶 420 m from Largo do Carmo — about 6 minutes up through Chiado — so the evening runs Embaixada 4:30, Largo do Carmo 5:45, and you are at the table early rather than rushing. Bairro Alto is on the doorstep afterwards if you want a drink.",
+ "🍽 BOOKED — 6:30 PM tonight, Rua da Atalaia 31 in Bairro Alto. Pin verified against OpenStreetMap, so the Map link opens the real place. Replaces the Time Out Market dinner, which moves to lunch tomorrow. 🚶 A 600 m walk from Largo do Carmo, 9 minutes up through Chiado (420 m as the crow flies, but the streets zigzag) — so the evening runs Embaixada 4:30, Largo do Carmo 5:45, and you are at the table early rather than rushing. Bairro Alto is on the doorstep afterwards if you want a drink.",
  None,18,120,False),
 
 # ---- Day 7: Lisbon AM → fly to Seville → Eclipse ----
