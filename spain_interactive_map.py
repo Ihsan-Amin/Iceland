@@ -323,8 +323,11 @@ S = [
 
 # ---- Day 6: Belém + azulejos ----
 ("⭐🕌 Jerónimos Monastery, Belém",38.6979,-9.2065,6,"moorish","Lisbon",
- "⭐ 9:30 AM at opening (book ahead, ~€18). Manueline masterpiece; then Belém Tower exterior and the original pastéis de Belém next door.",
+ "⭐ 9:30 AM at opening. ⚠️ The CLOISTER is sold out online — but the CHURCH is free, needs no ticket and has its own door on the west front. Igreja Santa Maria de Belém is the Manueline nave with Vasco da Gama's and Camões' tombs, and it is the more astonishing space of the two. Go in regardless. 🎟 Then try the ticket office anyway: Portuguese national monuments hold a walk-up allocation and 'sold out online' often is not sold out at the door, especially in the first half hour. If the cloister really is gone, the Coach Museum below is 400 m away and never sells out. Belém Tower exterior and the original pastéis next door either way.",
  None,9,120,False),
+("🚃 Museu Nacional dos Coches (backup)",38.6963,-9.2010,6,"museum","Lisbon",
+ "🚃 The fallback if the Jerónimos cloister is unbookable — and good enough to be no consolation prize. The world's finest collection of royal carriages, gilded 17th–19th-c. coaches the size of small rooms, in a purpose-built modern hall. ~€8, Tue–Sun 10:00–18:00 (open today), 400 m east of the monastery and 2 min from Pastéis de Belém. Walk-up tickets, no booking, rarely more than a short queue. ⚠️ MAAT, the other obvious Belém backup, is CLOSED on Tuesdays — do not walk down there today.",
+ "https://museudoscoches.gov.pt/en/",9,75,False),
 ("Pastéis de Belém",38.6975,-9.2032,6,"food","Lisbon",
  "🍽 The original custard tarts, since 1837 — €2–5 snack beside the monastery.",
  None,11,30,False),
@@ -1284,6 +1287,7 @@ MAP_PLACE = {
  "🕌 National Tile Museum (Azulejo)":"Museu Nacional do Azulejo, Lisboa",
  "A Ginjinha 🍒":"A Ginjinha, Lisboa",
  "A Nossa Casa — dinner 🍽":"A Nossa Casa, Rua da Atalaia, Bairro Alto, Lisboa",
+ "🚃 Museu Nacional dos Coches (backup)":"Museu Nacional dos Coches, Lisboa",
  "Time Out Market (lunch)":"Time Out Market, Lisboa",
  "🏊 Pool + spa, Corinthia (2 hrs)":"Corinthia Lisbon",
  "⭐🕌 Jerónimos Monastery, Belém":"Mosteiro dos Jerónimos, Lisboa",

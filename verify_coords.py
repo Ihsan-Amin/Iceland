@@ -84,6 +84,7 @@ QUERY = {
  "Segovia Aqueduct + walking tour":    "Acueducto de Segovia, Spain",
  "Bairro Alto (evening)":              "Bairro Alto, Lisboa, Portugal",
  "A Nossa Casa — dinner 🍽":           "A Nossa Casa, Lisboa, Portugal",
+ "🚃 Museu Nacional dos Coches (backup)":"Museu Nacional dos Coches, Lisboa, Portugal",
  "🏊 Pool + spa, Corinthia (2 hrs)":   "Corinthia Lisbon, Lisboa, Portugal",
  "Time Out Market (lunch)":            "Mercado da Ribeira, Cais do Sodre, Lisboa, Portugal",
  # ── Second pass. Queries above that returned nothing, or returned a
