@@ -403,11 +403,14 @@ S = [
 ("Bodega Santa Cruz — Las Columnas 🍤",37.3862,-5.9915,8,"food","Seville",
  "🍤 After thirteen hours on a coach you want food that is close, fast and cheap — this is a 12-minute walk in from the hotel (the Giralda Center is out in San Bernardo, ~950 m east of Santa Cruz) or a €6 taxi if legs have given up. A standing-room Seville institution: order at the bar, they chalk your tab straight onto the counter, montaditos and fried fish at €2.50–3.50 a plate. Three of you eat and drink well for €20–25 total, not each. Heaving and loud until midnight, which on a Thursday in August is the point. No reservations, no table service.",
  None,21,60,False),
-("⭐🕌 Casa de Pilatos",37.3906,-5.9878,9,"moorish","Seville",
- "⭐🕌 9:30 AM (~€12) — Mudéjar-Renaissance mansion, and it opens at 9:00, which is exactly why it moved here from the evening: the Alcázar slot is 11:30, so the early hours needed something and this is the only major Mudéjar house open that early. Nearly empty first thing, and the courtyards are cool before the sun gets up. 1.1 km from the hotel, ~14 min on foot. Allow the full 90 min — that is not padding, it is what closes the gap: finish here at 11:00, walk 12 min, and you are at the Puerta del León for 11:15, a quarter hour before your slot.",
- None,9,90,False),
+("Confitería La Campana ☕🥐",37.3928,-5.9946,9,"food","Seville",
+ "☕🥐 Breakfast where Seville has had it since 1885 — the city's grand old confitería, on its own square at the top of Calle Sierpes. Marble counters, mirrored walls, and a case of yemas, tocino de cielo and pestiños; take a coffee and a pastry standing at the bar like everyone else, or sit outside on the plaza. Opens 8:00, ~€4–6 a head. 🚕 8-minute taxi from the hotel rather than the 25-minute walk — you want the walking energy for the route south, not for getting here.",
+ None,9,45,False),
+("🚶 Old-town walk — Sierpes to Santa Cruz",37.3915,-5.9930,9,"attraction","Seville",
+ "🚶 The classic walk through old Seville, and it happens to end at the Alcázar door — which is the whole point at 11:30. Head south from La Campana: down Calle Sierpes under the summer awnings, past the tiled shopfronts and the Ayuntamiento's Renaissance facade on Plaza de San Francisco, then Plaza del Salvador for the church and its morning café tables. Cut through to Calle Alemanes and out into Plaza Virgen de los Reyes, where the Giralda finally fills the sky. Then the good bit: the Barrio Santa Cruz lanes — Calle Agua, Plaza Doña Elvira, Callejón del Agua — orange trees, whitewash and barely room for two people abreast. Come out at the Patio de Banderas and the Puerta del León is right there. ⏰ 75 min at a browsing pace, all of it shaded by buildings this early. Free, and the best hour of the day before the heat lands.",
+ None,9,75,False),
 ("🕌 Real Alcázar",37.3830,-5.9906,9,"moorish","Seville",
- "🕌 BOOKED — 11:30 timed entry. Spain's finest Mudéjar palace; allow the full 2.5h and add the Cuarto Real Alto if it was offered. ⏰ Be at the Puerta del León by 11:15: timed slots here are enforced and the queue for holders still forms. Coming from Casa de Pilatos that is a 12-minute walk, so leave there by 11:00. 🌡 The 11:30 slot runs you into the hottest part of the day, but the Alcázar is the right place for it — the Patio de las Doncellas and the gardens are shaded and the palace rooms stay cool.",
+ "🕌 BOOKED — 11:30 timed entry. Spain's finest Mudéjar palace; allow the full 2.5h and add the Cuarto Real Alto if it was offered. ⏰ Be at the Puerta del León by 11:15: timed slots here are enforced and the queue for holders still forms. The old-town walk drops you at the Patio de Banderas, two minutes from the gate, so you arrive with a quarter hour spare. 🌡 The 11:30 slot runs you into the hottest part of the day, but the Alcázar is the right place for it — the Patio de las Doncellas and the gardens are shaded and the palace rooms stay cool.",
  "https://realalcazarsevilla.sacatuentrada.es/en",11,150,False),
 ("Bodega Romero 🥪",37.3867,-5.9953,9,"food","Seville",
  "🥪 Your own pick, 400 m from the Alcázar exit. An Arenal bodega famous for its pringá montadito — slow-cooked pork, beef and chorizo pressed into a soft roll — plus proper plates of solomillo and spinach with chickpeas. Montaditos ~€3, raciones €8–12, so lunch for three runs €30–40 total. ⚠️ Pin is the Calle Harinas block, not a verified shopfront — tap Book / Info for the live listing. Aug 14 is a Friday, so the Sunday/Monday closures do not bite.",
@@ -643,6 +646,7 @@ MODE_TO = {
  "Casa Revuelta — late bacalao 🍺":"taxi",
  "🛍 Feira da Ladra flea market":"taxi",   # 8 km back from Belém — not a walk
  "Time Out Market (lunch)":"taxi",   # Gulbenkian → Cais do Sodré, 3.5 km
+ "Confitería La Campana ☕🥐":"taxi",   # 1.9 km across the centre; save the legs for the walk
  "🕌 National Tile Museum (Azulejo)":"taxi",
  "⭐ Tram 28 / Ler Devagar 📚":"taxi",   # 7 km from the Azulejo now the bifanas hop is gone
  "⭐🛍 Embaixada (Príncipe Real)":"walk",   # no clean single metro line to Príncipe Real
@@ -1116,7 +1120,6 @@ GUIDE = {
  "⭐ Calouste Gulbenkian Museum":"https://en.wikipedia.org/wiki/Calouste_Gulbenkian_Museum",
  "🕌 Real Alcázar":"https://en.wikipedia.org/wiki/Alcázar_of_Seville",
  "🕌 Cathedral + Giralda":"https://en.wikipedia.org/wiki/Seville_Cathedral",
- "⭐🕌 Casa de Pilatos":"https://en.wikipedia.org/wiki/Casa_de_Pilatos",
  "⭐ Plaza de España":"https://en.wikipedia.org/wiki/Plaza_de_España,_Seville",
  "⭐🕌 Mezquita-Catedral, Córdoba":"https://en.wikipedia.org/wiki/Mosque–Cathedral_of_Córdoba",
  "🕌 Córdoba old town — guided walk":"https://en.wikipedia.org/wiki/Alcázar_de_los_Reyes_Cristianos",
@@ -1179,7 +1182,6 @@ BOOKINFO = {
  "⭐ Quinta da Regaleira (optional)":"https://www.regaleira.pt/en/",
  "⭐🕌 Jerónimos Monastery, Belém":"https://www.patrimoniocultural.gov.pt",
  "🕌 National Tile Museum (Azulejo)":"https://www.museudoazulejo.gov.pt",
- "⭐🕌 Casa de Pilatos":"https://www.fundacionmedinaceli.org",
  "⭐ Santo Tomé (El Greco) — free time":"https://santotome.org",
 }
 
@@ -1282,6 +1284,8 @@ MAP_PLACE = {
  "🕌 National Tile Museum (Azulejo)":"Museu Nacional do Azulejo, Lisboa",
  "A Ginjinha 🍒":"A Ginjinha, Lisboa",
  "A Nossa Casa — dinner 🍽":"A Nossa Casa, Rua da Atalaia, Bairro Alto, Lisboa",
+ "Confitería La Campana ☕🥐":"Confitería La Campana, Sevilla",
+ "🚶 Old-town walk — Sierpes to Santa Cruz":"Plaza del Salvador, Sevilla",
  "🚃 Museu Nacional dos Coches (backup)":"Museu Nacional dos Coches, Lisboa",
  "Time Out Market (lunch)":"Time Out Market, Lisboa",
  "🏊 Pool + spa, Corinthia (2 hrs)":"Corinthia Lisbon",

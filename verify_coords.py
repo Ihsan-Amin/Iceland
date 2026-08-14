@@ -84,6 +84,8 @@ QUERY = {
  "Segovia Aqueduct + walking tour":    "Acueducto de Segovia, Spain",
  "Bairro Alto (evening)":              "Bairro Alto, Lisboa, Portugal",
  "A Nossa Casa — dinner 🍽":           "A Nossa Casa, Lisboa, Portugal",
+ "Confitería La Campana ☕🥐":         "Confiteria La Campana, Sevilla, Spain",
+ "🚶 Old-town walk — Sierpes to Santa Cruz":"Plaza del Salvador, Sevilla, Spain",
  "🚃 Museu Nacional dos Coches (backup)":"Museu Nacional dos Coches, Lisboa, Portugal",
  "🏊 Pool + spa, Corinthia (2 hrs)":   "Corinthia Lisbon, Lisboa, Portugal",
  "Time Out Market (lunch)":            "Mercado da Ribeira, Cais do Sodre, Lisboa, Portugal",
