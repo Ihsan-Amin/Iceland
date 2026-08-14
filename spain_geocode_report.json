@@ -34,7 +34,7 @@
     "lat": 41.16112,
     "lon": -8.639831,
     "metres_off": 0,
-    "display": "Sheraton Porto Hotel & SPA, 146, Rua de Pedro Hispano, Bessa, Lordelo do Ouro, Lordelo do Ouro e Massarelos, Porto, 4100",
+    "display": "Sheraton Porto Hotel & SPA, 146, Rua do Tenente Valadim, Bessa, Lordelo do Ouro, Lordelo do Ouro e Massarelos, Porto, 41",
     "class": "tourism",
     "type": "hotel"
    }
@@ -163,9 +163,9 @@
   ],
   "candidates": [
    {
-    "lat": 41.137613,
-    "lon": -8.608727,
-    "metres_off": 3,
+    "lat": 41.13762,
+    "lon": -8.608689,
+    "metres_off": 0,
     "display": "Jardim do Morro, Avenida da República, Devesas, Santa Marinha, Vila Nova de Gaia, Porto, 4430-148, Portugal",
     "class": "railway",
     "type": "stop"
@@ -224,7 +224,7 @@
     "lat": 41.139659,
     "lon": -8.609351,
     "metres_off": 27,
-    "display": "Ponte Luiz I, Ponte Luiz I (tabuleiro inferior), Santa Marinha, Cedofeita, Santo Ildefonso, Sé, Miragaia, São Nicolau e ",
+    "display": "Ponte Luiz I, Rua de General Torres, Devesas, Santa Marinha, Vila Nova de Gaia, Porto, 4430-108, Portugal",
     "class": "man_made",
     "type": "bridge"
    },
@@ -361,7 +361,7 @@
     "lat": 41.14574,
     "lon": -8.612284,
     "metres_off": 172,
-    "display": "São Bento, Rua do Almada, Baixa do Porto, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeita, Santo Ildefons",
+    "display": "São Bento, Rua do Loureiro, Lóios, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeita, Santo Ildefonso, Sé, ",
     "class": "railway",
     "type": "station"
    }
@@ -419,14 +419,14 @@
     "lat": 41.149316,
     "lon": -8.606947,
     "metres_off": 76,
-    "display": "Mercado do Bolhão, Rua de Alexandre Braga, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofe",
+    "display": "Mercado do Bolhão, Rua de Fernandes Tomás, Baixa do Porto, Conjunto Urbano da Ribeira, Zona Histórica do Porto, Cedofeit",
     "class": "amenity",
     "type": "marketplace"
    },
    {
-    "lat": 41.149256,
-    "lon": -8.607706,
-    "metres_off": 135,
+    "lat": 41.149434,
+    "lon": -8.607611,
+    "metres_off": 122,
     "display": "Mercado do Bolhão, Rua de Sá da Bandeira, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Cedofei",
     "class": "highway",
     "type": "bus_stop"
@@ -474,20 +474,20 @@
   ],
   "candidates": [
    {
-    "lat": 41.144859,
-    "lon": -8.60656,
-    "metres_off": 14,
-    "display": "Cervejaria Gazela, 8-10, Rua de Entreparedes, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Ced",
-    "class": "amenity",
-    "type": "restaurant"
-   },
-   {
     "lat": 41.144893,
     "lon": -8.607597,
     "metres_off": 100,
     "display": "Cervejaria Gazela, 4, Travessa de Cimo de Vila, Santo Ildefonso, Conjunto Urbano da Ribeira, Centro Histórico do Porto, ",
     "class": "amenity",
     "type": "pub"
+   },
+   {
+    "lat": 41.144859,
+    "lon": -8.60656,
+    "metres_off": 14,
+    "display": "Cervejaria Gazela, 8-10, Rua de Entreparedes, Baixa do Porto, Conjunto Urbano da Ribeira, Centro Histórico do Porto, Ced",
+    "class": "amenity",
+    "type": "restaurant"
    }
   ],
   "error": null
@@ -676,6 +676,14 @@
   ],
   "candidates": [
    {
+    "lat": 41.179083,
+    "lon": -8.691111,
+    "metres_off": 0,
+    "display": "Rua Heróis de França, Matosinhos Sul, Matosinhos, Porto, 4450-156, Portugal",
+    "class": "highway",
+    "type": "residential"
+   },
+   {
     "lat": 41.183984,
     "lon": -8.695833,
     "metres_off": 673,
@@ -688,14 +696,6 @@
     "lon": -8.69424,
     "metres_off": 446,
     "display": "Rua Heróis de França, Brito Capelo, Matosinhos, Porto, 4450-277, Portugal",
-    "class": "highway",
-    "type": "tertiary"
-   },
-   {
-    "lat": 41.181522,
-    "lon": -8.693468,
-    "metres_off": 335,
-    "display": "Rua Heróis de França, Matosinhos Sul, Matosinhos, Porto, 4450-159, Portugal",
     "class": "highway",
     "type": "tertiary"
    }
@@ -861,7 +861,7 @@
     "lat": 38.712014,
     "lon": -9.133218,
     "metres_off": 211,
-    "display": "Castelo de São Jorge, Costa do Castelo, São Vicente de Fora, Alfama, São Vicente, Lisboa, 1100-335, Portugal",
+    "display": "Castelo de São Jorge, Rua Bartolomeu de Gusmão, Santiago, Santa Maria Maior, Madalena, Lisboa, 1100-129, Portugal",
     "class": "place",
     "type": "house"
    },
@@ -920,6 +920,14 @@
   ],
   "candidates": [
    {
+    "lat": 38.739222,
+    "lon": -9.168223,
+    "metres_off": 144,
+    "display": "Estação de Sete Rios, Rua Canto da Maya, Sete Rios, Campolide, Lisboa, 1070-996, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
+   },
+   {
     "lat": 38.740673,
     "lon": -9.167476,
     "metres_off": 54,
@@ -932,14 +940,6 @@
     "lon": -9.167203,
     "metres_off": 0,
     "display": "Estação de Sete Rios, Avenida Columbano Bordalo Pinheiro, São Domingos de Benfica, Lisboa, 1070-067, Portugal",
-    "class": "highway",
-    "type": "bus_stop"
-   },
-   {
-    "lat": 38.739222,
-    "lon": -9.168223,
-    "metres_off": 144,
-    "display": "Estação de Sete Rios, Rua Canto da Maya, Sete Rios, Campolide, Lisboa, 1070-996, Portugal",
     "class": "highway",
     "type": "bus_stop"
    }
@@ -990,8 +990,8 @@
     "lon": -9.390565,
     "metres_off": 15,
     "display": "Palácio da Pena, Estrada da Pena, Quinta do Castanheiro, Sintra - São Martinho, Sintra - Santa Maria, Sintra, Sintra (Sa",
-    "class": "historic",
-    "type": "castle"
+    "class": "tourism",
+    "type": "attraction"
    },
    {
     "lat": 38.787867,
@@ -1102,7 +1102,7 @@
     "lat": 38.697753,
     "lon": -9.205591,
     "metres_off": 81,
-    "display": "Mosteiro dos Jerónimos, Praça do Império, São Francisco Xavier, Belém, Lisboa, 1400-206, Portugal",
+    "display": "Mosteiro dos Jerónimos, Praça do Império, São Francisco Xavier, Belém, Lisboa, 1400-209, Portugal",
     "class": "historic",
     "type": "building"
    },
@@ -1110,7 +1110,28 @@
     "lat": 38.698008,
     "lon": -9.205744,
     "metres_off": 67,
-    "display": "Mosteiro dos Jerónimos, Rua dos Jerónimos, São Francisco Xavier, Belém, Lisboa, 1400-211, Portugal",
+    "display": "Mosteiro dos Jerónimos, Praça do Império, São Francisco Xavier, Belém, Lisboa, 1400-206, Portugal",
+    "class": "tourism",
+    "type": "museum"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "🚃 Museu Nacional dos Coches (backup)",
+  "day": 6,
+  "city": "Lisbon",
+  "query": "Museu Nacional dos Coches, Lisboa, Portugal",
+  "current": [
+   38.6963,
+   -9.201
+  ],
+  "candidates": [
+   {
+    "lat": 38.696864,
+    "lon": -9.197987,
+    "metres_off": 269,
+    "display": "Museu Nacional dos Coches, 136, Avenida da Índia, São Francisco Xavier, Belém, Lisboa, 1300-300, Portugal",
     "class": "tourism",
     "type": "museum"
    }
@@ -1155,43 +1176,6 @@
     "display": "Feira da Ladra, Campo de Santa Clara, São Vicente de Fora, Graça, São Vicente, Lisboa, 1100-470, Portugal",
     "class": "amenity",
     "type": "marketplace"
-   }
-  ],
-  "error": null
- },
- {
-  "name": "⭐ Oceanário de Lisboa",
-  "day": 6,
-  "city": "Lisbon",
-  "query": "Oceanário de Lisboa, Lisbon, Portugal",
-  "current": [
-   38.7634,
-   -9.0938
-  ],
-  "candidates": [
-   {
-    "lat": 38.76352,
-    "lon": -9.093716,
-    "metres_off": 15,
-    "display": "Oceanário de Lisboa, Esplanada Dom Carlos I, Parque das Nações, Lisboa, 1990-005, Portugal",
-    "class": "tourism",
-    "type": "aquarium"
-   },
-   {
-    "lat": 38.76111,
-    "lon": -9.096439,
-    "metres_off": 342,
-    "display": "Oceanário de Lisboa, Alameda dos Oceanos, Parque das Nações, Lisboa, 1990-175, Portugal",
-    "class": "highway",
-    "type": "bus_stop"
-   },
-   {
-    "lat": 38.762281,
-    "lon": -9.093729,
-    "metres_off": 125,
-    "display": "Oceanário de Lisboa, Esplanada Dom Carlos I, Parque das Nações, Lisboa, 1990-011, Portugal",
-    "class": "shop",
-    "type": "gift"
    }
   ],
   "error": null
@@ -1309,14 +1293,14 @@
   "city": "Lisbon",
   "query": "A Nossa Casa, Lisboa, Portugal",
   "current": [
-   38.7105,
-   -9.142
+   38.711826,
+   -9.144958
   ],
   "candidates": [
    {
     "lat": 38.711826,
     "lon": -9.144958,
-    "metres_off": 296,
+    "metres_off": 0,
     "display": "A Nossa Casa, 31, Rua da Atalaia, Bairro Alto, Misericórdia, Lisboa, 1200-037, Portugal",
     "class": "amenity",
     "type": "restaurant"
@@ -1324,7 +1308,7 @@
    {
     "lat": 38.744533,
     "lon": -9.266473,
-    "metres_off": 11442,
+    "metres_off": 11151,
     "display": "A Nossa Casa, 47A, Estrada Consiglieri Pedroso, Caruncho, Queluz de Baixo, Barcarena, Oeiras, Lisboa, 2734-502, Portugal",
     "class": "shop",
     "type": "clothes"
@@ -1378,12 +1362,21 @@
   "name": "Time Out Market (lunch)",
   "day": 7,
   "city": "Lisbon",
-  "query": "Time Out Market, Cais do Sodre, Lisboa, Portugal",
+  "query": "Mercado da Ribeira, Cais do Sodre, Lisboa, Portugal",
   "current": [
    38.7071,
    -9.1459
   ],
-  "candidates": [],
+  "candidates": [
+   {
+    "lat": 38.707051,
+    "lon": -9.144555,
+    "metres_off": 117,
+    "display": "Mercado da Ribeira, Rua dos Remolares, Cais do Sodré, Misericórdia, Lisboa, 1200-478, Portugal",
+    "class": "highway",
+    "type": "bus_stop"
+   }
+  ],
   "error": null
  },
  {
@@ -1400,7 +1393,7 @@
     "lat": 37.417703,
     "lon": -5.894929,
     "metres_off": 0,
-    "display": "Aeropuerto internacional de Sevilla - San Pablo, Avenida República de China, Sevilla Este, Distrito Este-Alcosa-Torrebla",
+    "display": "Aeropuerto internacional de Sevilla - San Pablo, Calle Sendai, Sevilla Este, Distrito Este-Alcosa-Torreblanca, Sevilla, ",
     "class": "aeroway",
     "type": "aerodrome"
    }
@@ -1472,18 +1465,18 @@
   ],
   "candidates": [
    {
-    "lat": 37.38708,
-    "lon": -5.98529,
-    "metres_off": 212,
-    "display": "Avenida de Menéndez Pelayo, San Bartolomé, Casco Antiguo, Sevilla, Andalucía, 41004, España",
-    "class": "highway",
-    "type": "primary"
-   },
-   {
     "lat": 37.382186,
     "lon": -5.987902,
     "metres_off": 388,
     "display": "Avenida de Menéndez Pelayo, San Bernardo, Nervión, Sevilla, Andalucía, 41004, España",
+    "class": "highway",
+    "type": "primary"
+   },
+   {
+    "lat": 37.384003,
+    "lon": -5.986945,
+    "metres_off": 173,
+    "display": "Avenida de Menéndez Pelayo, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
     "class": "highway",
     "type": "primary"
    }
@@ -1657,6 +1650,56 @@
   "error": null
  },
  {
+  "name": "Confitería La Campana ☕🥐",
+  "day": 9,
+  "city": "Seville",
+  "query": "Confiteria La Campana, Sevilla, Spain",
+  "current": [
+   37.3928,
+   -5.9946
+  ],
+  "candidates": [
+   {
+    "lat": 37.392581,
+    "lon": -5.994848,
+    "metres_off": 33,
+    "display": "Confitería La Campana, 1, Calle Sierpes, Alfalfa, Casco Antiguo, Sevilla, Andalucía, 41001, España",
+    "class": "shop",
+    "type": "bakery"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "🚶 Old-town walk — Sierpes to Santa Cruz",
+  "day": 9,
+  "city": "Seville",
+  "query": "Plaza del Salvador, Sevilla, Spain",
+  "current": [
+   37.3915,
+   -5.993
+  ],
+  "candidates": [
+   {
+    "lat": 37.390034,
+    "lon": -5.993104,
+    "metres_off": 163,
+    "display": "Plaza del Salvador, Alfalfa, Casco Antiguo, Sevilla, Andalucía, España",
+    "class": "place",
+    "type": "square"
+   },
+   {
+    "lat": 37.390075,
+    "lon": -5.993135,
+    "metres_off": 159,
+    "display": "Plaza del Salvador, Alfalfa, Casco Antiguo, Sevilla, Andalucía, 41001, España",
+    "class": "highway",
+    "type": "pedestrian"
+   }
+  ],
+  "error": null
+ },
+ {
   "name": "🕌 Real Alcázar",
   "day": 9,
   "city": "Seville",
@@ -1671,37 +1714,16 @@
     "lon": -5.990183,
     "metres_off": 44,
     "display": "Real Alcázar de Sevilla, Patio de Banderas, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
-    "class": "historic",
-    "type": "castle"
+    "class": "tourism",
+    "type": "attraction"
    },
    {
     "lat": 37.384412,
     "lon": -5.992174,
     "metres_off": 210,
-    "display": "Puerta del León, Patio de Los Leones, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
+    "display": "Puerta del León, Plaza del Triunfo, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
     "class": "building",
     "type": "yes"
-   }
-  ],
-  "error": null
- },
- {
-  "name": "🕌 Cathedral + Giralda",
-  "day": 9,
-  "city": "Seville",
-  "query": "Catedral de Sevilla, Spain",
-  "current": [
-   37.3859,
-   -5.9932
-  ],
-  "candidates": [
-   {
-    "lat": 37.385915,
-    "lon": -5.993141,
-    "metres_off": 6,
-    "display": "Catedral de Sevilla, 헌법대로, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
-    "class": "amenity",
-    "type": "place_of_worship"
    }
   ],
   "error": null
@@ -1744,6 +1766,27 @@
   "error": null
  },
  {
+  "name": "🕌 Cathedral + Giralda",
+  "day": 9,
+  "city": "Seville",
+  "query": "Catedral de Sevilla, Spain",
+  "current": [
+   37.3859,
+   -5.9932
+  ],
+  "candidates": [
+   {
+    "lat": 37.385915,
+    "lon": -5.993141,
+    "metres_off": 6,
+    "display": "Catedral de Sevilla, Calle Fray Ceferino González, Santa Cruz, Casco Antiguo, Sevilla, Andalucía, 41004, España",
+    "class": "amenity",
+    "type": "place_of_worship"
+   }
+  ],
+  "error": null
+ },
+ {
   "name": "🛍 Calle Sierpes & Calle Tetuán",
   "day": 9,
   "city": "Seville",
@@ -1781,27 +1824,6 @@
   "error": null
  },
  {
-  "name": "⭐🕌 Casa de Pilatos",
-  "day": 9,
-  "city": "Seville",
-  "query": "Casa de Pilatos, Seville, Spain",
-  "current": [
-   37.3906,
-   -5.9878
-  ],
-  "candidates": [
-   {
-    "lat": 37.390239,
-    "lon": -5.987249,
-    "metres_off": 63,
-    "display": "Casa de Pilatos, 1, Plaza de Pilatos, San Bartolomé, Casco Antiguo, Sevilla, Andalucía, 41003, España",
-    "class": "tourism",
-    "type": "museum"
-   }
-  ],
-  "error": null
- },
- {
   "name": "⭐ Plaza de España",
   "day": 9,
   "city": "Seville",
@@ -1815,7 +1837,7 @@
     "lat": 37.376903,
     "lon": -5.98565,
     "metres_off": 0,
-    "display": "Plaza de España, Calle Diego de Riaño, El Prado-Parque de María Luisa, Distrito Sur, Sevilla, Andalucía, 41004, España",
+    "display": "Plaza de España, Calle Nicolás Alpériz, El Prado-Parque de María Luisa, Distrito Sur, Sevilla, Andalucía, 41004, España",
     "class": "tourism",
     "type": "artwork"
    },
@@ -2031,7 +2053,7 @@
     "lat": 37.176055,
     "lon": -3.58811,
     "metres_off": 6,
-    "display": "Alhambra, Calle Torres Bermejas, El Mauror, San Matías - Realejo, Centro, Granada, Comarca de la Vega de Granada, Granad",
+    "display": "Alhambra, Paseo de las Torres, La Antequeruela, San Matías - Realejo, Centro, Granada, Comarca de la Vega de Granada, Gr",
     "class": "historic",
     "type": "castle"
    }
@@ -2199,8 +2221,8 @@
     "lon": -3.694422,
     "metres_off": 29,
     "display": "Museo Nacional Centro de Arte Reina Sofía, 52, Calle de Santa Isabel, Lavapiés, Embajadores, Centro, Madrid, Comunidad d",
-    "class": "tourism",
-    "type": "museum"
+    "class": "amenity",
+    "type": "arts_centre"
    }
   ],
   "error": null
@@ -2232,9 +2254,9 @@
     "type": "books"
    },
    {
-    "lat": 40.409161,
-    "lon": -3.688836,
-    "metres_off": 147,
+    "lat": 40.409199,
+    "lon": -3.688563,
+    "metres_off": 168,
     "display": "Cuesta de Moyano, Calle de Alfonso XII, Jerónimos, Retiro, Madrid, Comunidad de Madrid, 28014, España",
     "class": "highway",
     "type": "bus_stop"
@@ -2315,8 +2337,8 @@
     "lon": -3.706997,
     "metres_off": 96,
     "display": "Plaza Mayor, Barrio de los Austrias, Sol, Centro, Madrid, Comunidad de Madrid, 28012, España",
-    "class": "place",
-    "type": "square"
+    "class": "highway",
+    "type": "pedestrian"
    },
    {
     "lat": 40.415269,
@@ -2565,8 +2587,8 @@
     "lon": -4.024176,
     "metres_off": 0,
     "display": "Mezquita del Cristo de la Luz, Calle Cristo de la Luz, Santa Bárbara, Toledo, Castilla-La Mancha, 45002, España",
-    "class": "building",
-    "type": "church"
+    "class": "tourism",
+    "type": "attraction"
    },
    {
     "lat": 39.860744,
@@ -2635,9 +2657,9 @@
     "type": "pedestrian"
    },
    {
-    "lat": 40.947781,
-    "lon": -4.118186,
-    "metres_off": 54,
+    "lat": 40.947793,
+    "lon": -4.117928,
+    "metres_off": 39,
     "display": "Plaza del Azoguejo, Santa Columba, Sexmo de Segovia, La Albuera, Comunidad de Ciudad y Tierra de Segovia, Segovia, Casti",
     "class": "highway",
     "type": "pedestrian"
@@ -2711,17 +2733,17 @@
   "candidates": [
    {
     "lat": 40.418076,
-    "lon": -3.717771,
+    "lon": -3.717772,
     "metres_off": 0,
-    "display": "Jardines del Campo del Moro, Centro, Madrid, Comunidad de Madrid, España",
+    "display": "Jardines del Campo del Moro, Paseo de Circunvalación, Palacio, Centro, Madrid, Comunidad de Madrid, 28005, España",
     "class": "leisure",
     "type": "park"
    },
    {
-    "lat": 40.418782,
-    "lon": -3.719502,
-    "metres_off": 166,
-    "display": "La Terraza del Campo del Moro, Paseo de los Plátanos, Barrio de la Latina, Palacio, Centro, Madrid, Comunidad de Madrid,",
+    "lat": 40.418981,
+    "lon": -3.719612,
+    "metres_off": 186,
+    "display": "La Terraza del Campo del Moro, Paseo de Ali Ben Yusuf, Palacio, Centro, Madrid, Comunidad de Madrid, 28008, España",
     "class": "amenity",
     "type": "bar"
    },
