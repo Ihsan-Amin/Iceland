@@ -85,6 +85,7 @@ QUERY = {
  "Bairro Alto (evening)":              "Bairro Alto, Lisboa, Portugal",
  "A Nossa Casa — dinner 🍽":           "A Nossa Casa, Lisboa, Portugal",
  "Confitería La Campana ☕🥐":         "Confiteria La Campana, Sevilla, Spain",
+ "⭐ Museo Thyssen-Bornemisza":        "Museo Thyssen-Bornemisza, Madrid, Spain",
  "🚶 Old-town walk — Sierpes to Santa Cruz":"Plaza del Salvador, Sevilla, Spain",
  "🚃 Museu Nacional dos Coches (backup)":"Museu Nacional dos Coches, Lisboa, Portugal",
  "🏊 Pool + spa, Corinthia (2 hrs)":   "Corinthia Lisbon, Lisboa, Portugal",
